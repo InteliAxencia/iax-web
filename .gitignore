@@ -1,0 +1,29 @@
+# Dependencias
+node_modules/
+
+# Build / salida
+dist/
+.astro/
+.output/
+
+# Entornos y secretos (NUNCA subir)
+.env
+.env.*
+!.env.example
+
+# Plataformas de despliegue
+.vercel/
+.wrangler/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
