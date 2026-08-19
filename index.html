@@ -1,644 +1,1668 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iAx – inteliAxencia · IA para el sector legal y laboral</title>
-<meta name="description" content="Acompañamos a despachos laboralistas, graduados sociales, sindicatos y colegios profesionales en su transformación digital: diagnóstico, auditoría, implantación de herramientas y desarrollo a medida.">
- 
-<!--
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iAx · inteliAxencia · IA y automatización para despachos laborales</title>
+  <meta name="description"
+    content="Analizamos cómo trabaja tu despacho, formamos a tu equipo e implementamos soluciones adaptadas, incluida IA local para trabajar con mayor control sobre tu información.">
+
+  <!--
   ============================================================
-  iAx – inteliAxencia · Landing page v2 (prototipo estático)
+  iAx · inteliAxencia · Landing page v3 (prototipo estático)
   ============================================================
-  Cambios v2:
-    · CSS refactorizado a MOBILE-FIRST: los estilos base son para
-      móvil; los @media (min-width:…) escalan hacia tablet/desktop.
-    · Fix de legibilidad del botón "Agendar auditoría" del menú:
-      .nav-links a era más específico que .btn-indigo y pisaba el
-      color del texto (negro sobre índigo). Ahora hay overrides
-      explícitos con mayor especificidad.
-    · Eyebrows: índigo sobre fondos claros (la guía prohíbe texto
-      coral pequeño sobre blanco); coral solo sobre fondos índigo.
- 
+  Cambios v3 (merge de IAx_Servicios_Web_v0.1.md):
+    · Arquitectura nueva: Servicios (3 tarjetas) → Método (4 pasos)
+      → IA local (bloque diferencial) → Funcionalidades → FAQ → CTA.
+    · Fuera el bloque de precio (490 €) y el código promocional demo:
+      la spec v0.1 excluye precios, plazos, ROI y garantías.
+    · Fuera la sección "Cursos" como sección propia: su contenido
+      vive ahora dentro del Servicio 02 (Formación y acompañamiento).
+    · Fuera el bloque comentado de "4 fases": lo sustituye el método
+      Entendemos → Identificamos → Implementamos → Evolucionamos.
+    · Acordeones nativos (<details>/<summary>): sin JS, accesibles
+      por teclado, respetan prefers-reduced-motion.
+
+  Reglas de copy aplicadas:
+    · "diagnóstico", nunca "auditoría".
+    · "digitalización" no es el eje de la propuesta.
+    · Tuteo peninsular (cuéntanos / encuentras), no voseo.
+    · Sin guiones largos.
+
   Guía de marca aplicada:
     · Índigo #1B0F96  → dominante (~60%): hero, bandas, footer, CTA clave
-    · Coral  #FD8F96  → acento (~10%): la 'x', números de fase, énfasis
+    · Coral  #FD8F96  → acento (~10%): la 'x', numeración, énfasis
     · Blanco / Negro  → neutros (~30%): texto y maquetación
     · Tipografía: Neurial Grotesk (fallback Helvetica Neue / Arial)
- 
+
   PUNTOS DE INTEGRACIÓN (buscar "TODO" en el código):
     1. @font-face  → añadir los .otf/.woff2 de Neurial Grotesk
-    2. Newsletter  → API de Brevo (o Mailerlite)
-    3. Cursos      → endpoint serverless / email al equipo
-    4. Auditoría   → Cal.com embebido + Stripe Checkout con cupón
-       (el código promo aquí es una DEMO en cliente; en producción
-        el cupón se valida SIEMPRE en Stripe, nunca en el navegador)
+    2. Newsletter  → API de Brevo (double opt-in)
+    3. Contacto    → endpoint serverless / Cal.com cuando se decida
+    4. Legal       → aviso legal, privacidad y cookies antes de
+                     publicar cualquier formulario en producción
 -->
- 
-<style>
-/* ==================== TOKENS DE MARCA ==================== */
-:root{
-  --indigo:#1B0F96;
-  --indigo-deep:#140B6E;      /* variación oscura para capas sobre índigo */
-  --coral:#FD8F96;
-  --blanco:#FFFFFF;
-  --negro:#111111;
-  --gris:#6B6B76;             /* pies de foto / letra pequeña */
-  --gris-claro:#F4F4F8;       /* fondo neutro de apoyo */
-  --borde:#E4E4EC;
- 
-  --font: "Neurial Grotesk","Helvetica Neue",Arial,sans-serif;
- 
-  --max-w:1120px;
-  --radius:14px;
-  --gutter:20px;
-}
- 
-/* TODO 1 · Tipografía de marca (archivos .otf incluidos en el kit)
+
+  <style>
+    /* ==================== TOKENS DE MARCA ==================== */
+    :root {
+      --indigo: #1B0F96;
+      --indigo-deep: #140B6E;
+      /* variación oscura para capas sobre índigo */
+      --coral: #FD8F96;
+      --blanco: #FFFFFF;
+      --negro: #111111;
+      --gris: #6B6B76;
+      /* pies de foto / letra pequeña */
+      --gris-claro: #F4F4F8;
+      /* fondo neutro de apoyo */
+      --borde: #E4E4EC;
+      --texto-suave: #3c3c46;
+
+      --font: "Neurial Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+      --max-w: 1120px;
+      --radius: 14px;
+      --gutter: 20px;
+    }
+
+    /* TODO 1 · Tipografía de marca (archivos .otf incluidos en el kit)
 @font-face{ font-family:"Neurial Grotesk"; src:url(/fonts/NeurialGrotesk-Regular.woff2) format("woff2"); font-weight:400; font-display:swap; }
 @font-face{ font-family:"Neurial Grotesk"; src:url(/fonts/NeurialGrotesk-Medium.woff2)  format("woff2"); font-weight:500; font-display:swap; }
 @font-face{ font-family:"Neurial Grotesk"; src:url(/fonts/NeurialGrotesk-Bold.woff2)    format("woff2"); font-weight:700; font-display:swap; }
 @font-face{ font-family:"Neurial Grotesk"; src:url(/fonts/NeurialGrotesk-Extrabold.woff2) format("woff2"); font-weight:800; font-display:swap; }
 */
- 
-/* ==================== BASE (MÓVIL PRIMERO) ==================== */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
- 
-body{
-  font-family:var(--font);
-  color:var(--negro);
-  background:var(--blanco);
-  line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-}
- 
-.wrap{max-width:var(--max-w);margin:0 auto;padding:0 var(--gutter)}
- 
-h1,h2,h3{line-height:1.12;letter-spacing:-.015em}
-h1{font-weight:800;font-size:clamp(2.1rem,8vw,4.2rem)}
-h2{font-weight:800;font-size:clamp(1.55rem,5.5vw,2.5rem);color:var(--indigo)}
-h3{font-weight:700;font-size:1.15rem;color:var(--indigo)}
- 
-/* Eyebrow: índigo sobre fondos claros (WCAG); la barra coral hace de acento */
-.eyebrow{
-  display:inline-block;font-weight:700;font-size:.8rem;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);
-  margin-bottom:14px;
-}
-.eyebrow::before{content:"";display:inline-block;width:22px;height:4px;background:var(--coral);margin-right:10px;vertical-align:middle}
-/* Sobre fondos índigo el coral sí tiene contraste suficiente */
-.eyebrow--invert{color:var(--coral)}
- 
-p.lead{font-size:1.1rem;max-width:56ch}
-.caption{color:var(--gris);font-size:.85rem;font-weight:300}
- 
-a{color:inherit}
-:focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:4px}
- 
-/* ==================== LOGO ==================== */
-.logo{font-weight:800;font-size:1.5rem;letter-spacing:-.02em;text-decoration:none;line-height:1}
-.logo .x{color:var(--coral)}
-.logo--claim{font-weight:500;font-size:.9rem;letter-spacing:0;margin-left:10px;opacity:.85}
- 
-/* ==================== BOTONES ==================== */
-.btn{
-  display:inline-block;font-family:var(--font);font-weight:700;font-size:1rem;
-  padding:14px 28px;border-radius:999px;border:2px solid transparent;
-  cursor:pointer;text-decoration:none;text-align:center;
-  transition:transform .15s ease,background .15s ease,color .15s ease,border-color .15s ease;
-}
-.btn:hover{transform:translateY(-2px)}
-.btn-indigo{background:var(--indigo);color:var(--blanco)}
-.btn-indigo:hover{background:var(--indigo-deep);color:var(--blanco)}
-.btn-blanco{background:var(--blanco);color:var(--indigo)}
-.btn-blanco:hover{background:var(--gris-claro);color:var(--indigo)}
-.btn-ghost{background:transparent;color:var(--blanco);border-color:rgba(255,255,255,.55)}
-.btn-ghost:hover{border-color:var(--coral);color:var(--coral)}
-.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none}
- 
-/* ==================== HEADER (base: móvil) ==================== */
-header{
-  position:sticky;top:0;z-index:50;background:var(--blanco);
-  border-bottom:1px solid var(--borde);
-}
-.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav .logo{color:var(--indigo)}
-.nav-toggle{
-  display:block;background:none;border:none;font-size:1.7rem;
-  color:var(--indigo);cursor:pointer;line-height:1;padding:8px;
-}
-.nav-links{
-  list-style:none;
-  position:absolute;top:64px;left:0;right:0;background:var(--blanco);
-  display:none;flex-direction:column;gap:0;
-  border-bottom:1px solid var(--borde);padding:8px 0 18px;
-}
-.nav-links.open{display:flex}
-.nav-links li{width:100%;text-align:center;padding:10px 0}
-.nav-links a{font-weight:500;font-size:1rem;text-decoration:none;color:var(--negro)}
-.nav-links a:hover{color:var(--indigo)}
-/* FIX legibilidad: estos selectores ganan a .nav-links a / .nav-links a:hover,
+
+    /* ==================== BASE (MÓVIL PRIMERO) ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    body {
+      font-family: var(--font);
+      color: var(--negro);
+      background: var(--blanco);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter)
+    }
+
+    h1,
+    h2,
+    h3 {
+      line-height: 1.12;
+      letter-spacing: -.015em
+    }
+
+    h1 {
+      font-weight: 800;
+      font-size: clamp(2.1rem, 8vw, 4.2rem)
+    }
+
+    h2 {
+      font-weight: 800;
+      font-size: clamp(1.55rem, 5.5vw, 2.5rem);
+      color: var(--indigo)
+    }
+
+    h3 {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--indigo)
+    }
+
+    /* Eyebrow: índigo sobre fondos claros (WCAG); la barra coral hace de acento */
+    .eyebrow {
+      display: inline-block;
+      font-weight: 700;
+      font-size: .8rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--indigo);
+      margin-bottom: 14px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      display: inline-block;
+      width: 22px;
+      height: 4px;
+      background: var(--coral);
+      margin-right: 10px;
+      vertical-align: middle
+    }
+
+    /* Sobre fondos índigo el coral sí tiene contraste suficiente */
+    .eyebrow--invert {
+      color: var(--coral)
+    }
+
+    p.lead {
+      font-size: 1.1rem;
+      max-width: 56ch
+    }
+
+    .caption {
+      color: var(--gris);
+      font-size: .85rem;
+      font-weight: 300
+    }
+
+    a {
+      color: inherit
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--coral);
+      outline-offset: 3px;
+      border-radius: 4px
+    }
+
+    /* ==================== LOGO ==================== */
+    .logo {
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -.02em;
+      text-decoration: none;
+      line-height: 1
+    }
+
+    .logo .x {
+      color: var(--coral)
+    }
+
+    .logo--claim {
+      font-weight: 500;
+      font-size: .9rem;
+      letter-spacing: 0;
+      margin-left: 10px;
+      opacity: .85
+    }
+
+    /* ==================== BOTONES ==================== */
+    .btn {
+      display: inline-block;
+      font-family: var(--font);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px)
+    }
+
+    .btn-indigo {
+      background: var(--indigo);
+      color: var(--blanco)
+    }
+
+    .btn-indigo:hover {
+      background: var(--indigo-deep);
+      color: var(--blanco)
+    }
+
+    .btn-blanco {
+      background: var(--blanco);
+      color: var(--indigo)
+    }
+
+    .btn-blanco:hover {
+      background: var(--gris-claro);
+      color: var(--indigo)
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--blanco);
+      border-color: rgba(255, 255, 255, .55)
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--coral);
+      color: var(--coral)
+    }
+
+    .btn[disabled] {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    /* Enlace de texto con flecha, para CTAs secundarios */
+    .link-cta {
+      display: inline-block;
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--indigo);
+      text-decoration: none;
+      border-bottom: 2px solid var(--coral);
+      padding-bottom: 2px;
+    }
+
+    .link-cta:hover {
+      color: var(--indigo-deep)
+    }
+
+    .link-cta--invert {
+      color: var(--blanco)
+    }
+
+    .link-cta--invert:hover {
+      color: var(--coral)
+    }
+
+    /* ==================== HEADER (base: móvil) ==================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--blanco);
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px
+    }
+
+    .nav .logo {
+      color: var(--indigo)
+    }
+
+    .nav-toggle {
+      display: block;
+      background: none;
+      border: none;
+      font-size: 1.7rem;
+      color: var(--indigo);
+      cursor: pointer;
+      line-height: 1;
+      padding: 8px;
+    }
+
+    .nav-links {
+      list-style: none;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--blanco);
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      border-bottom: 1px solid var(--borde);
+      padding: 8px 0 18px;
+    }
+
+    .nav-links.open {
+      display: flex
+    }
+
+    .nav-links li {
+      width: 100%;
+      text-align: center;
+      padding: 10px 0
+    }
+
+    .nav-links a {
+      font-weight: 500;
+      font-size: 1rem;
+      text-decoration: none;
+      color: var(--negro)
+    }
+
+    .nav-links a:hover {
+      color: var(--indigo)
+    }
+
+    /* FIX legibilidad: estos selectores ganan a .nav-links a / .nav-links a:hover,
    que antes pisaban el color del CTA (texto negro/índigo sobre fondo índigo) */
-.nav-links a.btn-indigo{color:var(--blanco);padding:12px 24px;font-size:.95rem}
-.nav-links a.btn-indigo:hover{color:var(--blanco);background:var(--indigo-deep)}
- 
-@media(min-width:821px){
-  .nav{height:72px}
-  .nav-toggle{display:none}
-  .nav-links{
-    position:static;display:flex;flex-direction:row;align-items:center;
-    gap:28px;border:none;padding:0;background:transparent;
-  }
-  .nav-links li{width:auto;padding:0}
-  .nav-links a{font-size:.95rem}
-  .nav-links a.btn-indigo{padding:10px 22px;font-size:.9rem}
-}
- 
-/* ==================== HERO (base: móvil) ==================== */
-.hero{
-  background:var(--indigo);color:var(--blanco);
-  position:relative;overflow:hidden;
-  padding:64px 0 76px;
-}
-/* Firma visual: la 'x' del logotipo como aspa gráfica de fondo */
-.hero-x{
-  position:absolute;right:-18%;bottom:-14%;
-  width:min(72vw,560px);height:min(72vw,560px);
-  pointer-events:none;opacity:.8;
-}
-.hero-x span{position:absolute;inset:0;background:var(--indigo-deep);border-radius:60px}
-.hero-x span:first-child{transform:rotate(45deg) scaleX(.28)}
-.hero-x span:last-child{transform:rotate(-45deg) scaleX(.28)}
-.hero-inner{position:relative;max-width:720px}
-.hero h1 .acento{color:var(--coral)}
-.hero p{margin:20px 0 32px;font-size:1.08rem;font-weight:300;max-width:56ch}
-.hero p strong{font-weight:700}
-.hero-ctas{display:flex;flex-direction:column;gap:12px}
-.hero-ctas .btn{width:100%}
-.hero-publicos{margin-top:38px;display:flex;flex-wrap:wrap;gap:8px}
-.hero-publicos span{
-  font-size:.8rem;font-weight:500;padding:7px 14px;border-radius:999px;
-  border:1px solid rgba(255,255,255,.3);color:rgba(255,255,255,.92);
-}
- 
-@media(min-width:560px){
-  .hero-ctas{flex-direction:row;flex-wrap:wrap}
-  .hero-ctas .btn{width:auto}
-}
-@media(min-width:880px){
-  .hero{padding:96px 0 110px}
-  .hero p{font-size:1.2rem;margin:22px 0 36px}
-  .hero-x{right:-6%;bottom:-22%;width:min(46vw,560px);height:min(46vw,560px);opacity:1}
-  .hero-publicos{margin-top:46px;gap:10px}
-}
- 
-/* ==================== SECCIONES (base: móvil) ==================== */
-section{padding:60px 0}
-.section-head{max-width:640px;margin-bottom:36px}
-.section-head p{margin-top:14px;color:#3c3c46}
- 
-@media(min-width:880px){
-  section{padding:88px 0}
-  .section-head{margin-bottom:52px}
-}
- 
-/* --- Método: 4 fases --- */
-.fases{background:var(--gris-claro)}
-.fase-grid{display:grid;grid-template-columns:1fr;gap:16px}
-.fase{
-  background:var(--blanco);border-radius:var(--radius);padding:26px 22px 24px;
-  border:1px solid var(--borde);display:flex;flex-direction:column;gap:12px;
-}
-.fase .num{font-weight:800;font-size:2rem;color:var(--coral);line-height:1}
-.fase p{font-size:.95rem;color:#3c3c46}
-.fase .resultado{
-  margin-top:auto;padding-top:14px;border-top:1px solid var(--borde);
-  font-size:.85rem;color:var(--gris);
-}
-.fase .resultado b{color:var(--indigo);font-weight:700;display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
- 
-@media(min-width:560px){.fase-grid{grid-template-columns:repeat(2,1fr);gap:20px}}
-@media(min-width:980px){.fase-grid{grid-template-columns:repeat(4,1fr)}}
- 
-/* --- Cursos --- */
-.cursos-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
-.cursos ul{list-style:none;margin-top:22px;display:grid;gap:12px}
-.cursos li{padding-left:26px;position:relative;font-size:1rem}
-.cursos li::before{content:"";position:absolute;left:0;top:9px;width:12px;height:12px;background:var(--coral);border-radius:3px}
- 
-@media(min-width:880px){.cursos-grid{grid-template-columns:1.1fr .9fr;gap:56px}}
- 
-/* --- Formularios (tarjeta) --- */
-.card-form{
-  background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radius);
-  padding:26px 20px;box-shadow:0 8px 30px rgba(27,15,150,.07);
-}
-.card-form h3{margin-bottom:6px}
-.card-form .caption{display:block;margin-bottom:20px}
-.field{margin-bottom:16px}
-.field label{display:block;font-weight:500;font-size:.88rem;margin-bottom:6px}
-.field input,.field select,.field textarea{
-  width:100%;font-family:var(--font);font-size:1rem;padding:12px 14px;
-  border:1.5px solid var(--borde);border-radius:10px;background:var(--blanco);color:var(--negro);
-}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--indigo);outline:none}
-.form-ok{
-  display:none;background:#EDF7EF;border:1px solid #BFE3C6;color:#1E5E2E;
-  border-radius:10px;padding:14px 16px;font-size:.95rem;margin-top:6px;
-}
-.form-ok.show{display:block}
- 
-@media(min-width:560px){.card-form{padding:32px}}
- 
-/* --- Auditoría --- */
-.auditoria{background:var(--indigo);color:var(--blanco)}
-.auditoria h2{color:var(--blanco)}
-.auditoria .grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
-.auditoria .incluye{list-style:none;margin-top:24px;display:grid;gap:12px}
-.auditoria .incluye li{padding-left:26px;position:relative;font-weight:300}
-.auditoria .incluye li b{font-weight:700}
-.auditoria .incluye li::before{content:"×";position:absolute;left:0;top:-2px;color:var(--coral);font-weight:800;font-size:1.2rem}
-.precio-card{background:var(--blanco);color:var(--negro);border:none}
-.precio{display:flex;align-items:baseline;gap:12px;margin-bottom:4px;flex-wrap:wrap}
-.precio .importe{font-weight:800;font-size:2.5rem;color:var(--indigo);letter-spacing:-.02em}
-.precio .tachado{font-weight:500;font-size:1.3rem;color:var(--gris);text-decoration:line-through;display:none}
-.precio-card.gratis .importe-normal{display:none}
-.precio-card.gratis .tachado{display:inline}
-.precio-card.gratis .importe-promo{display:inline;color:var(--indigo)}
-.importe-promo{display:none}
-.promo-row{display:flex;flex-direction:column;gap:10px}
-.promo-row input{flex:1}
-.promo-msg{font-size:.85rem;margin-top:8px;min-height:1.2em}
-.promo-msg.ok{color:#1E5E2E;font-weight:500}
-.promo-msg.err{color:#B3261E;font-weight:500}
- 
-@media(min-width:560px){
-  .precio .importe{font-size:3rem}
-  .promo-row{flex-direction:row}
-}
-@media(min-width:880px){.auditoria .grid{grid-template-columns:1.05fr .95fr;gap:56px}}
- 
-/* --- Equipo --- */
-.equipo-grid{display:grid;grid-template-columns:1fr;gap:20px;max-width:440px}
-.persona{
-  border:1px solid var(--borde);border-radius:var(--radius);
-  padding:28px 24px;text-align:left;background:var(--blanco);
-}
-.avatar{
-  width:76px;height:76px;border-radius:50%;background:var(--indigo);
-  color:var(--blanco);font-weight:800;font-size:1.5rem;
-  display:flex;align-items:center;justify-content:center;margin-bottom:18px;
-}
-.persona h3{font-size:1.1rem;color:var(--negro)}
-.persona .rol{color:var(--indigo);font-weight:500;font-size:.9rem;margin:2px 0 12px}
-.persona p{font-size:.93rem;color:#3c3c46}
- 
-@media(min-width:880px){
-  .equipo-grid{grid-template-columns:repeat(3,1fr);gap:24px;max-width:none}
-}
- 
-/* --- Newsletter --- */
-.newsletter{background:var(--gris-claro)}
-.newsletter .inner{
-  background:var(--blanco);border:1px solid var(--borde);border-radius:var(--radius);
-  padding:32px 24px;display:grid;grid-template-columns:1fr;gap:32px;align-items:center;
-}
-.newsletter form{display:flex;flex-direction:column;gap:10px}
-.newsletter input{
-  flex:1;font-family:var(--font);font-size:1rem;padding:14px 16px;
-  border:1.5px solid var(--borde);border-radius:999px;
-}
-.newsletter input:focus{border-color:var(--indigo);outline:none}
-.newsletter .caption{margin-top:12px;display:block}
- 
-@media(min-width:560px){.newsletter form{flex-direction:row}}
-@media(min-width:880px){
-  .newsletter .inner{grid-template-columns:1.1fr .9fr;gap:44px;padding:52px}
-}
- 
-/* ==================== FOOTER ==================== */
-footer{background:var(--indigo);color:var(--blanco);padding:48px 0 36px}
-.foot{display:flex;flex-direction:column;gap:32px;align-items:flex-start}
-.foot .logo{color:var(--blanco);font-size:1.7rem}
-.foot p{font-weight:300;font-size:.92rem;max-width:34ch;margin-top:12px;opacity:.85}
-.foot-links{list-style:none;display:grid;gap:10px}
-.foot-links a{text-decoration:none;font-weight:300;font-size:.95rem;opacity:.9}
-.foot-links a:hover{color:var(--coral);opacity:1}
-.legal{
-  margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,255,255,.18);
-  display:flex;flex-direction:column;gap:10px;
-  font-weight:300;font-size:.82rem;opacity:.75;
-}
-.legal a{text-decoration:none}
-.legal a:hover{color:var(--coral)}
- 
-@media(min-width:880px){
-  footer{padding:56px 0 40px}
-  .foot{flex-direction:row;justify-content:space-between;flex-wrap:wrap}
-  .legal{flex-direction:row;justify-content:space-between;flex-wrap:wrap;margin-top:44px}
-}
-</style>
+    .nav-links a.btn-indigo {
+      color: var(--blanco);
+      padding: 12px 24px;
+      font-size: .95rem
+    }
+
+    .nav-links a.btn-indigo:hover {
+      color: var(--blanco);
+      background: var(--indigo-deep)
+    }
+
+    @media(min-width:821px) {
+      .nav {
+        height: 72px
+      }
+
+      .nav-toggle {
+        display: none
+      }
+
+      .nav-links {
+        position: static;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 24px;
+        border: none;
+        padding: 0;
+        background: transparent;
+      }
+
+      .nav-links li {
+        width: auto;
+        padding: 0
+      }
+
+      .nav-links a {
+        font-size: .95rem
+      }
+
+      .nav-links a.btn-indigo {
+        padding: 10px 22px;
+        font-size: .9rem
+      }
+    }
+
+    /* ==================== HERO (base: móvil) ==================== */
+    .hero {
+      background: var(--indigo);
+      color: var(--blanco);
+      position: relative;
+      overflow: hidden;
+      padding: 64px 0 76px;
+    }
+
+    /* Firma visual: la 'x' del logotipo como aspa gráfica de fondo */
+    .hero-x {
+      position: absolute;
+      right: -18%;
+      bottom: -14%;
+      width: min(72vw, 560px);
+      height: min(72vw, 560px);
+      pointer-events: none;
+      opacity: .8;
+    }
+
+    .hero-x span {
+      position: absolute;
+      inset: 0;
+      background: var(--indigo-deep);
+      border-radius: 60px
+    }
+
+    .hero-x span:first-child {
+      transform: rotate(45deg) scaleX(.28)
+    }
+
+    .hero-x span:last-child {
+      transform: rotate(-45deg) scaleX(.28)
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 720px
+    }
+
+    .hero h1 .acento {
+      color: var(--coral)
+    }
+
+    .hero p {
+      margin: 20px 0 32px;
+      font-size: 1.08rem;
+      font-weight: 300;
+      max-width: 56ch
+    }
+
+    .hero p strong {
+      font-weight: 700
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .hero-ctas .btn {
+      width: 100%
+    }
+
+    .hero-publicos {
+      margin-top: 38px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .hero-publicos span {
+      font-size: .8rem;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, .3);
+      color: rgba(255, 255, 255, .92);
+    }
+
+    @media(min-width:560px) {
+      .hero-ctas {
+        flex-direction: row;
+        flex-wrap: wrap
+      }
+
+      .hero-ctas .btn {
+        width: auto
+      }
+    }
+
+    @media(min-width:880px) {
+      .hero {
+        padding: 96px 0 110px
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        margin: 22px 0 36px
+      }
+
+      .hero-x {
+        right: -6%;
+        bottom: -22%;
+        width: min(46vw, 560px);
+        height: min(46vw, 560px);
+        opacity: 1
+      }
+
+      .hero-publicos {
+        margin-top: 46px;
+        gap: 10px
+      }
+    }
+
+    /* ==================== SECCIONES (base: móvil) ==================== */
+    section {
+      padding: 60px 0
+    }
+
+    .section-head {
+      max-width: 660px;
+      margin-bottom: 36px
+    }
+
+    .section-head p {
+      margin-top: 14px;
+      color: var(--texto-suave)
+    }
+
+    @media(min-width:880px) {
+      section {
+        padding: 88px 0
+      }
+
+      .section-head {
+        margin-bottom: 52px
+      }
+    }
+
+    /* ==================== ACORDEÓN NATIVO ==================== */
+    /* <details>/<summary>: sin JS, navegable por teclado, plegado por defecto */
+    details.acc>summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--indigo);
+    }
+
+    details.acc>summary::-webkit-details-marker {
+      display: none
+    }
+
+    details.acc>summary::after {
+      content: "+";
+      margin-left: auto;
+      font-weight: 800;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--coral);
+      transition: transform .18s ease;
+    }
+
+    details.acc[open]>summary::after {
+      transform: rotate(45deg)
+    }
+
+    details.acc>summary:hover {
+      color: var(--indigo-deep)
+    }
+
+    /* ==================== SERVICIOS ==================== */
+    .servicios {
+      background: var(--gris-claro)
+    }
+
+    .pilares {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 22px 0 6px
+    }
+
+    .pilares span {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--indigo);
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 999px;
+      padding: 7px 14px;
+    }
+
+    .servicio-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .servicio {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .servicio .rotulo {
+      font-weight: 800;
+      font-size: .78rem;
+      letter-spacing: .12em;
+      color: var(--coral);
+      text-transform: uppercase;
+    }
+
+    .servicio .sub {
+      font-weight: 700;
+      font-size: .98rem;
+      color: var(--indigo)
+    }
+
+    .servicio>p {
+      font-size: .95rem;
+      color: var(--texto-suave)
+    }
+
+    .servicio details.acc > summary {
+      justify-content: flex-end;
+      text-align: right;
+    }
+    
+    .servicio details.acc > summary::after {
+      margin-left: 0;
+    }
+
+    .servicio .detalle {
+      padding-top: 16px;
+      display: grid;
+      gap: 14px
+    }
+
+    .servicio .detalle h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--indigo);
+      line-height: 1.3
+    }
+
+    .servicio .detalle p {
+      font-size: .92rem;
+      color: var(--texto-suave)
+    }
+
+    .servicio .detalle ul {
+      list-style: none;
+      display: grid;
+      gap: 8px
+    }
+
+    .servicio .detalle li {
+      position: relative;
+      padding-left: 20px;
+      font-size: .92rem;
+      color: var(--texto-suave)
+    }
+
+    .servicio .detalle li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 9px;
+      height: 9px;
+      background: var(--coral);
+      border-radius: 2px;
+    }
+
+    .servicio .objetivo {
+      background: var(--gris-claro);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: .9rem;
+      color: var(--texto-suave);
+    }
+
+    .servicio .objetivo b {
+      color: var(--indigo)
+    }
+
+    @media(min-width:720px) {
+      .servicio-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px
+      }
+      .servicio > p:not(.sub){
+        min-height:6.2em;
+      } 
+    }
+
+    /* ==================== MÉTODO: 4 PASOS ==================== */
+    .pasos {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px
+    }
+
+    .paso {
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .paso .num {
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--coral);
+      line-height: 1;
+      letter-spacing: -.03em
+    }
+
+    .paso p {
+      font-size: .94rem;
+      color: var(--texto-suave)
+    }
+
+    @media(min-width:600px) {
+      .pasos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px
+      }
+    }
+
+    @media(min-width:980px) {
+      .pasos {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    /* ==================== IA LOCAL (bloque diferencial) ==================== */
+    .local {
+      background: var(--indigo);
+      color: var(--blanco);
+      position: relative;
+      overflow: hidden
+    }
+
+    .local h2 {
+      color: var(--blanco);
+      font-size: clamp(1.7rem, 6vw, 2.9rem)
+    }
+
+    .local .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      align-items: start;
+      position: relative
+    }
+
+    .local .sub {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--coral);
+      margin-top: 16px
+    }
+
+    .local p {
+      font-weight: 300;
+      margin-top: 16px;
+      max-width: 54ch
+    }
+
+    .local p strong {
+      font-weight: 700
+    }
+
+    .local .panel {
+      background: var(--indigo-deep);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      border: 1px solid rgba(255, 255, 255, .14);
+    }
+
+    .local .panel h3 {
+      color: var(--blanco);
+      font-size: 1.05rem
+    }
+
+    .local .panel p {
+      font-size: .94rem;
+      margin-top: 14px;
+      max-width: none
+    }
+
+    .local .panel .destacado {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      font-weight: 700;
+      font-size: .98rem;
+    }
+
+    .local .cta-row {
+      margin-top: 28px
+    }
+
+    @media(min-width:900px) {
+      .local .grid {
+        grid-template-columns: 1.05fr .95fr;
+        gap: 56px
+      }
+    }
+
+    /* ==================== FUNCIONALIDADES ==================== */
+    .func-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px
+    }
+
+    .func {
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 24px 22px;
+      background: var(--blanco);
+    }
+
+    .func h3 {
+      font-size: 1.02rem;
+      margin-bottom: 14px
+    }
+
+    .func ul {
+      list-style: none;
+      display: grid;
+      gap: 10px
+    }
+
+    .func li {
+      position: relative;
+      padding-left: 22px;
+      font-size: .92rem;
+      color: var(--texto-suave)
+    }
+
+    .func li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      background: var(--coral);
+      border-radius: 2px;
+    }
+
+    .nota-estado {
+      margin-top: 28px;
+      max-width: 64ch;
+      font-size: .9rem;
+      color: var(--texto-suave);
+      border-left: 3px solid var(--coral);
+      padding-left: 16px;
+    }
+
+    @media(min-width:640px) {
+      .func-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px
+      }
+    }
+
+    @media(min-width:1040px) {
+      .func-grid {
+        grid-template-columns: repeat(4, 1fr)
+      }
+    }
+
+    /* ==================== FAQ ==================== */
+    .faq {
+      background: var(--gris-claro)
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 12px;
+      max-width: 780px
+    }
+
+    details.faq-item {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+    }
+
+    details.faq-item>summary {
+      font-size: 1rem
+    }
+
+    details.faq-item p {
+      margin-top: 14px;
+      font-size: .95rem;
+      color: var(--texto-suave);
+      max-width: 62ch
+    }
+
+    /* ==================== FORMULARIOS (tarjeta) ==================== */
+    .card-form {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 26px 20px;
+      box-shadow: 0 8px 30px rgba(27, 15, 150, .07);
+    }
+
+    .card-form h3 {
+      margin-bottom: 6px
+    }
+
+    .card-form .caption {
+      display: block;
+      margin-bottom: 20px
+    }
+
+    .field {
+      margin-bottom: 16px
+    }
+
+    .field label {
+      display: block;
+      font-weight: 500;
+      font-size: .88rem;
+      margin-bottom: 6px
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      font-family: var(--font);
+      font-size: 1rem;
+      padding: 12px 14px;
+      border: 1.5px solid var(--borde);
+      border-radius: 10px;
+      background: var(--blanco);
+      color: var(--negro);
+    }
+
+    .field textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.5
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--indigo);
+      outline: none
+    }
+
+    .form-ok {
+      display: none;
+      background: #EDF7EF;
+      border: 1px solid #BFE3C6;
+      color: #1E5E2E;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: .95rem;
+      margin-top: 6px;
+    }
+
+    .form-ok.show {
+      display: block
+    }
+
+    @media(min-width:560px) {
+      .card-form {
+        padding: 32px
+      }
+    }
+
+    /* ==================== CTA FINAL / CONTACTO ==================== */
+    .contacto .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      align-items: start
+    }
+
+    .contacto .grid>div p {
+      margin-top: 16px;
+      color: var(--texto-suave);
+      max-width: 52ch
+    }
+
+    @media(min-width:880px) {
+      .contacto .grid {
+        grid-template-columns: 1.05fr .95fr;
+        gap: 56px
+      }
+    }
+
+    /* ==================== EQUIPO ==================== */
+    .equipo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 440px
+    }
+
+    .persona {
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: left;
+      background: var(--blanco);
+    }
+
+    .avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--indigo);
+      color: var(--blanco);
+      font-weight: 800;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+    }
+
+    .persona h3 {
+      font-size: 1.1rem;
+      color: var(--negro)
+    }
+
+    .persona .rol {
+      color: var(--indigo);
+      font-weight: 500;
+      font-size: .9rem;
+      margin: 2px 0 12px
+    }
+
+    .persona p {
+      font-size: .93rem;
+      color: var(--texto-suave)
+    }
+
+    @media(min-width:880px) {
+      .equipo-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        max-width: none
+      }
+    }
+
+    /* ==================== NEWSLETTER ==================== */
+    .newsletter {
+      background: var(--gris-claro)
+    }
+
+    .newsletter .inner {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .newsletter form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .newsletter input {
+      flex: 1;
+      font-family: var(--font);
+      font-size: 1rem;
+      padding: 14px 16px;
+      border: 1.5px solid var(--borde);
+      border-radius: 999px;
+    }
+
+    .newsletter input:focus {
+      border-color: var(--indigo);
+      outline: none
+    }
+
+    .newsletter .caption {
+      margin-top: 12px;
+      display: block
+    }
+
+    @media(min-width:560px) {
+      .newsletter form {
+        flex-direction: row
+      }
+    }
+
+    @media(min-width:880px) {
+      .newsletter .inner {
+        grid-template-columns: 1.1fr .9fr;
+        gap: 44px;
+        padding: 52px
+      }
+    }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      background: var(--indigo);
+      color: var(--blanco);
+      padding: 48px 0 36px
+    }
+
+    .foot {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: flex-start
+    }
+
+    .foot .logo {
+      color: var(--blanco);
+      font-size: 1.7rem
+    }
+
+    .foot p {
+      font-weight: 300;
+      font-size: .92rem;
+      max-width: 34ch;
+      margin-top: 12px;
+      opacity: .85
+    }
+
+    .foot-links {
+      list-style: none;
+      display: grid;
+      gap: 10px
+    }
+
+    .foot-links a {
+      text-decoration: none;
+      font-weight: 300;
+      font-size: .95rem;
+      opacity: .9
+    }
+
+    .foot-links a:hover {
+      color: var(--coral);
+      opacity: 1
+    }
+
+    .legal {
+      margin-top: 40px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(255, 255, 255, .18);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-weight: 300;
+      font-size: .82rem;
+      opacity: .75;
+    }
+
+    .legal a {
+      text-decoration: none
+    }
+
+    .legal a:hover {
+      color: var(--coral)
+    }
+
+    @media(min-width:880px) {
+      footer {
+        padding: 56px 0 40px
+      }
+
+      .foot {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap
+      }
+
+      .legal {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-top: 44px
+      }
+    }
+  </style>
 </head>
+
 <body>
- 
-<!-- ==================== HEADER ==================== -->
-<header>
-  <div class="wrap nav">
-    <a class="logo" href="#" aria-label="iAx – inteliAxencia, inicio">iA<span class="x">x</span></a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">☰</button>
-    <ul class="nav-links" id="menu">
-      <li><a href="#metodo">Método</a></li>
-      <li><a href="#cursos">Cursos</a></li>
-      <li><a href="#equipo">Equipo</a></li>
-      <li><a href="#newsletter">Newsletter</a></li>
-      <li><a class="btn btn-indigo" href="#auditoria">Agendar auditoría</a></li>
-    </ul>
-  </div>
-</header>
- 
-<!-- ==================== HERO ==================== -->
-<section class="hero" id="inicio">
-  <div class="hero-x" aria-hidden="true"><span></span><span></span></div>
-  <div class="wrap hero-inner">
-    <span class="eyebrow eyebrow--invert">IA para el sector legal · Derecho laboral</span>
-    <h1>La transformación digital de tu despacho, con criterio<span class="acento">.</span></h1>
-    <p>Ayudamos a organizaciones laborales, jurídicas y profesionales a <strong>entender, ordenar e implementar</strong> su digitalización de forma práctica, progresiva y adaptada a su realidad. Empezamos escuchando. Diagnosticamos con método. Y solo entonces, recomendamos.</p>
-    <div class="hero-ctas">
-      <a class="btn btn-blanco" href="#auditoria">Agendar auditoría</a>
-      <a class="btn btn-ghost" href="#cursos">Información sobre cursos</a>
+
+  <!-- ==================== HEADER ==================== -->
+  <header>
+    <div class="wrap nav">
+      <a class="logo" href="#inicio" aria-label="iAx inteliAxencia, inicio">iA<span class="x">x</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú">☰</button>
+      <ul class="nav-links" id="menu">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#ia-local">IA local</a></li>
+        <li><a href="#equipo">Equipo</a></li>
+        <li><a class="btn btn-indigo" href="#contacto">Hablemos de tu caso</a></li>
+      </ul>
     </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="hero" id="inicio">
+    <div class="hero-x" aria-hidden="true"><span></span><span></span></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow eyebrow--invert">IA para el sector legal · Derecho laboral</span>
+      <h1>Recupera tiempo para ejercer el Derecho Laboral</h1>
+      <p>Analizamos tu forma de trabajar, optimizamos procesos y te acompañamos con formación personalizada para que
+        cada mejora se traduzca en <strong>más tiempo para tus clientes y menos tiempo en tareas que no aportan
+          valor.</strong></p>
+      <div class="hero-ctas">
+        <a class="btn btn-blanco" href="#contacto">Hablemos de tu caso</a>
+        <a class="btn btn-ghost" href="#servicios">Ver cómo trabajamos</a>
+      </div>
+      <!--
     <div class="hero-publicos" aria-label="A quién nos dirigimos">
-      <span>Abogados laboralistas</span><span>Graduados sociales</span><span>Sindicatos</span>
-      <span>Colegios profesionales</span><span>Patronales</span><span>Empresas</span>
+      <span>Abogados laboralistas</span><span>Graduados sociales</span>
+      <span>Colegios profesionales</span><span>Departamento Legal de RRHH</span>
     </div>
-  </div>
-</section>
- 
-<!-- ==================== MÉTODO: 4 FASES ==================== -->
-<section class="fases" id="metodo">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Nuestro método</span>
-      <h2>Cuatro fases, cero decisiones precipitadas</h2>
-      <p>Un proceso progresivo para avanzar desde una primera conversación interna hasta la implantación real de mejoras digitales, sin asumir decisiones tecnológicas precipitadas.</p>
+    -->
     </div>
-    <div class="fase-grid">
-      <article class="fase">
-        <span class="num" aria-hidden="true">1</span>
-        <h3>Taller inicial</h3>
-        <p>Charla formativa y taller de diagnóstico para alinear visión, detectar necesidades y abrir una conversación útil sobre IA y automatización dentro del equipo.</p>
-        <div class="resultado"><b>Resultado</b>Una lectura compartida del punto de madurez digital de la organización.</div>
-      </article>
-      <article class="fase">
-        <span class="num" aria-hidden="true">2</span>
-        <h3>Auditoría interna</h3>
-        <p>Análisis ordenado de procesos: gestión documental, expedientes, comunicaciones, herramientas, datos, seguridad y oportunidades de automatización.</p>
-        <div class="resultado"><b>Resultado</b>Mapa de situación y recomendaciones priorizadas y accionables.</div>
-      </article>
-      <article class="fase">
-        <span class="num" aria-hidden="true">3</span>
-        <h3>Selección e implantación</h3>
-        <p>Definición de requisitos, comparativa independiente de herramientas, apoyo en la decisión, plan de implantación y formación del equipo.</p>
-        <div class="resultado"><b>Resultado</b>Una implantación segura, ordenada y alineada con tus objetivos.</div>
-      </article>
-      <article class="fase">
-        <span class="num" aria-hidden="true">4</span>
-        <h3>Desarrollo ad hoc</h3>
-        <p>Cuando el mercado no cubre una necesidad concreta: formularios inteligentes, automatizaciones, cuadros de mando o asistentes internos a medida.</p>
-        <div class="resultado"><b>Resultado</b>Soluciones prácticas sin sobredimensionar la inversión.</div>
-      </article>
-    </div>
-  </div>
-</section>
- 
-<!-- ==================== CURSOS ==================== -->
-<section id="cursos">
-  <div class="wrap cursos-grid">
-    <div class="cursos">
-      <span class="eyebrow">Formación</span>
-      <h2>Cursos de IA aplicada al derecho laboral</h2>
-      <p class="lead" style="margin-top:14px">Formación práctica, en lenguaje claro para equipos no técnicos, diseñada para despachos, sindicatos y departamentos laborales.</p>
-      <ul>
-        <li>Fundamentos de IA para profesionales del ámbito laboral y jurídico.</li>
-        <li>Automatización de tareas administrativas repetitivas.</li>
-        <li>Gestión documental inteligente y clasificación de expedientes.</li>
-        <li>Uso responsable de la IA: seguridad, trazabilidad y control.</li>
-      </ul>
-    </div>
- 
-    <!-- TODO 3 · Conectar a endpoint serverless o email del equipo -->
-    <form class="card-form" id="form-cursos" novalidate>
-      <h3>Solicita información</h3>
-      <span class="caption">Te contamos fechas, formatos y programas sin compromiso.</span>
-      <div class="field">
-        <label for="c-nombre">Nombre</label>
-        <input id="c-nombre" name="nombre" type="text" autocomplete="name" required>
-      </div>
-      <div class="field">
-        <label for="c-email">Email profesional</label>
-        <input id="c-email" name="email" type="email" autocomplete="email" required>
-      </div>
-      <div class="field">
-        <label for="c-perfil">Tu organización</label>
-        <select id="c-perfil" name="perfil">
-          <option>Despacho de abogados laboralistas</option>
-          <option>Graduados sociales</option>
-          <option>Sindicato</option>
-          <option>Colegio profesional</option>
-          <option>Asociación empresarial / patronal</option>
-          <option>Empresa (RRHH, jurídico, relaciones laborales)</option>
-        </select>
-      </div>
-      <button class="btn btn-indigo" type="submit" style="width:100%">Quiero información</button>
-      <p class="form-ok" role="status">Recibido. Te escribiremos en breve con toda la información sobre los cursos.</p>
-    </form>
-  </div>
-</section>
- 
-<!-- ==================== AUDITORÍA ==================== -->
-<section class="auditoria" id="auditoria">
-  <div class="wrap grid">
-    <div>
-      <span class="eyebrow eyebrow--invert">Fase 2 · Diagnóstico</span>
-      <h2>Auditoría de digitalización</h2>
-      <p style="margin-top:16px;font-weight:300;max-width:52ch">Analizamos de forma ordenada qué procesos están ya digitalizados, cuáles funcionan y cuáles presentan margen de mejora. Sin humo y sin compromiso de compra posterior.</p>
-      <ul class="incluye">
-        <li><b>Mapa de situación actual</b> de tus procesos y herramientas.</li>
-        <li><b>Riesgos, duplicidades e ineficiencias</b> detectadas.</li>
-        <li><b>Recomendaciones priorizadas</b> y accionables.</li>
-        <li><b>Propuesta de siguientes pasos</b>, con independencia de proveedor.</li>
-      </ul>
-    </div>
- 
-    <!-- TODO 4 · Producción: Cal.com embebido + Stripe Checkout con cupón.
-         El código promocional se valida en Stripe (cupón -100%), nunca en cliente.
-         Esta validación en JS es solo para el prototipo. -->
-    <form class="card-form precio-card" id="form-auditoria" novalidate>
-      <h3>Agenda tu auditoría</h3>
-      <span class="caption">Sesión de diagnóstico + informe con recomendaciones.</span>
-      <div class="precio" aria-live="polite">
-        <span class="importe importe-normal">490&nbsp;€</span>
-        <span class="importe importe-promo">0&nbsp;€</span>
-        <span class="tachado">490&nbsp;€</span>
-      </div>
-      <span class="caption" style="margin-bottom:18px">IVA no incluido. Plazas limitadas cada mes.</span>
-      <div class="field">
-        <label for="a-promo">¿Tienes un código promocional?</label>
-        <div class="promo-row">
-          <input id="a-promo" name="promo" type="text" placeholder="Introduce tu código" autocomplete="off">
-          <button class="btn btn-indigo" type="button" id="btn-promo">Aplicar</button>
+  </section>
+
+  <!-- ==================== SERVICIOS ==================== -->
+  <section class="servicios" id="servicios">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Servicios</span>
+        <h2>Cómo podemos ayudarte</h2>
+        <p>Cada despacho trabaja de una manera diferente. Por eso no partimos de una herramienta, sino de tus
+          necesidades.</p>
+        <p>Analizamos tus procesos, identificamos oportunidades de mejora y te acompañamos en la incorporación de nuevas
+          herramientas, desde la formación del equipo hasta el desarrollo de soluciones adaptadas.</p>
+        <div class="pilares" aria-label="Áreas de trabajo">
+          <span>Diagnóstico</span><span>Formación</span><span>Implementación</span><span>IA local</span>
         </div>
-        <p class="promo-msg" id="promo-msg" role="status"></p>
+        <br>
+        <a class="btn btn-indigo" href="#contacto">Cuéntanos qué quieres mejorar</a>
       </div>
-      <div class="field">
-        <label for="a-email">Email de contacto</label>
-        <input id="a-email" name="email" type="email" autocomplete="email" required>
+      <div class="servicio-grid">
+
+        <!-- Servicio 01 -->
+        <article class="servicio">
+          <h3>Diagnóstico y optimización</h3>
+          <p class="sub">Entender antes de incorporar.</p>
+          <p>Analizamos cómo trabaja tu despacho para detectar tareas repetitivas, puntos de fricción y oportunidades
+            concretas de mejora.</p>
+          <details class="acc" name="servicios">
+            <summary class="link-cta">Ver cómo trabajamos</summary>
+            <div class="detalle">
+              <h4>Primero entendemos cómo trabajas. Después buscamos qué mejorar.</h4>
+              <p>Analizamos los procesos y herramientas que utilizas actualmente para identificar tareas repetitivas,
+                puntos de fricción y oportunidades de mejora.</p>
+              <p><b>Podemos ayudarte a:</b></p>
+              <ul>
+                <li>analizar procesos y tareas;</li>
+                <li>detectar oportunidades de optimización;</li>
+                <li>evaluar las herramientas que ya utilizas;</li>
+                <li>identificar nuevas herramientas que puedan aportar valor;</li>
+                <li>definir por dónde empezar.</li>
+              </ul>
+              <p class="objetivo"><b>El objetivo:</b> que tengas claro qué conviene mejorar y qué solución tiene sentido
+                para tu despacho.</p>
+              <p><a class="btn btn-indigo"  href="#contacto">Analizar mi despacho</a></p>
+            </div>
+          </details>
+        </article>
+
+        <!-- Servicio 02 -->
+        <article class="servicio">
+          <h3>Formación y acompañamiento</h3>
+          <p class="sub">Aprender haciendo.</p>
+          <p>Formación práctica para incorporar nuevas herramientas a los procesos reales del equipo, con acompañamiento
+            durante su implementación cuando sea necesario.</p>
+          <details class="acc" name="servicios">
+            <summary class="link-cta"
+            >Conocer la formación</summary>
+            <div class="detalle">
+              <h4>Las herramientas solo aportan valor cuando el equipo sabe utilizarlas.</h4>
+              <p>Diseñamos formación práctica a partir de las necesidades reales de tu despacho. Trabajamos con las
+                herramientas y situaciones que forman parte de tu actividad para que el equipo pueda incorporarlas a su
+                trabajo cotidiano.</p>
+              <p>Y si necesitas algo más que formación, podemos acompañarte durante la implementación.</p>
+              <p><b>Trabajamos sobre:</b></p>
+              <ul>
+                <li>uso práctico de herramientas de IA;</li>
+                <li>incorporación de nuevas herramientas;</li>
+                <li>buenas prácticas de uso;</li>
+                <li>adaptación a los procesos del despacho;</li>
+                <li>acompañamiento durante la puesta en marcha.</li>
+              </ul>
+              <p><b>Temas que solemos trabajar:</b></p>
+              <ul>
+                <li>fundamentos de IA para profesionales del ámbito laboral y jurídico;</li>
+                <li>automatización de tareas administrativas repetitivas;</li>
+                <li>gestión documental y clasificación de expedientes;</li>
+                <li>uso responsable de la IA: seguridad, trazabilidad y control.</li>
+              </ul>
+              <p class="objetivo"><b>El objetivo:</b> que la tecnología se incorpore al trabajo del equipo, en lugar de
+                convertirse en otra herramienta más que nadie utiliza.</p>
+              <p><a class="btn btn-indigo" href="#contacto">Quiero formar a mi equipo</a></p>
+            </div>
+          </details>
+        </article>
+
+        <!-- Servicio 03 -->
+        <article class="servicio">
+          <h3>Soluciones adaptadas</h3>
+          <p class="sub">Cuando lo que existe no es suficiente.</p>
+          <p>Evaluamos, integramos o desarrollamos soluciones ajustadas a las necesidades concretas de tu despacho.</p>
+          <details class="acc" name="servicios">
+            <summary class="link-cta">Explorar soluciones</summary>
+            <div class="detalle">
+              <h4>Cuando una herramienta estándar no es suficiente.</h4>
+              <p>No todos los problemas se resuelven con una aplicación disponible en el mercado.</p>
+              <p>Cuando detectamos una necesidad específica, evaluamos alternativas e implementamos una solución
+                adaptada al funcionamiento del despacho.</p>
+              <p>Esto puede incluir la integración de herramientas existentes, configuraciones específicas o soluciones
+                desarrolladas para una necesidad concreta.</p>
+              <p>Y en determinados casos, la respuesta puede estar en trabajar con <b>IA de forma local</b>.</p>
+              <p><a class="btn btn-indigo" href="#contacto">Cuéntanos qué necesitas</a></p>
+            </div>
+          </details>
+        </article>
+
       </div>
-      <button class="btn btn-indigo" type="submit" style="width:100%" id="btn-agendar">Agendar cita</button>
-      <p class="form-ok" role="status">Solicitud recibida. Te enviaremos un enlace para elegir día y hora.</p>
-    </form>
-  </div>
-</section>
- 
-<!-- ==================== EQUIPO ==================== -->
-<section id="equipo">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Quiénes somos</span>
-      <h2>Un equipo entre dos mundos: el jurídico y el tecnológico</h2>
-      <p>No vendemos tecnología por vender tecnología. Actuamos como socio de confianza entre la necesidad organizativa y la solución adecuada, en lenguaje claro para equipos no técnicos.</p>
     </div>
-    <div class="equipo-grid">
-      <!-- Sustituir por fotos y bios reales del equipo fundador -->
-      <article class="persona">
-        <div class="avatar" aria-hidden="true">NA</div>
-        <h3>Nombre Apellido</h3>
-        <p class="rol">Socia fundadora · Estrategia y procesos</p>
-        <p>Experiencia en consultoría de procesos para organizaciones del ámbito laboral y colegial. Lidera los talleres y las auditorías.</p>
-      </article>
-      <article class="persona">
-        <div class="avatar" aria-hidden="true">NA</div>
-        <h3>Nombre Apellido</h3>
-        <p class="rol">Socio fundador · Tecnología e IA</p>
-        <p>Desarrollo de soluciones de automatización e IA aplicada. Responsable de la selección de herramientas y el desarrollo ad hoc.</p>
-      </article>
-      <article class="persona">
-        <div class="avatar" aria-hidden="true">NA</div>
-        <h3>Nombre Apellido</h3>
-        <p class="rol">Socio fundador · Ámbito jurídico-laboral</p>
-        <p>Trayectoria en derecho laboral y relaciones con despachos, sindicatos y colegios profesionales. Garantiza el rigor del enfoque.</p>
-      </article>
+  </section>
+
+  <!-- ==================== MÉTODO: 4 PASOS ==================== -->
+  <section id="metodo">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Cómo trabajamos</span>
+        <h2>No empezamos por la herramienta</h2>
+        <p>Primero entendemos cómo trabaja tu despacho. Después identificamos qué puede mejorarse y qué solución tiene
+          sentido.</p>
+      </div>
+      <div class="pasos">
+        <article class="paso">
+          <span class="num" aria-hidden="true">01</span>
+          <h3>Entendemos</h3>
+          <p>Analizamos cómo trabaja tu despacho, qué herramientas utilizas y dónde están las principales dificultades.
+          </p>
+        </article>
+        <article class="paso">
+          <span class="num" aria-hidden="true">02</span>
+          <h3>Identificamos</h3>
+          <p>Detectamos qué procesos pueden optimizarse y qué alternativas tienen sentido para tu situación.</p>
+        </article>
+        <article class="paso">
+          <span class="num" aria-hidden="true">03</span>
+          <h3>Implementamos</h3>
+          <p>Te ayudamos a incorporar la solución elegida y a que el equipo pueda utilizarla en su trabajo cotidiano.
+          </p>
+        </article>
+        <article class="paso">
+          <span class="num" aria-hidden="true">04</span>
+          <h3>Evolucionamos</h3>
+          <p>Si las necesidades cambian, podemos seguir acompañando al despacho y desarrollar nuevas soluciones.</p>
+        </article>
+      </div>
     </div>
-  </div>
-</section>
- 
-<!-- ==================== NEWSLETTER ==================== -->
-<section class="newsletter" id="newsletter">
-  <div class="wrap">
-    <div class="inner">
+  </section>
+
+  <!-- ==================== IA LOCAL · BLOQUE DIFERENCIAL ==================== -->
+  <section class="local" id="ia-local">
+    <div class="hero-x" aria-hidden="true" style="right:-24%;top:-30%;bottom:auto;opacity:.55">
+      <span></span><span></span></div>
+    <div class="wrap grid">
       <div>
-        <span class="eyebrow">Newsletter</span>
-        <h2 style="font-size:clamp(1.5rem,2.6vw,2rem)">IA y derecho laboral, sin ruido</h2>
-        <p style="margin-top:12px;color:#3c3c46">Una vez al mes: novedades de IA relevantes para el ámbito laboral, casos prácticos y herramientas explicadas en claro. Sin spam.</p>
+        <span class="eyebrow eyebrow--invert">Diferencial iAx</span>
+        <h2>¿Y si la información no puede salir de tu despacho?</h2>
+        <p class="sub">IA local para trabajar con mayor control sobre tus datos.</p>
+        <p>Hay situaciones en las que utilizar herramientas externas no es la opción más adecuada.</p>
+        <p>Por eso iAx ofrece una solución de <strong>IA local diseñada para trabajar en el entorno del propio
+            despacho</strong>, que permite centralizar información, consultar documentación y utilizar capacidades de IA
+          sin depender exclusivamente de servicios externos.</p>
+        <p>Una alternativa pensada para despachos que necesitan combinar las capacidades de la inteligencia artificial
+          con un mayor control sobre su información.</p>
+        <div class="cta-row">
+          <a class="link-cta link-cta--invert" href="#funcionalidades">Conocer la IA local</a>
+        </div>
       </div>
+
+      <div class="panel">
+        <h3>IA con una gestión responsable del dato</h3>
+        <p>La solución está concebida para que el despacho pueda mantener un mayor control sobre <strong>dónde se
+            procesa su información, cómo se organiza y quién puede acceder a ella</strong>.</p>
+        <p>El enfoque de iAx incorpora principios de <strong>gobernanza del dato, control de acceso, trazabilidad y
+            gestión responsable de la información</strong>, especialmente relevantes cuando se trabaja con documentación
+          jurídica y datos sensibles.</p>
+        <p class="destacado">Porque incorporar inteligencia artificial no debería significar perder el control sobre la
+          información.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FUNCIONALIDADES IA LOCAL ==================== -->
+  <section id="funcionalidades">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">IA local</span>
+        <h2>Un entorno de trabajo conectado y sin cortes por cuota</h2>
+        <p>La solución incorpora funcionalidades orientadas al trabajo cotidiano del despacho. La capacidad de trabajo es tuya, sin cortes por planes de suscripción.</p>
+      </div>
+
+      <div class="func-grid">
+        <article class="func">
+          <h3>Documentación</h3>
+          <ul>
+            <li>Organización de documentos.</li>
+            <li>Consulta a bases de datos según permisos de acceso.</li>
+            <li>Revisión y análisis de documentos con skills legales.</li>
+            <li>Soporte para PDF, Word y Excel.</li>
+          </ul>
+        </article>
+        <article class="func">
+          <h3>Información jurídica</h3>
+          <ul>
+            <li>Consulta del BOE.</li>
+            <li>Consulta de jurisprudencia.</li>
+            <li>Centralización de información por expediente.</li>
+            <li>Restricciones para evitar consultas masivas.</li>
+          </ul>
+        </article>
+        <article class="func">
+          <h3>Gestión del despacho</h3>
+          <ul>
+            <li>Revisión del correo.</li>
+            <li>Recordatorios de agenda.</li>
+            <li>Análisis de leads.</li>
+          </ul>
+        </article>
+        <article class="func">
+          <h3>Control y acceso</h3>
+          <ul>
+            <li>Sistema de acceso y panel de control.</li>
+            <li>Permisos según perfil dentro del despacho.</li>
+            <li>Trazabilidad del uso.</li>
+            <li>Gobernanza del dato.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Dudas habituales antes de empezar</h2>
+      </div>
+      <div class="faq-list">
+        <details class="acc faq-item">
+          <summary>¿Tengo que saber qué herramienta necesito antes de contactar?</summary>
+          <p>No. Podemos partir de un problema o una necesidad concreta y analizar qué alternativa tiene sentido.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Trabajáis con las herramientas que ya utilizamos?</summary>
+          <p>Sí. Primero analizamos el entorno existente antes de recomendar incorporar nuevas herramientas.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿La formación está pensada para personas sin experiencia en IA?</summary>
+          <p>Sí. La formación se adapta al nivel de conocimiento y a las necesidades reales del equipo.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Qué es la IA local?</summary>
+          <p>Es una alternativa que permite ejecutar determinadas capacidades de IA en un entorno controlado por el
+            propio despacho, en lugar de depender exclusivamente de servicios externos.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Hay límite de consultas? ¿Me quedaré sin servicio a mitad de un escrito?</summary>
+          <p>No. Con las herramientas de suscripción habituales, el proveedor reparte una capacidad compartida entre millones de usuarios y le asigna a usted una cuota. Cuando la agota, el sistema se bloquea y solo puede seguir cuando se reinicia el contador, que a veces son horas. Suele ocurrir el día de vencimiento de un plazo, que es precisamente cuando más lo está usando.</p>
+          <p>
+          Con una instalación en su despacho ese contador no existe. La capacidad de cálculo es suya, no está compartida con nadie, y nadie puede cortarle el acceso. Si varias personas del despacho consultan a la vez en un momento punta, las respuestas pueden tardar unos segundos más de lo habitual, pero el sistema no se detiene ni le obliga a esperar a que se renueve ninguna suscripción.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Y el coste? ¿Pago más si lo uso mucho?</summary>
+          <p>No. El coste es fijo y conocido de antemano: no hay factura variable en función del volumen de consultas ni de documentos analizados. Tampoco se paga por usuario, así que incorporar a alguien más del equipo no encarece el servicio mientras la instalación tenga capacidad suficiente. Dimensionamos el equipo según el tamaño del despacho y sus momentos de mayor carga, y eso queda definido en la propuesta.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Es tan potente como ChatGPT, Claude u otro modelos de IA en la nube?</summary>
+          <p>Para las tareas de un despacho laboralista, sí. Como conversador generalista, no — y no hace falta que lo sea.</p>
+          <p>Los modelos comerciales más grandes están entrenados para hacerlo todo razonablemente bien: escribir un soneto, resolver una olimpiada de matemáticas, programar. Un despacho no necesita nada de eso. Necesita localizar el párrafo exacto de un convenio, resumir una vista de treinta páginas, extraer los datos de veinte nóminas, o redactar un borrador siguiendo su propia plantilla. En ese terreno concreto la diferencia entre un modelo local bien configurado y uno comercial es pequeña, porque lo que determina la calidad de la respuesta no es tanto el tamaño del modelo como si tiene delante los documentos correctos.</p>
+          <p>Y ahí es donde el sistema local va por delante: trabaja sobre sus expedientes, sus escritos y sus convenios. Un asistente comercial no los tiene, y si se los sube, salen del despacho.</p>
+          <p>Para el caso puntual que requiera un razonamiento especialmente complejo, podemos configurar el sistema de forma que consulte un modelo externo de máxima capacidad, siempre con los datos identificativos eliminados previamente y siempre con su autorización. Lo habitual es que eso sea una fracción pequeña del uso diario.</p>
+          <p>Nuestra recomendación es sencilla: no tiene sentido pagar precio de gama alta —ni enviar documentación confidencial fuera— para el trabajo que se repite cada día.</p>
+        </details>
+        <details class="acc faq-item">
+          <summary>¿Puedo consultaros aunque todavía no tenga claro qué necesito?</summary>
+          <p>Sí. De hecho, ese es uno de los motivos por los que hacemos un diagnóstico previo.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EQUIPO ==================== -->
+  <section id="equipo">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Quiénes somos</span>
+        <h2>Un equipo entre dos mundos: el jurídico y el tecnológico</h2>
+        <p>No vendemos tecnología por vender tecnología. Actuamos como socio de confianza entre la necesidad
+          organizativa y la solución adecuada, en lenguaje claro para equipos no técnicos.</p>
+      </div>
+      <div class="equipo-grid">
+        <!-- TODO · Sustituir por fotos y bios reales del equipo fundador -->
+        <article class="persona">
+          <div class="avatar" aria-hidden="true">NA</div>
+          <h3>Nombre Apellido</h3>
+          <p class="rol">Socia fundadora · Estrategia y procesos</p>
+          <p>Experiencia en consultoría de procesos para organizaciones del ámbito laboral y colegial. Conduce los
+            talleres y los diagnósticos iniciales.</p>
+        </article>
+        <article class="persona">
+          <div class="avatar" aria-hidden="true">NA</div>
+          <h3>Nombre Apellido</h3>
+          <p class="rol">Socio fundador · Tecnología e IA</p>
+          <p>Desarrollo de soluciones de automatización e IA aplicada. Responsable de la selección de herramientas y de
+            las soluciones adaptadas.</p>
+        </article>
+        <article class="persona">
+          <div class="avatar" aria-hidden="true">NA</div>
+          <h3>Nombre Apellido</h3>
+          <p class="rol">Socio fundador · Ámbito jurídico-laboral</p>
+          <p>Trayectoria en derecho laboral y relaciones con despachos, colegios profesionales y departamentos de RRHH.
+            Garantiza el rigor del enfoque.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA FINAL · CONTACTO ==================== -->
+  <section class="contacto" id="contacto">
+    <div class="wrap grid">
       <div>
-        <!-- TODO 2 · Conectar a la API de Brevo (double opt-in) -->
-        <form id="form-news" novalidate>
-          <label for="n-email" class="caption" style="position:absolute;left:-9999px">Email</label>
-          <input id="n-email" type="email" placeholder="tu@email.com" autocomplete="email" required>
-          <button class="btn btn-indigo" type="submit">Suscribirme</button>
-        </form>
-        <p class="form-ok" id="news-ok" role="status" style="margin-top:14px">Revisa tu bandeja: te hemos enviado un email para confirmar la suscripción.</p>
-        <span class="caption">Al suscribirte aceptas nuestra <a href="#">política de privacidad</a>. Podrás darte de baja en un clic.</span>
+        <span class="eyebrow">Siguiente paso</span>
+        <h2>Empecemos por tu problema</h2>
+        <p>No necesitas tener definida la herramienta ni la solución.</p>
+        <p>Cuéntanos qué quieres mejorar, qué tarea te lleva demasiado tiempo o qué dificultad encuentras en tu forma
+          actual de trabajar.</p>
+        <p>Analizamos tu situación y vemos juntos si podemos ayudarte.</p>
+        <br>
+        <button class="btn btn-indigo" type="submit" style="width:100%">Hablemos de tu caso</button>
+      </div>
+  </section>
+
+  <!-- ==================== NEWSLETTER ==================== -->
+  <section class="newsletter" id="newsletter">
+    <div class="wrap">
+      <div class="inner">
+        <div>
+          <span class="eyebrow">Newsletter</span>
+          <h2 style="font-size:clamp(1.5rem,2.6vw,2rem)">IA y derecho laboral, sin ruido</h2>
+          <p style="margin-top:12px;color:var(--texto-suave)">Una vez al mes: novedades de IA relevantes para el ámbito
+            laboral, casos prácticos y herramientas explicadas en claro. Sin spam.</p>
+        </div>
+        <div>
+          <!-- TODO 2 · Conectar a la API de Brevo (double opt-in) -->
+          <form id="form-news" novalidate>
+            <label for="n-email" class="caption" style="position:absolute;left:-9999px">Email</label>
+            <input id="n-email" type="email" placeholder="tu@email.com" autocomplete="email" required>
+            <button class="btn btn-indigo" type="submit">Suscribirme</button>
+          </form>
+          <p class="form-ok" id="news-ok" role="status" style="margin-top:14px">Revisa tu bandeja: te hemos enviado un
+            email para confirmar la suscripción.</p>
+          <span class="caption">Al suscribirte aceptas nuestra <a href="#">política de privacidad</a>. Podrás darte de
+            baja en un clic.</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
- 
-<!-- ==================== FOOTER ==================== -->
-<footer>
-  <div class="wrap foot">
-    <div>
-      <a class="logo" href="#inicio">iA<span class="x">x</span><span class="logo--claim">— inteliAxencia</span></a>
-      <p>Acompañamiento estratégico y operativo para la digitalización del ámbito laboral y jurídico.</p>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <a class="logo" href="#inicio">iA<span class="x">x</span><span class="logo--claim">· inteliAxencia</span></a>
+        <p>Analizamos procesos, formamos equipos e implementamos soluciones de IA para despachos y asesorías del ámbito
+          jurídico y laboral.</p>
+      </div>
+      <ul class="foot-links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#ia-local">IA local</a></li>
+        <li><a href="#faq">Preguntas frecuentes</a></li>
+        <li><a href="#equipo">Equipo</a></li>
+      </ul>
+      <ul class="foot-links">
+        <li><a href="#newsletter">Newsletter</a></li>
+        <li><a href="mailto:hola@inteliaxencia.com">hola@inteliaxencia.com</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
     </div>
-    <ul class="foot-links">
-      <li><a href="#metodo">Método</a></li>
-      <li><a href="#cursos">Cursos</a></li>
-      <li><a href="#auditoria">Auditoría</a></li>
-      <li><a href="#equipo">Equipo</a></li>
-    </ul>
-    <ul class="foot-links">
-      <li><a href="mailto:hola@inteliaxencia.com">hola@inteliaxencia.com</a></li>
-      <li><a href="#">LinkedIn</a></li>
-    </ul>
-  </div>
-  <div class="wrap legal">
-    <span>© 2026 iAx – inteliAxencia. Todos los derechos reservados.</span>
-    <span><a href="#">Aviso legal</a> · <a href="#">Privacidad</a> · <a href="#">Cookies</a></span>
-  </div>
-</footer>
- 
-<script>
-/* ==================== NAV MÓVIL ==================== */
-const toggle = document.querySelector('.nav-toggle');
-const menu = document.getElementById('menu');
-toggle.addEventListener('click', () => {
-  const open = menu.classList.toggle('open');
-  toggle.setAttribute('aria-expanded', open);
-});
-menu.addEventListener('click', e => {
-  if (e.target.tagName === 'A') { menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
-});
- 
-/* ==================== CÓDIGO PROMOCIONAL (DEMO) ====================
-   ⚠️ Solo prototipo. En producción, el código se valida como cupón
-   de Stripe en el servidor: el cliente nunca debe poder deducirlo. */
-const CODIGO_DEMO = 'IAXLABORAL';
-const promoInput = document.getElementById('a-promo');
-const promoMsg = document.getElementById('promo-msg');
-const precioCard = document.getElementById('form-auditoria');
- 
-document.getElementById('btn-promo').addEventListener('click', () => {
-  const code = promoInput.value.trim().toUpperCase();
-  if (!code) { promoMsg.textContent = 'Introduce un código.'; promoMsg.className = 'promo-msg err'; return; }
-  if (code === CODIGO_DEMO) {
-    precioCard.classList.add('gratis');
-    promoMsg.textContent = 'Código aplicado: tu auditoría sale gratis.';
-    promoMsg.className = 'promo-msg ok';
-    promoInput.disabled = true;
-  } else {
-    promoMsg.textContent = 'Código no válido. Revisa que esté bien escrito.';
-    promoMsg.className = 'promo-msg err';
-  }
-});
- 
-/* ==================== ENVÍOS SIMULADOS ==================== */
-function simular(form, okSelector) {
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = form.querySelector('input[type=email]');
-    if (!email.checkValidity()) { email.reportValidity(); return; }
-    form.querySelector(okSelector).classList.add('show');
-    form.querySelectorAll('input,select,button[type=submit]').forEach(el => el.disabled = true);
-  });
-}
-simular(document.getElementById('form-cursos'), '.form-ok');
-simular(document.getElementById('form-auditoria'), '.form-ok');
- 
-const newsForm = document.getElementById('form-news');
-newsForm.addEventListener('submit', e => {
-  e.preventDefault();
-  const email = document.getElementById('n-email');
-  if (!email.checkValidity()) { email.reportValidity(); return; }
-  document.getElementById('news-ok').classList.add('show');
-  newsForm.querySelectorAll('input,button').forEach(el => el.disabled = true);
-});
-</script>
+    <div class="wrap legal">
+      <span>© 2026 iAx · inteliAxencia. Todos los derechos reservados.</span>
+      <span><a href="#">Aviso legal</a> · <a href="#">Privacidad</a> · <a href="#">Cookies</a></span>
+    </div>
+  </footer>
+
+  <script>
+    /* ==================== NAV MÓVIL ==================== */
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('menu');
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+    menu.addEventListener('click', e => {
+      if (e.target.tagName === 'A') { menu.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); }
+    });
+
+    /* ==================== ENVÍOS SIMULADOS ====================
+       Prototipo: ningún dato sale del navegador. Sustituir por el
+       endpoint real (y Turnstile) antes de publicar. */
+    function simular(form, okSelector) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const email = form.querySelector('input[type=email]');
+        if (!email.checkValidity()) { email.reportValidity(); return; }
+        form.querySelector(okSelector).classList.add('show');
+        form.querySelectorAll('input,select,textarea,button[type=submit]').forEach(el => el.disabled = true);
+      });
+    }
+    simular(document.getElementById('form-contacto'), '.form-ok');
+
+    const newsForm = document.getElementById('form-news');
+    newsForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('n-email');
+      if (!email.checkValidity()) { email.reportValidity(); return; }
+      document.getElementById('news-ok').classList.add('show');
+      newsForm.querySelectorAll('input,button').forEach(el => el.disabled = true);
+    });
+  </script>
 </body>
+
 </html>
