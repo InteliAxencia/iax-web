@@ -128,18 +128,29 @@ redistribución no autorizada. Mientras tanto, el fallback basta.
 
 ## 5. Git
 
-- Una rama por cambio. Nunca commits directos a `main`. Prefijos `feat/`, `fix/`,
-  `chore/`, `docs/`.
+- Una rama por cambio, con un único responsable. Nunca commits directos a
+  `main`. Prefijos `feat/`, `fix/`, `chore/`, `docs/`. No hay otros: `feature/`
+  no es válido.
 - `main` está protegida por un ruleset: se entra por pull request.
 - **Solo commits de fusión.** El aplastado y el rebase están desactivados en el
-  repositorio para preservar las firmas ED25519.
+  repositorio para preservar las firmas ED25519. Un squash sustituye tus commits
+  por uno nuevo firmado por GitHub, y la cadena de firma hasta tu máquina se
+  pierde. Un merge commit los conserva.
+- **Commits atómicos, un asunto por commit.** No es una regla independiente de
+  la anterior: es lo que la hace viable. Si cada rama llega al pull request con
+  pocos commits bien definidos, el merge commit no introduce ruido y no hace
+  falta aplastar nada. Un commit que toca a la vez el andamiaje, la identidad
+  visual y un archivo heredado no se puede revertir por partes ni localizar con
+  `git bisect`.
 - Los commits van firmados con SSH. No propongas comandos que desactiven la
   firma, ni `--no-verify`, ni nada que reescriba el historial.
-- Commits atómicos, un asunto por commit. Uno que toca a la vez el andamiaje, la
-  identidad visual y un archivo heredado no se puede revertir por partes ni
-  localizar con `git bisect`.
 - El mensaje explica el porqué. Si el contexto no se deduce del diff, va en el
-  cuerpo del mensaje.
+  cuerpo del mensaje. **En los merge commits el cuerpo es obligatorio**: no
+  tienen diff propio, así que sin él el historial de `main` no dice qué entró.
+- La configuración vive en dos sitios y el ruleset manda. `Settings` → `General`
+  define qué métodos permite el repositorio; el ruleset de `main` define cuáles
+  permite esa rama. Si se contradicen, GitHub bloquea el merge sin explicar por
+  qué: el desplegable del botón aparece vacío.
 
 Git se ejecuta desde el host, no desde el Dev Container. La clave de firma, el
 hook de pre-commit y `gitleaks` viven en el host a propósito.
