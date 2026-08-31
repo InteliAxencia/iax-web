@@ -3,11 +3,14 @@
 Sitio web de iAx, digitalización práctica para organizaciones del ámbito laboral y jurídico.
 
 ## Stack
+
 Astro + Tailwind CSS (migración en curso desde el prototipo estático `index.html`).
 Despliegue en Vercel / Cloudflare Pages.
 
 ## Variables de entorno
+
 Copia `.env.example` a `.env` y rellena los valores. `.env` nunca se sube al repo.
 
 ## Licencia
+
 © iAx – inteliAxencia. Todos los derechos reservados.
