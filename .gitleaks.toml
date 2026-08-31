@@ -1,0 +1,12 @@
+# Configuracion de gitleaks para iax-web.
+# Extiende el conjunto de reglas por defecto en lugar de sustituirlo.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Rutas generadas, no versionadas"
+paths = [
+  '''^dist/''',
+  '''^\.astro/''',
+  '''^node_modules/''',
+]
