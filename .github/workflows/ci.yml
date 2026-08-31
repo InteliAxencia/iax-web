@@ -43,3 +43,11 @@ jobs:
       - run: npm run format:check
       - run: npm run check
       - run: npm run build
+
+      - name: gitleaks
+        env:
+          GITLEAKS_VERSION: "8.30.1" # debe coincidir con el rev de .pre-commit-config.yaml
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" -o gitleaks.tar.gz
+          tar -xzf gitleaks.tar.gz gitleaks
+          ./gitleaks dir . --redact --exit-code 1
