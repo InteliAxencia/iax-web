@@ -31,13 +31,13 @@ tomaron de forma explícita y no se revierten por comodidad ni por prisa.
 
 ## 2. Stack y comandos
 
-| Pieza | Elección | Nota |
-|---|---|---|
-| Framework | Astro 7 | Node `>=22.12`, en local Node 24 LTS por nvm |
-| Estilos | Tailwind v4 vía `@tailwindcss/vite` | nunca `@astrojs/tailwind`, está deprecado |
-| Despliegue | Cloudflare Workers con assets estáticos | adaptador `@astrojs/cloudflare` |
-| Contenedor | Dev Container sobre Podman rootless | Git se queda en el host |
-| Integraciones previstas | Brevo, Cal.com, Stripe, Turnstile | sujetas al bloqueo legal de la sección 4 |
+| Pieza                   | Elección                                | Nota                                         |
+| ----------------------- | --------------------------------------- | -------------------------------------------- |
+| Framework               | Astro 7                                 | Node `>=22.12`, en local Node 24 LTS por nvm |
+| Estilos                 | Tailwind v4 vía `@tailwindcss/vite`     | nunca `@astrojs/tailwind`, está deprecado    |
+| Despliegue              | Cloudflare Workers con assets estáticos | adaptador `@astrojs/cloudflare`              |
+| Contenedor              | Dev Container sobre Podman rootless     | Git se queda en el host                      |
+| Integraciones previstas | Brevo, Cal.com, Stripe, Turnstile       | sujetas al bloqueo legal de la sección 4     |
 
 Comandos:
 
@@ -159,12 +159,12 @@ hook de pre-commit y `gitleaks` viven en el host a propósito.
 
 ## 6. Marca
 
-| Token | Valor | Uso |
-|---|---|---|
-| Índigo | `#1B0F96` | Dominante, en torno al 60 por ciento |
-| Índigo profundo | `#140B6E` | Capas sobre índigo, estados hover |
-| Coral | `#FD8F96` | Acento, en torno al 10 por ciento |
-| Blanco y negro | `#FFFFFF` y `#111111` | Neutros, en torno al 30 por ciento |
+| Token           | Valor                 | Uso                                  |
+| --------------- | --------------------- | ------------------------------------ |
+| Índigo          | `#1B0F96`             | Dominante, en torno al 60 por ciento |
+| Índigo profundo | `#140B6E`             | Capas sobre índigo, estados hover    |
+| Coral           | `#FD8F96`             | Acento, en torno al 10 por ciento    |
+| Blanco y negro  | `#FFFFFF` y `#111111` | Neutros, en torno al 30 por ciento   |
 
 Tipografía: Neurial Grotesk, con fallback a Helvetica Neue y Arial.
 
