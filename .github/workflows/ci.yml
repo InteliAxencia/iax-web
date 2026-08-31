@@ -17,13 +17,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: R1 · sin bindings propietarios de Cloudflare
-        run: |
-          if [ -f wrangler.jsonc ] && grep -nE '"(kv_namespaces|d1_databases|durable_objects|r2_buckets|queues|hyperdrive|vectorize|ai|secrets_store_secrets|browser|mtls_certificates|analytics_engine_datasets|dispatch_namespaces|workflows|pipelines)"' wrangler.jsonc; then
-            echo "R1 incumplida: binding propietario en wrangler.jsonc"
-            exit 1
-          fi
-
       - name: R2 · sin importaciones atadas al runtime
         run: |
           if grep -rnE "['\"]cloudflare:" src/; then
@@ -40,6 +33,9 @@ jobs:
           node-version-file: .nvmrc
 
       - run: npm ci --ignore-scripts
+
+      - name: R1 · solo claves permitidas en wrangler.json
+        run: node scripts/check-r1.mjs
       - run: npm run format:check
       - run: npm run check
       - run: npm run build
