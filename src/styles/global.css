@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+/* Tokens de marca iAx. Definirlos aquí genera a la vez las clases de
+   utilidad (bg-indigo, text-coral) y las variables CSS
+   (var(--color-indigo)), así el valor vive en un solo sitio.
+   Referencia: guía de marca v2.2. */
+
+@theme {
+  --color-indigo: #1b0f96;
+  --color-indigo-deep: #140b6e;
+  --color-coral: #fd8f96;
+  --color-gris: #6b6b76;
+  --color-gris-claro: #f4f4f8;
+  --color-borde: #e4e4ec;
+
+  --font-sans: "Neurial Grotesk", "Helvetica Neue", Arial, sans-serif;
+}
