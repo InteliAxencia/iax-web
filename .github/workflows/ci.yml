@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: R1 · sin bindings propietarios de Cloudflare
+        run: |
+          if [ -f wrangler.jsonc ] && grep -nE '"(kv_namespaces|d1_databases|durable_objects|r2_buckets|queues|hyperdrive|vectorize|ai|secrets_store_secrets|browser|mtls_certificates|analytics_engine_datasets|dispatch_namespaces|workflows|pipelines)"' wrangler.jsonc; then
+            echo "R1 incumplida: binding propietario en wrangler.jsonc"
+            exit 1
+          fi
+
+      - name: R2 · sin importaciones atadas al runtime
+        run: |
+          if grep -rnE "['\"]cloudflare:" src/; then
+            echo "R2 incumplida: importacion especifica del runtime en src/"
+            exit 1
+          fi
+          if grep -rn "locals.runtime" src/; then
+            echo "R2 incumplida: configuracion leida del contexto del runtime"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - run: npm ci --ignore-scripts
+      - run: npm run format:check
+      - run: npm run check
+      - run: npm run build
