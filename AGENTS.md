@@ -254,6 +254,42 @@ Esto ya está resuelto y no puede perderse en ninguna migración:
 
 No hay `LICENSE`: se aplica el copyright por defecto. Este código no es abierto.
 
+## 10. Portabilidad del alojamiento
+
+El alojamiento es una decisión reversible, no un cimiento. Estas dos reglas son
+lo que mantiene barata esa reversibilidad. Su porqué y el disparador que obliga
+a revisar la decisión están en `docs/decisiones-reversibles.md`.
+
+### R1. Sin servicios propietarios de Cloudflare
+
+Prohibidos: Workers KV, D1, Durable Objects, R2, Queues, Hyperdrive, Vectorize,
+Workers AI y Secrets Store.
+
+Permitido: servir los assets estáticos y ejecutar las rutas de API. Nada más.
+El único binding admitido en `wrangler.jsonc` es `assets`. Los secretos se
+cargan con `wrangler secret put`, que es configuración de despliegue y no crea
+dependencia en el código.
+
+### R2. Rutas de API finas
+
+Cada ruta hace cuatro cosas y ninguna más: leer el cuerpo, validar el esquema,
+llamar a una función de `src/lib/` y devolver la respuesta.
+
+La lógica de negocio vive en `src/lib/`, en funciones sin variables globales del
+runtime y sin ninguna importación de `cloudflare:*`. La configuración se lee
+siempre por `astro:env`, nunca del contexto del runtime.
+
+Criterio de verificación: si mañana cambias el adaptador, `src/lib/` no se toca.
+
+### R3. Comprobación automática, no confianza
+
+Las dos reglas anteriores se comprueban en el job `verify` antes de instalar
+dependencias. Una regla escrita se incumple sola el día que entra alguien nuevo.
+
+La comprobación de R1 es una lista de bindings prohibidos, así que va por detrás
+del catálogo de Cloudflare: un producto nuevo no lo detecta. La puerta real es
+revisar `wrangler.jsonc` en el pull request; el `grep` es la red de abajo.
+
 ---
 
 Ante la duda, pregunta antes de escribir. Un cambio que rompe una de estas
