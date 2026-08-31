@@ -83,8 +83,8 @@ No son preferencias. No admiten excepción por comodidad ni por prisa.
 - Los valores reales viven en las variables de proyecto de Cloudflare y en el
   gestor de contraseñas del equipo. Nunca en Drive, correo ni mensajería.
 - Secretos de desarrollo local: `.dev.vars`, que está en `.gitignore`. Wrangler
-  no lee `.env` para esto.
-- `.env.example` lleva los nombres de las claves, nunca sus valores.
+  no lee `.env` para esto. El archivo `.dev.vars.example` lleva los nombres de
+  las claves, nunca sus valores.
 - Hay un hook de `gitleaks` en pre-commit. Si salta, se resuelve. No se silencia.
 
 ### Validación
