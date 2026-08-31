@@ -1,0 +1,12 @@
+{
+  "name": "iax-web",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node@sha256:757b22963a35e3673da4bece29c4948c815637085947259b80910e951e3ba64a",
+  "runArgs": ["--userns=keep-id:uid=1000,gid=1000"],
+  "containerUser": "node",
+  "updateRemoteUserUID": false,
+  "containerEnv": {
+    "ASTRO_TELEMETRY_DISABLED": "1"
+  },
+  "forwardPorts": [4321],
+  "postCreateCommand": "npm ci --ignore-scripts"
+}
