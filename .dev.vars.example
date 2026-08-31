@@ -1,0 +1,11 @@
+# Secretos de desarrollo local. Wrangler lee este mecanismo, no .env
+# Copia este archivo a .dev.vars y rellena los valores.
+# .dev.vars esta en .gitignore y nunca se sube.
+#
+# En produccion los valores se cargan con:
+#   npx wrangler secret put NOMBRE_DE_LA_CLAVE
+#
+# Cada clave que anadas aqui tiene que estar declarada en el esquema de
+# astro:env en astro.config.mjs, o Astro no la reconocera.
+
+PRUEBA_SECRETO=
