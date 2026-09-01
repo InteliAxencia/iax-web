@@ -31,13 +31,13 @@ tomaron de forma explícita y no se revierten por comodidad ni por prisa.
 
 ## 2. Stack y comandos
 
-| Pieza                   | Elección                                | Nota                                         |
-| ----------------------- | --------------------------------------- | -------------------------------------------- |
-| Framework               | Astro 7                                 | Node `>=22.12`, en local Node 24 LTS por nvm |
-| Estilos                 | Tailwind v4 vía `@tailwindcss/vite`     | nunca `@astrojs/tailwind`, está deprecado    |
-| Despliegue              | Cloudflare Workers con assets estáticos | adaptador `@astrojs/cloudflare`              |
-| Contenedor              | Dev Container sobre Podman rootless     | Git se queda en el host                      |
-| Integraciones previstas | Brevo, Cal.com, Stripe, Turnstile       | sujetas al bloqueo legal de la sección 4     |
+| Pieza                   | Elección                                    | Nota                                          |
+| ----------------------- | ------------------------------------------- | --------------------------------------------- |
+| Framework               | Astro 7                                     | Node `^24`, fijado en `.nvmrc` y en `engines` |
+| Estilos                 | Tailwind v4 vía `@tailwindcss/vite`         | nunca `@astrojs/tailwind`, está deprecado     |
+| Despliegue              | Cloudflare Workers con assets estáticos     | adaptador `@astrojs/cloudflare`               |
+| Contenedor              | Dev Container sobre Podman rootless         | Git se queda en el host                       |
+| Integraciones previstas | Brevo, Easy!Appointments, Stripe, Turnstile | sujetas al bloqueo legal de la sección 4      |
 
 Comandos:
 
@@ -45,6 +45,10 @@ Comandos:
   red local.
 - `npm run dev:host` solo cuando necesites probar desde otro dispositivo.
 - `npm run build` y `npm run preview`.
+- `npm run format` aplica Prettier y `npm run format:check` solo comprueba.
+- `npm run check` ejecuta `astro check`, que valida tipos y plantillas.
+- Antes de abrir un pull request: `format:check`, `check` y `build`. Es lo mismo
+  que ejecuta el job `verify`, así que fallar en local ahorra una vuelta.
 - Instalación: `npm ci`, que ya respeta el `.npmrc` del repositorio, o
   `npm install --ignore-scripts`. Sin excepciones no documentadas.
 
@@ -247,7 +251,7 @@ Esto ya está resuelto y no puede perderse en ninguna migración:
 ## 9. Qué no vive en este repositorio
 
 - El esquema comercial y la guía de marca, que están en Drive.
-- Las configuraciones de Brevo, Cal.com y Stripe, y los contactos, que quedan
+- Las configuraciones de Brevo, Easy!Appointments y Stripe, y los contactos, que quedan
   fuera del control de versiones y necesitan su propia rutina de exportación.
 - Los secretos, que están en el gestor de contraseñas del equipo.
 - Los archivos de fuente, mientras siga vigente el bloqueo 4.2.
@@ -266,9 +270,18 @@ Prohibidos: Workers KV, D1, Durable Objects, R2, Queues, Hyperdrive, Vectorize,
 Workers AI y Secrets Store.
 
 Permitido: servir los assets estáticos y ejecutar las rutas de API. Nada más.
-El único binding admitido en `wrangler.jsonc` es `assets`. Los secretos se
+El único binding admitido en `wrangler.json` es `assets`. Los secretos se
 cargan con `wrangler secret put`, que es configuración de despliegue y no crea
 dependencia en el código.
+
+El archivo va en `wrangler.json`, sin comentarios, para que la comprobación de
+R1 pueda leerlo con `JSON.parse` sin depender de un parser de JSONC. Los porqués
+viven en `docs/`.
+
+Ojo con el adaptador: `@astrojs/cloudflare` activa por defecto Cloudflare Images
+y sesiones sobre Workers KV sin que nadie escriba nada. Se desactivan en
+`astro.config.mjs` con `imageService: "compile"` y `session: false`. Si actualizas
+el adaptador, comprueba la salida del build.
 
 ### R2. Rutas de API finas
 
@@ -283,12 +296,18 @@ Criterio de verificación: si mañana cambias el adaptador, `src/lib/` no se toc
 
 ### R3. Comprobación automática, no confianza
 
-Las dos reglas anteriores se comprueban en el job `verify` antes de instalar
-dependencias. Una regla escrita se incumple sola el día que entra alguien nuevo.
+Las dos reglas anteriores se comprueban en el job `verify`. Una regla escrita se
+incumple sola el día que entra alguien nuevo.
 
-La comprobación de R1 es una lista de bindings prohibidos, así que va por detrás
-del catálogo de Cloudflare: un producto nuevo no lo detecta. La puerta real es
-revisar `wrangler.jsonc` en el pull request; el `grep` es la red de abajo.
+R1 se comprueba con `scripts/check-r1.mjs`, que es una lista blanca: solo pasan
+las claves enumeradas ahí y cualquier otra rompe la CI. Falla en cerrado a
+propósito, así que un producto nuevo de Cloudflare no se cuela sin que nadie se
+entere. Añadir una clave a esa lista es una decisión consciente y queda en el
+diff del pull request.
+
+R2 se comprueba con `grep` sobre `src/`, y eso sí va por detrás: detecta las
+importaciones de `cloudflare:` y las lecturas de `locals.runtime`, pero no puede
+cubrir todas las formas de atarse al runtime. Ahí la puerta real es la revisión.
 
 ---
 
