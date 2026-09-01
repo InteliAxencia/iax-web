@@ -58,24 +58,29 @@ Neurial Grotesk.
 **Disparador de revisión.** Que el mantenimiento del proyecto se detenga más de
 doce meses, o que aparezca una vulnerabilidad grave sin parche disponible.
 
-## 3. Comprobación de R1 por lista negra
+## 3. Comprobación de R1 por lista blanca
 
-**Decisión vigente.** El paso de R1 en el job `verify` enumera los bindings
-prohibidos.
+**Decisión vigente.** `scripts/check-r1.mjs` lee `wrangler.json` y rechaza
+cualquier clave que no esté en su lista de permitidas.
 
-**Por qué.** Es lo que se puede comprobar hoy con `grep`, sin dependencias y sin
-parsear un archivo que todavía no existe.
+**Por qué.** Falla en cerrado. Una lista negra habría ido siempre por detrás del
+catálogo de Cloudflare: el día que saliera un producto nuevo, nadie se enteraría
+de que ese binding entró. Con lista blanca, una clave desconocida rompe la CI, y
+añadirla es una decisión consciente que queda en el diff del pull request.
 
-**Lo que no da.** Una lista negra falla en abierto: el día que Cloudflare saque
-un producto nuevo, el `grep` no lo conoce y ese binding entra sin que nadie se
-entere.
+**Lo que trae consigo.** El archivo tiene que ser `wrangler.json` sin
+comentarios, para leerlo con `JSON.parse` sin depender de un parser de JSONC.
+Los porqués de la configuración viven en `docs/`, no dentro del archivo.
 
-**Disparador.** La creación de `wrangler.jsonc` en el bloque F.
+**Lo que no cubre.** Solo mira las claves de primer nivel de `wrangler.json`. No
+detecta lo que el adaptador de Astro active por su cuenta: `@astrojs/cloudflare`
+habilita por defecto Cloudflare Images y sesiones sobre Workers KV, y eso se
+desactiva en `astro.config.mjs`, no aquí. Al actualizar el adaptador hay que
+mirar la salida del build.
 
-**Qué se hace entonces.** Pasar a lista blanca, que falla en cerrado: cualquier
-clave no permitida rompe la CI. Requiere parsear el archivo, así que hay que
-decidir a la vez si se usa `wrangler.json` sin comentarios, con los porqués en
-`docs/`, o si el check necesita un parser de JSONC.
+**Disparador de revisión.** Que la CI falle por una clave legítima con
+demasiada frecuencia, señal de que la lista se quedó corta, o que aparezca una
+forma de declarar bindings fuera de `wrangler.json`.
 
 ## 4. Análisis de código con CodeQL
 
