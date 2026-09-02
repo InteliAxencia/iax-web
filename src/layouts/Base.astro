@@ -1,0 +1,32 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+
+const {
+  titulo = "iAx · inteliAxencia · IA y automatización para despachos laborales",
+  descripcion = "Analizamos cómo trabaja tu despacho, formamos a tu equipo e implementamos soluciones adaptadas, incluida IA local para trabajar con mayor control sobre tu información.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#1B0F96" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
