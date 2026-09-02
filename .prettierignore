@@ -6,4 +6,4 @@ public/
 # Prototipo estatico pendiente de migrar a componentes.
 # Formatearlo no aporta nada porque va a desaparecer, y ademas
 # tiene HTML mal cerrado que impide el analisis.
-index.html
+prototipo.html
