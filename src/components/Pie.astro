@@ -1,0 +1,152 @@
+---
+const navegacion = [
+  { href: "#servicios", texto: "Servicios" },
+  { href: "#metodo", texto: "Método" },
+  { href: "#ia-local", texto: "IA local" },
+  { href: "#faq", texto: "Preguntas frecuentes" },
+  { href: "#equipo", texto: "Equipo" },
+];
+
+const legales = [
+  { href: "/aviso-legal", texto: "Aviso legal" },
+  { href: "/privacidad", texto: "Privacidad" },
+  { href: "/cookies", texto: "Cookies" },
+];
+---
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <a class="logo" href="#inicio"
+        >iA<span class="x">x</span><span class="logo--claim"
+          >· inteliAxencia</span
+        ></a
+      >
+      <p>
+        Analizamos procesos, formamos equipos e implementamos soluciones de IA
+        para despachos y asesorías del ámbito jurídico y laboral.
+      </p>
+    </div>
+    <ul class="foot-links">
+      {
+        navegacion.map((e) => (
+          <li>
+            {" "}
+            <a href={e.href}>{e.texto}</a>{" "}
+          </li>
+        ))
+      }
+    </ul>
+    <ul class="foot-links">
+      <li><a href="#newsletter">Newsletter</a></li>
+      <li>
+        <a href="mailto:hola@inteliaxencia.com">hola@inteliaxencia.com</a>
+      </li>
+      <li>
+        <a
+          href="https://www.linkedin.com/company/inteliaxencia/"
+          target="_blank"
+          rel="noopener">LinkedIn</a
+        >
+      </li>
+    </ul>
+  </div>
+  <div class="wrap legal">
+    <span>© 2026 iAx · inteliAxencia. Todos los derechos reservados.</span>
+    <span>
+      {
+        legales.map((e, i) => (
+          <>
+            {i > 0 && " · "}
+            <a href={e.href}>{e.texto}</a>
+          </>
+        ))
+      }
+    </span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: var(--color-indigo);
+    color: #fff;
+    padding: 48px 0 36px;
+  }
+
+  .foot {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  .foot .logo {
+    color: #fff;
+    font-size: 1.7rem;
+  }
+
+  .foot p {
+    font-weight: 300;
+    font-size: 0.92rem;
+    max-width: 34ch;
+    margin-top: 12px;
+    opacity: 0.85;
+  }
+
+  .foot-links {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .foot-links a {
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 0.95rem;
+    opacity: 0.9;
+  }
+
+  .foot-links a:hover {
+    color: var(--color-coral);
+    opacity: 1;
+  }
+
+  .legal {
+    margin-top: 40px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 300;
+    font-size: 0.82rem;
+    opacity: 0.75;
+  }
+
+  .legal a {
+    text-decoration: none;
+  }
+
+  .legal a:hover {
+    color: var(--color-coral);
+  }
+
+  @media (min-width: 821px) {
+    footer {
+      padding: 56px 0 40px;
+    }
+
+    .foot {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .legal {
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 44px;
+    }
+  }
+</style>
