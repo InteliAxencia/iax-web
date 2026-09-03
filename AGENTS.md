@@ -309,6 +309,73 @@ R2 se comprueba con `grep` sobre `src/`, y eso sí va por detrás: detecta las
 importaciones de `cloudflare:` y las lecturas de `locals.runtime`, pero no puede
 cubrir todas las formas de atarse al runtime. Ahí la puerta real es la revisión.
 
+## 11. Método de trabajo
+
+Esta sección no describe el código, describe cómo se trabaja sobre el. Aplica a
+cualquier agente y a cualquier persona que edite mediante scripts. Es R3 llevado
+al estado de los archivos: comprobación, no confianza.
+
+### M1. El estado del archivo se lee, no se recuerda
+
+Toda edición va precedida, en el mismo turno, de la lectura del tramo que se va
+a modificar: `sed -n`, `grep -n` o `cat -n`. No vale haberlo leído antes en la
+sesión. Prettier, un hook o una edición propia lo han podido cambiar desde
+entonces.
+
+Cualquier afirmación sobre lo que contiene un archivo va acompañada de la salida
+del comando que lo leyó. Si no se puede citar de qué comando y de qué momento
+sale, se lee primero.
+
+### M2. Un archivo en el contexto no es el repositorio
+
+Los archivos adjuntos al proyecto o pegados en la conversación son una foto del
+momento en que se subieron. Sirven de referencia, nunca de fuente sobre el
+estado actual. «Lo tengo» no equivale a haberlo leído hoy y no autoriza a
+escribir contra él.
+
+Corolario: no se suben al proyecto archivos de `src/`. Envejecen en el primer
+commit.
+
+### M3. La cadena de búsqueda no se escribe a mano
+
+Una sustitución no puede depender de acertar espacios, sangría y saltos de
+línea. El script localiza la línea por su contenido y toma la sangría del propio
+archivo.
+
+Un `assert` sobre texto literal inventado no aporta seguridad. Falla, y cada
+fallo deja el archivo un paso más lejos de donde se cree que está.
+
+### M4. Una modificación estructural, un script
+
+Si el archivo queda sintácticamente inválido entre dos pasos, esos dos pasos
+eran uno. Quitar una etiqueta de cierre y recolocarla son la misma operación, no
+dos.
+
+### M5. Después de escribir, `git diff`
+
+Ninguna edición se da por buena por el `ok` que imprime el script. Se comprueba
+con `git diff` sobre el archivo tocado. Si la edición era estructural, además
+`npm run format:check && npx astro check` antes de seguir, no al final del
+bloque.
+
+### M6. Medir antes de corregir. Dos intentos y se para
+
+Ante un fallo, primero la comprobación que distingue entre las hipótesis,
+después el arreglo. Una explicación plausible sin medición previa cuesta más que
+la medición.
+
+Dos intentos fallidos sobre el mismo síntoma cierran la vía: se deja de proponer
+arreglos, se vuelca el archivo entero o se mide el elemento, y se reanuda desde
+la evidencia. Anunciar que se deja de suponer no cuenta como medir.
+
+### M7. El alcance y el orden los decide quién dirige
+
+Cuando se pide una tarea, no se aplaza por decisión del agente. Si hay motivo
+para posponerla se expone y se espera respuesta.
+
+La revisión de quien dirige no es el control de calidad del agente. Detectar los
+fallos propios no se delega.
+
 ---
 
 Ante la duda, pregunta antes de escribir. Un cambio que rompe una de estas
