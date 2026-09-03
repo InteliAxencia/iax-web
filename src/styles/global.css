@@ -24,3 +24,76 @@
   --radius: 14px;
   --gutter: 20px;
 }
+
+/* ==================== BASE ====================
+   Estilos de todo el sitio. Trasladados del prototipo, consumiendo los
+   tokens de @theme. El reset universal no se copia: el preflight de
+   Tailwind ya normaliza margenes, rellenos y box-sizing. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-negro);
+  background: #fff;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El preflight deja los encabezados sin tamano ni peso a proposito, asi
+   que estos valores no son decorativos: sin ellos todo sale del tamano
+   del cuerpo de texto. */
+
+h1,
+h2,
+h3 {
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 8vw, 4.2rem);
+}
+
+h2 {
+  font-weight: 800;
+  font-size: clamp(1.55rem, 5.5vw, 2.5rem);
+  color: var(--color-indigo);
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-indigo);
+}
+
+p.lead {
+  font-size: 1.1rem;
+  max-width: 56ch;
+}
+
+.caption {
+  color: var(--color-gris);
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+
+a {
+  color: inherit;
+}
