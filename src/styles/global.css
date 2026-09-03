@@ -115,3 +115,148 @@ a {
 .sobre-indigo :focus-visible {
   outline-color: var(--color-coral);
 }
+
+/* ==================== CONTENEDOR ==================== */
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ==================== LOGO ==================== */
+
+.logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.logo .x {
+  color: var(--color-coral);
+}
+
+.logo--claim {
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  margin-left: 10px;
+  opacity: 0.85;
+}
+
+/* ==================== BOTONES ==================== */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-indigo {
+  background: var(--color-indigo);
+  color: #fff;
+}
+
+.btn-indigo:hover {
+  background: var(--color-indigo-deep);
+  color: #fff;
+}
+
+.btn-blanco {
+  background: #fff;
+  color: var(--color-indigo);
+}
+
+.btn-blanco:hover {
+  background: var(--color-gris-claro);
+  color: var(--color-indigo);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-coral);
+  color: var(--color-coral);
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Enlace de texto con subrayado coral, para llamadas secundarias. */
+
+.link-cta {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-indigo);
+  text-decoration: none;
+  border-bottom: 2px solid var(--color-coral);
+  padding-bottom: 2px;
+}
+
+.link-cta:hover {
+  color: var(--color-indigo-deep);
+}
+
+.link-cta--invert {
+  color: #fff;
+}
+
+.link-cta--invert:hover {
+  color: var(--color-coral);
+}
+
+/* ==================== ANTETITULO ====================
+   El texto va en indigo, no en coral: sobre fondo claro el coral no
+   cumple contraste. El acento lo pone la barra del ::before, que es
+   decorativa y no transmite informacion. Sobre fondo indigo si tiene
+   recorrido, y para eso esta la variante invertida. */
+
+.eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-indigo);
+  margin-bottom: 14px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 4px;
+  background: var(--color-coral);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.eyebrow--invert {
+  color: var(--color-coral);
+}
