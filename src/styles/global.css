@@ -97,3 +97,21 @@ p.lead {
 a {
   color: inherit;
 }
+
+/* ==================== FOCO VISIBLE ====================
+   Punto 2 del suelo de calidad. El prototipo usaba coral sobre blanco,
+   que da un contraste de 1,9:1 y no llega al 3:1 que pide el criterio
+   para indicadores de foco. El indigo si llega sobrado.
+
+   El coral se reserva para las superficies indigo (hero, IA local y
+   pie), donde el indigo desapareceria contra el fondo. */
+
+:focus-visible {
+  outline: 3px solid var(--color-indigo);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sobre-indigo :focus-visible {
+  outline-color: var(--color-coral);
+}
