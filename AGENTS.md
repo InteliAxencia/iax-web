@@ -228,8 +228,16 @@ está resuelta aquí, consúltala antes de escribir.
 - Si hay un prototipo estático en la raíz, es referencia visual, no fuente de
   verdad, y no es el destino de los cambios de producto.
 - Cuidado con la especificidad del CSS. Un selector de contexto puede pisar la
-  clase de un componente y arruinar el contraste del texto. Ya ocurrió una vez
-  con el botón del menú.
+  clase de un componente y arruinar el contraste o la disposición. Ya ha pasado
+  dos veces: con el botón del menú y con una regla `:not([open])` que ganaba en
+  escritorio a un bloque que no declaraba `display`. Las `@media` no suman
+  especificidad.
+- El CSS de un componente vive en su `<style>` y consume los tokens de `@theme`
+  con `var()`. Ningún componente redeclara un hexadecimal. Si falta un token, se
+  añade al `@theme`; no se escribe el valor suelto.
+- Toda superficie con fondo índigo lleva la clase `.sobre-indigo`. Cambia el
+  anillo de foco a coral: sin ella el foco es índigo sobre índigo y no se ve.
+- Punto de ruptura único en 821px, salvo razón concreta y anotada.
 
 ### Suelo de calidad
 
@@ -243,6 +251,9 @@ Esto ya está resuelto y no puede perderse en ninguna migración:
 5. **HTML nativo antes que JavaScript.** Los acordeones son
    `<details>`/`<summary>` y la exclusión mutua se consigue con el atributo
    `name`, no con un script.
+   Un `<details>` cerrado no pinta a sus descendientes, y `display` no lo
+   revierte. Si el contenido debe verse con el `<details>` cerrado, va como
+   hermano y la apertura se lee con el combinador `~`.
 6. Todo campo con su `<label>` asociado y los mensajes de estado con
    `role="status"`.
 
