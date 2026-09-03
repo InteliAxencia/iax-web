@@ -13,5 +13,14 @@
   --color-gris-claro: #f4f4f8;
   --color-borde: #e4e4ec;
 
+  --color-negro: #111111;
+  --color-texto-suave: #3c3c46;
+
   --font-sans: "Neurial Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  /* Medidas compartidas. Sin el prefijo --color- a proposito: no son
+     colores y no deben generar utilidades de color. */
+  --max-w: 1120px;
+  --radius: 14px;
+  --gutter: 20px;
 }
