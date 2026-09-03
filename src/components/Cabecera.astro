@@ -13,22 +13,20 @@ const enlaces = [
       >iA<span class="x">x</span></a
     >
     <details class="nav-menu">
-      <summary aria-label="Abrir menú"
-        ><span aria-hidden="true">☰</span></summary
-      >
-      <ul class="nav-links">
-        {
-          enlaces.map((e) => (
-            <li>
-              <a href={e.href}>{e.texto}</a>
-            </li>
-          ))
-        }
-        <li>
-          <a class="btn btn-indigo" href="#contacto">Hablemos de tu caso</a>
-        </li>
-      </ul>
+      <summary aria-label="Menú"><span aria-hidden="true">☰</span></summary>
     </details>
+    <ul class="nav-links">
+      {
+        enlaces.map((e) => (
+          <li>
+            <a href={e.href}>{e.texto}</a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="btn btn-indigo" href="#contacto">Hablemos de tu caso</a>
+      </li>
+    </ul>
   </div>
 </header>
 
@@ -65,11 +63,17 @@ const enlaces = [
     left: 0;
     right: 0;
     background: #fff;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 0;
     border-bottom: 1px solid var(--color-borde);
     padding: 8px 0 18px;
+  }
+
+  /* El ul es hermano del details, no su hijo: un details cerrado no pinta
+     a sus descendientes. La apertura se lee con el combinador de hermano. */
+  .nav-menu[open] ~ .nav-links {
+    display: flex;
   }
 
   .nav-links li {
@@ -116,6 +120,7 @@ const enlaces = [
     }
 
     .nav-links {
+      display: flex;
       position: static;
       flex-direction: row;
       align-items: center;
