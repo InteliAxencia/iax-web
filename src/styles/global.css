@@ -13,5 +13,250 @@
   --color-gris-claro: #f4f4f8;
   --color-borde: #e4e4ec;
 
+  --color-negro: #111111;
+  --color-texto-suave: #3c3c46;
+
   --font-sans: "Neurial Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  /* Medidas compartidas. Sin el prefijo --color- a propósito: no son
+     colores y no deben generar utilidades de color. */
+  --max-w: 1120px;
+  --radius: 14px;
+  --gutter: 20px;
+}
+
+/* ==================== BASE ====================
+   Estilos de todo el sitio. Trasladados del prototipo, consumiendo los
+   tokens de @theme. El reset universal no se copia: el preflight de
+   Tailwind ya normaliza márgenes, rellenos y box-sizing. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-negro);
+  background: #fff;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* El preflight deja los encabezados sin tamaño ni peso a propósito, así
+   que estos valores no son decorativos: sin ellos todo sale del tamaño
+   del cuerpo de texto. */
+
+h1,
+h2,
+h3 {
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 8vw, 4.2rem);
+}
+
+h2 {
+  font-weight: 800;
+  font-size: clamp(1.55rem, 5.5vw, 2.5rem);
+  color: var(--color-indigo);
+}
+
+h3 {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--color-indigo);
+}
+
+p.lead {
+  font-size: 1.1rem;
+  max-width: 56ch;
+}
+
+.caption {
+  color: var(--color-gris);
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+
+a {
+  color: inherit;
+}
+
+/* ==================== FOCO VISIBLE ====================
+   Punto 2 del suelo de calidad. El prototipo usaba coral sobre blanco,
+   que da un contraste de 1,9:1 y no llega al 3:1 que pide el criterio
+   para indicadores de foco. El índigo sí llega sobrado.
+
+   El coral se reserva para las superficies índigo (hero, IA local y
+   pie), donde el índigo desaparecería contra el fondo. */
+
+:focus-visible {
+  outline: 3px solid var(--color-indigo);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.sobre-indigo :focus-visible {
+  outline-color: var(--color-coral);
+}
+
+/* ==================== CONTENEDOR ==================== */
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ==================== LOGO ==================== */
+
+.logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.logo .x {
+  color: var(--color-coral);
+}
+
+.logo--claim {
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  margin-left: 10px;
+  opacity: 0.85;
+}
+
+/* ==================== BOTONES ==================== */
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-indigo {
+  background: var(--color-indigo);
+  color: #fff;
+}
+
+.btn-indigo:hover {
+  background: var(--color-indigo-deep);
+  color: #fff;
+}
+
+.btn-blanco {
+  background: #fff;
+  color: var(--color-indigo);
+}
+
+.btn-blanco:hover {
+  background: var(--color-gris-claro);
+  color: var(--color-indigo);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-coral);
+  color: var(--color-coral);
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Enlace de texto con subrayado coral, para llamadas secundarias. */
+
+.link-cta {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-indigo);
+  text-decoration: none;
+  border-bottom: 2px solid var(--color-coral);
+  padding-bottom: 2px;
+}
+
+.link-cta:hover {
+  color: var(--color-indigo-deep);
+}
+
+.link-cta--invert {
+  color: #fff;
+}
+
+.link-cta--invert:hover {
+  color: var(--color-coral);
+}
+
+/* ==================== ANTETITULO ====================
+   El texto va en índigo, no en coral: sobre fondo claro el coral no
+   cumple contraste. El acento lo pone la barra del ::before, que es
+   decorativa y no transmite información. Sobre fondo índigo sí tiene
+   recorrido, y para eso esta la variante invertida. */
+
+.eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-indigo);
+  margin-bottom: 14px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 4px;
+  background: var(--color-coral);
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.eyebrow--invert {
+  color: var(--color-coral);
 }
