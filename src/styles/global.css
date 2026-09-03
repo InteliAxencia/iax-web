@@ -13,6 +13,7 @@
   --color-gris-claro: #f4f4f8;
   --color-borde: #e4e4ec;
 
+  --color-blanco: #ffffff;
   --color-negro: #111111;
   --color-texto-suave: #3c3c46;
 
@@ -50,7 +51,7 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--color-negro);
-  background: #fff;
+  background: var(--color-blanco);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
@@ -172,16 +173,16 @@ a {
 
 .btn-indigo {
   background: var(--color-indigo);
-  color: #fff;
+  color: var(--color-blanco);
 }
 
 .btn-indigo:hover {
   background: var(--color-indigo-deep);
-  color: #fff;
+  color: var(--color-blanco);
 }
 
 .btn-blanco {
-  background: #fff;
+  background: var(--color-blanco);
   color: var(--color-indigo);
 }
 
@@ -192,7 +193,7 @@ a {
 
 .btn-ghost {
   background: transparent;
-  color: #fff;
+  color: var(--color-blanco);
   border-color: rgba(255, 255, 255, 0.55);
 }
 
@@ -224,7 +225,7 @@ a {
 }
 
 .link-cta--invert {
-  color: #fff;
+  color: var(--color-blanco);
 }
 
 .link-cta--invert:hover {
