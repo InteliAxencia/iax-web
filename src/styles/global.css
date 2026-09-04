@@ -22,6 +22,9 @@
   /* Medidas compartidas. Sin el prefijo --color- a propósito: no son
      colores y no deben generar utilidades de color. */
   --max-w: 1120px;
+  /* Ancho de lectura de las paginas de texto corrido, mas estrecho que
+     --max-w para no pasar de una linea comoda. */
+  --max-w-lectura: 720px;
   --radius: 14px;
   --gutter: 20px;
 }
