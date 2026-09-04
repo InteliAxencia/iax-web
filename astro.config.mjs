@@ -16,11 +16,21 @@ export default defineConfig({
 
   session: false,
 
-  // Las variables de servidor van con access "secret" para que no puedan
-  // acabar en el bundle del cliente. Los valores reales se cargan con
-  // wrangler secret put, y en local desde .dev.vars.
+  // Las variables de servidor con datos sensibles van con access "secret"
+  // para que no puedan acabar en el bundle del cliente. Sus valores se cargan
+  // con wrangler secret put, y en local desde .dev.vars.
+  // ID_FISCAL va con access "public" porque se imprime en el aviso legal. Su
+  // valor real solo se aporta en la compilacion de Cloudflare, para que no
+  // entre en el historial publico. El marcador por defecto mantiene dev y
+  // build en marcha; que no llegue a produccion lo comprueba verify.
   env: {
     schema: {
+      ID_FISCAL: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+        default: "XXXXXXXXX",
+      }),
       PRUEBA_SECRETO: envField.string({
         context: "server",
         access: "secret",

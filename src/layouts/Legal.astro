@@ -1,0 +1,101 @@
+---
+import Base from "./Base.astro";
+import Cabecera from "../components/Cabecera.astro";
+import Pie from "../components/Pie.astro";
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+}
+
+const { titulo, descripcion } = Astro.props;
+---
+
+<Base titulo={titulo} descripcion={descripcion}>
+  <Cabecera />
+  <main class="lectura">
+    <slot />
+  </main>
+  <Pie />
+</Base>
+
+<style>
+  /* Texto corrido. El preflight de Tailwind quita margenes de parrafo,
+     vinetas de lista y estilo de enlace, asi que aqui no se decora: se
+     devuelve lo que el documento necesita para leerse.
+
+     Va con :global() porque el marcado lo escribe la pagina y recibe su
+     propio identificador de ambito, no el del layout. Todo cuelga de
+     .lectura para que no se escape al resto del sitio. */
+
+  .lectura {
+    max-width: var(--max-w-lectura);
+    margin: 0 auto;
+    padding: 56px var(--gutter) 72px;
+  }
+
+  .lectura :global(h1) {
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    color: var(--color-indigo);
+    margin-bottom: 8px;
+  }
+
+  .lectura :global(h2) {
+    font-size: 1.3rem;
+    margin-top: 40px;
+    margin-bottom: 12px;
+  }
+
+  .lectura :global(p) {
+    margin-bottom: 16px;
+    color: var(--color-texto-suave);
+  }
+
+  /* La linea de fecha. No reutiliza .caption de global.css: la regla de
+     arriba compila con el atributo de ambito del layout y le ganaria el
+     color por especificidad. */
+
+  .lectura :global(p.actualizado) {
+    color: var(--color-gris);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .lectura :global(ul) {
+    list-style: disc;
+    padding-left: 22px;
+    margin-bottom: 16px;
+  }
+
+  .lectura :global(li) {
+    margin-bottom: 8px;
+    color: var(--color-texto-suave);
+  }
+
+  .lectura :global(strong) {
+    font-weight: 700;
+    color: var(--color-negro);
+  }
+
+  /* a { color: inherit } en global.css deja los enlaces indistinguibles
+     dentro de un parrafo. Aqui recuperan color y subrayado. No se usa
+     .link-cta: esa clase es para llamadas a la accion, no para enlaces
+     en linea. */
+
+  .lectura :global(a) {
+    color: var(--color-indigo);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .lectura :global(a:hover) {
+    color: var(--color-indigo-deep);
+  }
+
+  @media (min-width: 821px) {
+    .lectura {
+      padding: 72px var(--gutter) 96px;
+    }
+  }
+</style>
