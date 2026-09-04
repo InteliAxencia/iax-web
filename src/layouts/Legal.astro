@@ -51,6 +51,17 @@ const { titulo, descripcion } = Astro.props;
     color: var(--color-texto-suave);
   }
 
+  /* La linea de fecha. No reutiliza .caption de global.css: la regla de
+     arriba compila con el atributo de ambito del layout y le ganaria el
+     color por especificidad. */
+
+  .lectura :global(p.actualizado) {
+    color: var(--color-gris);
+    font-size: 0.85rem;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
   .lectura :global(ul) {
     list-style: disc;
     padding-left: 22px;
