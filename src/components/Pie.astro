@@ -1,10 +1,10 @@
 ---
 const navegacion = [
-  { href: "#servicios", texto: "Servicios" },
-  { href: "#metodo", texto: "Método" },
-  { href: "#ia-local", texto: "IA local" },
-  { href: "#faq", texto: "Preguntas frecuentes" },
-  { href: "#equipo", texto: "Equipo" },
+  { href: "/#servicios", texto: "Servicios" },
+  { href: "/#metodo", texto: "Método" },
+  { href: "/#ia-local", texto: "IA local" },
+  { href: "/#faq", texto: "Preguntas frecuentes" },
+  { href: "/#equipo", texto: "Equipo" },
 ];
 
 const legales = [
@@ -17,7 +17,7 @@ const legales = [
 <footer class="sobre-indigo">
   <div class="wrap foot">
     <div>
-      <a class="logo" href="#inicio"
+      <a class="logo" href="/"
         >iA<span class="x">x</span><span class="logo--claim"
           >· inteliAxencia</span
         ></a
@@ -31,14 +31,13 @@ const legales = [
       {
         navegacion.map((e) => (
           <li>
-            {" "}
-            <a href={e.href}>{e.texto}</a>{" "}
+            <a href={e.href}>{e.texto}</a>
           </li>
         ))
       }
     </ul>
     <ul class="foot-links">
-      <li><a href="#newsletter">Newsletter</a></li>
+      <li><a href="/#newsletter">Newsletter</a></li>
       <li>
         <a href="mailto:hola@inteliaxencia.com">hola@inteliaxencia.com</a>
       </li>
