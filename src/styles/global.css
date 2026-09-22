@@ -253,3 +253,87 @@ a {
 .eyebrow--invert {
   color: var(--color-coral);
 }
+
+/* ==================== SECCIONES ====================
+   Relleno vertical y cabecera comunes a las secciones de la portada. El
+   selector de elemento alcanza a cualquier etiqueta section del sitio:
+   hoy ninguna pagina legal la usa, comprobado con grep sobre src/. Si
+   alguna la usa en el futuro, heredara este relleno. */
+
+section {
+  padding: 60px 0;
+}
+
+.section-head {
+  max-width: 660px;
+  margin-bottom: 36px;
+}
+
+.section-head p {
+  margin-top: 14px;
+  color: var(--color-texto-suave);
+}
+
+@media (min-width: 821px) {
+  section {
+    padding: 88px 0;
+  }
+
+  .section-head {
+    margin-bottom: 52px;
+  }
+}
+
+/* ==================== ASPA ====================
+   La 'x' del logotipo como firma grafica de fondo. Compartida: la usan
+   las dos secciones sobre indigo, presentacion e IA local. Es
+   decorativa, su marcado son dos span vacios dentro de un contenedor con
+   aria-hidden. En el prototipo se llamaba .hero-x. */
+
+.aspa {
+  position: absolute;
+  right: -18%;
+  bottom: -14%;
+  width: min(72vw, 560px);
+  height: min(72vw, 560px);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.aspa span {
+  position: absolute;
+  inset: 0;
+  background: var(--color-indigo-deep);
+  border-radius: 60px;
+}
+
+.aspa span:first-child {
+  transform: rotate(45deg) scaleX(0.28);
+}
+
+.aspa span:last-child {
+  transform: rotate(-45deg) scaleX(0.28);
+}
+
+@media (min-width: 821px) {
+  .aspa {
+    right: -6%;
+    bottom: -22%;
+    width: min(46vw, 560px);
+    height: min(46vw, 560px);
+    opacity: 1;
+  }
+}
+
+/* El modificador va despues del @media a proposito: tiene la misma
+   especificidad que .aspa, 0-1-0, y las @media no suman, asi que decide
+   el orden en el archivo. Colocado antes, en escritorio perderia su
+   posicion. En el prototipo esto era un style en linea, que ganaba por
+   ser inline. */
+
+.aspa--local {
+  top: -30%;
+  right: -24%;
+  bottom: auto;
+  opacity: 0.55;
+}
