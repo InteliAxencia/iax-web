@@ -129,3 +129,42 @@ pull request de Dependabot que subía TypeScript a 7.0.2 lo detuvo `verify`.
 
 **Disparador.** Que `@astrojs/check` publique una versión que soporte
 TypeScript 7.
+
+## 6. Sitio sin aviso de cookies
+
+**Decisión vigente.** La web no muestra aviso de cookies. La política de
+cookies informa de las necesarias y explica por qué no hay aviso.
+
+**Por qué.** Todas las cookies del sitio son necesarias, y la guía de la AEPD
+de mayo de 2024 prevé que en ese caso no hace falta informar ni pedir
+consentimiento. Un aviso con un único botón de aceptar, sin nada que rechazar,
+es un patrón que la misma guía califica de engañoso.
+
+**Lo que trae consigo.** Enlace permanente a la política de cookies en el pie
+de todas las páginas, junto al aviso legal y la privacidad. Ninguna cookie
+propia de consentimiento. El anexo de tratamiento de datos de Cloudflare,
+aceptado de forma expresa en el panel, porque la guía exige pactar que el
+tercero no use sus cookies para nada más. Cloudflare Web Analytics es una
+excepción consciente a la letra de R1, que solo permite servir assets estáticos
+y ejecutar rutas de API.
+
+**Condiciones.** La decisión se cae en cuanto se rompa cualquiera. Si ocurre,
+el aviso se implanta antes de desplegar el cambio.
+
+- Cloudflare Web Analytics sigue sin instalar cookies ni identificadores
+  persistentes.
+- No entra ninguna otra herramienta de medición.
+- No se incrusta ningún recurso de terceros: ni Google Fonts, ni vídeos, ni
+  mapas, ni píxeles, ni botones de redes sociales, ni widgets de reserva o de
+  mensajería. La única excepción es el script de Cloudflare Web Analytics.
+- Los enlaces a LinkedIn y GitHub son enlaces simples, sin widget ni script.
+- No se conecta pasarela de pago.
+- Ningún formulario incrusta scripts de terceros: los formularios llaman a la
+  API de Mailjet desde el servidor. Si entra Turnstile, se comprueba antes qué
+  guarda en el dispositivo.
+- La agenda, cuando se retome, cumple las condiciones del apartado 2 antes de
+  enlazarse.
+
+**Disparador de revisión.** Además de romper una condición, que la AEPD
+considere que una medición sin cookies como la de Cloudflare requiere
+consentimiento.
