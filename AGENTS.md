@@ -31,13 +31,13 @@ tomaron de forma explícita y no se revierten por comodidad ni por prisa.
 
 ## 2. Stack y comandos
 
-| Pieza                   | Elección                                    | Nota                                          |
-| ----------------------- | ------------------------------------------- | --------------------------------------------- |
-| Framework               | Astro 7                                     | Node `^24`, fijado en `.nvmrc` y en `engines` |
-| Estilos                 | Tailwind v4 vía `@tailwindcss/vite`         | nunca `@astrojs/tailwind`, está deprecado     |
-| Despliegue              | Cloudflare Workers con assets estáticos     | adaptador `@astrojs/cloudflare`               |
-| Contenedor              | Dev Container sobre Podman rootless         | Git se queda en el host                       |
-| Integraciones previstas | Brevo, Easy!Appointments, Stripe, Turnstile | sujetas al bloqueo legal de la sección 4      |
+| Pieza                   | Elección                                      | Nota                                          |
+| ----------------------- | --------------------------------------------- | --------------------------------------------- |
+| Framework               | Astro 7                                       | Node `^24`, fijado en `.nvmrc` y en `engines` |
+| Estilos                 | Tailwind v4 vía `@tailwindcss/vite`           | nunca `@astrojs/tailwind`, está deprecado     |
+| Despliegue              | Cloudflare Workers con assets estáticos       | adaptador `@astrojs/cloudflare`               |
+| Contenedor              | Dev Container sobre Podman rootless           | Git se queda en el host                       |
+| Integraciones previstas | Mailjet, Easy!Appointments, Stripe, Turnstile | sujetas al bloqueo legal de la sección 4      |
 
 Comandos:
 
@@ -262,7 +262,7 @@ Esto ya está resuelto y no puede perderse en ninguna migración:
 ## 9. Qué no vive en este repositorio
 
 - El esquema comercial y la guía de marca, que están en Drive.
-- Las configuraciones de Brevo, Easy!Appointments y Stripe, y los contactos, que quedan
+- Las configuraciones de Mailjet, Easy!Appointments y Stripe, y los contactos, que quedan
   fuera del control de versiones y necesitan su propia rutina de exportación.
 - Los secretos, que están en el gestor de contraseñas del equipo.
 - Los archivos de fuente, mientras siga vigente el bloqueo 4.2.

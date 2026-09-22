@@ -168,3 +168,27 @@ el aviso se implanta antes de desplegar el cambio.
 **Disparador de revisión.** Además de romper una condición, que la AEPD
 considere que una medición sin cookies como la de Cloudflare requiere
 consentimiento.
+
+## 7. Proveedor de correo
+
+**Decisión vigente.** Mailjet para el boletín y para los mensajes de los
+formularios de contacto.
+
+**Por qué.** Permite desactivar el seguimiento de aperturas y clics, en la
+cuenta y en cada envío, y eso es coherente con la política de cookies. Guarda
+los datos en la UE, en Google Cloud, en Fráncfort y en Saint-Ghislain
+(Bélgica). Su contrato de encargo publica el mecanismo de las transferencias:
+cláusulas contractuales tipo y Marco de Privacidad de Datos UE-EE. UU.
+
+**Descartado.** Brevo, que era la opción prevista: no deja desactivar el
+seguimiento salvo en su plan Enterprise y a petición.
+
+**Lo que trae consigo.** La doble confirmación se construye: un enlace firmado
+con caducidad, un endpoint que lo valida y el alta en la lista con la IP y la
+fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
+desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
+Mailjet y un tope de 200 correos al día.
+
+**Disparador de revisión.** Que Mailjet deje de permitir desactivar el
+seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
+diario del plan gratuito.
