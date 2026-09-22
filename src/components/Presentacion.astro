@@ -1,0 +1,81 @@
+<section class="presentacion sobre-indigo" id="inicio">
+  <div class="aspa" aria-hidden="true"><span></span><span></span></div>
+  <div class="wrap presentacion-inner">
+    <span class="eyebrow eyebrow--invert"
+      >IA para el sector legal · Derecho laboral</span
+    >
+    <h1>Recupera tiempo para ejercer el Derecho Laboral</h1>
+    <p>
+      Analizamos tu forma de trabajar, optimizamos procesos y te acompañamos con
+      formación personalizada para que cada mejora se traduzca en <strong
+        >más tiempo para tus clientes y menos tiempo en tareas que no aportan
+        valor.</strong
+      >
+    </p>
+    <div class="presentacion-ctas">
+      <a class="btn btn-blanco" href="/#contacto">Hablemos de tu caso</a>
+      <a class="link-cta link-cta--invert" href="/#metodo">Conocer el método</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .presentacion {
+    background: var(--color-indigo);
+    color: var(--color-blanco);
+    position: relative;
+    overflow: hidden;
+    padding: 64px 0 76px;
+  }
+
+  .presentacion-inner {
+    position: relative;
+    max-width: 720px;
+  }
+
+  .presentacion p {
+    margin: 20px 0 32px;
+    font-size: 1.08rem;
+    font-weight: 300;
+    max-width: 56ch;
+  }
+
+  .presentacion p strong {
+    font-weight: 700;
+  }
+
+  /* En columna, el align-items por defecto estiraria el enlace de texto y
+     su subrayado coral ocuparia todo el ancho. */
+
+  .presentacion-ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .presentacion-ctas .btn {
+    width: 100%;
+  }
+
+  @media (min-width: 821px) {
+    .presentacion {
+      padding: 96px 0 110px;
+    }
+
+    .presentacion p {
+      font-size: 1.2rem;
+      margin: 22px 0 36px;
+    }
+
+    .presentacion-ctas {
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .presentacion-ctas .btn {
+      width: auto;
+    }
+  }
+</style>
