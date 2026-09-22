@@ -15,8 +15,9 @@ documentación de Astro cubre de forma oficial.
 
 **Lo que no da.** Procesamiento exclusivo en la UE. La localización de datos de
 Cloudflare es un complemento exclusivo de Enterprise. La transferencia
-internacional se apoya en el contrato de encargo y sus cláusulas contractuales
-tipo, y así tiene que constar en la política de privacidad, sin adornos.
+internacional se apoya en el Marco de Privacidad de Datos UE-EE. UU., con las
+cláusulas contractuales tipo del contrato de encargo como garantía subsidiaria,
+y así tiene que constar en la política de privacidad, sin adornos.
 
 **Disparador.** Que un cliente o un pliego imponga por contrato residencia o
 procesamiento de datos en la UE, o conformidad con el Esquema Nacional de
@@ -39,7 +40,10 @@ eliminatorio.
 
 ## 2. Sistema de reservas
 
-**Decisión vigente.** Easy!Appointments autoalojado, versión estable.
+**Decisión vigente.** Sin sistema de reservas: la web no ofrece citas. La
+gestión de agenda queda para una mejora futura de la web.
+
+**Cuando se retome.** Easy!Appointments autoalojado, versión estable.
 
 **Por qué.** Cal.com movió su código principal de AGPL a licencia propietaria en
 abril de 2026. Un componente que guarda datos de citas de clientes del sector
@@ -54,6 +58,13 @@ del servidor es encargado.
 **Pendiente antes de instalar nada.** Verificar por escrito el archivo de
 licencia del repositorio, con el mismo criterio que se aplica a la tipografía
 Neurial Grotesk.
+
+**Antes de enlazarla desde la web.** No carga librerías desde CDN externos,
+comprobado en la pestaña de red del navegador y no en la documentación. La
+sincronización con Google Calendar sigue desactivada: si se activa, entra
+Google como encargado, con transferencia internacional. Las políticas de
+privacidad y de cookies se actualizan antes, y la de cookies incluye las suyas,
+como `ci_session`.
 
 **Disparador de revisión.** Que el mantenimiento del proyecto se detenga más de
 doce meses, o que aparezca una vulnerabilidad grave sin parche disponible.
@@ -118,3 +129,66 @@ pull request de Dependabot que subía TypeScript a 7.0.2 lo detuvo `verify`.
 
 **Disparador.** Que `@astrojs/check` publique una versión que soporte
 TypeScript 7.
+
+## 6. Sitio sin aviso de cookies
+
+**Decisión vigente.** La web no muestra aviso de cookies. La política de
+cookies informa de las necesarias y explica por qué no hay aviso.
+
+**Por qué.** Todas las cookies del sitio son necesarias, y la guía de la AEPD
+de mayo de 2024 prevé que en ese caso no hace falta informar ni pedir
+consentimiento. Un aviso con un único botón de aceptar, sin nada que rechazar,
+es un patrón que la misma guía califica de engañoso.
+
+**Lo que trae consigo.** Enlace permanente a la política de cookies en el pie
+de todas las páginas, junto al aviso legal y la privacidad. Ninguna cookie
+propia de consentimiento. El anexo de tratamiento de datos de Cloudflare,
+aceptado de forma expresa en el panel, porque la guía exige pactar que el
+tercero no use sus cookies para nada más. Cloudflare Web Analytics es una
+excepción consciente a la letra de R1, que solo permite servir assets estáticos
+y ejecutar rutas de API.
+
+**Condiciones.** La decisión se cae en cuanto se rompa cualquiera. Si ocurre,
+el aviso se implanta antes de desplegar el cambio.
+
+- Cloudflare Web Analytics sigue sin instalar cookies ni identificadores
+  persistentes.
+- No entra ninguna otra herramienta de medición.
+- No se incrusta ningún recurso de terceros: ni Google Fonts, ni vídeos, ni
+  mapas, ni píxeles, ni botones de redes sociales, ni widgets de reserva o de
+  mensajería. La única excepción es el script de Cloudflare Web Analytics.
+- Los enlaces a LinkedIn y GitHub son enlaces simples, sin widget ni script.
+- No se conecta pasarela de pago.
+- Ningún formulario incrusta scripts de terceros: los formularios llaman a la
+  API de Mailjet desde el servidor. Si entra Turnstile, se comprueba antes qué
+  guarda en el dispositivo.
+- La agenda, cuando se retome, cumple las condiciones del apartado 2 antes de
+  enlazarse.
+
+**Disparador de revisión.** Además de romper una condición, que la AEPD
+considere que una medición sin cookies como la de Cloudflare requiere
+consentimiento.
+
+## 7. Proveedor de correo
+
+**Decisión vigente.** Mailjet para el boletín y para los mensajes de los
+formularios de contacto.
+
+**Por qué.** Permite desactivar el seguimiento de aperturas y clics, en la
+cuenta y en cada envío, y eso es coherente con la política de cookies. Guarda
+los datos en la UE, en Google Cloud, en Fráncfort y en Saint-Ghislain
+(Bélgica). Su contrato de encargo publica el mecanismo de las transferencias:
+cláusulas contractuales tipo y Marco de Privacidad de Datos UE-EE. UU.
+
+**Descartado.** Brevo, que era la opción prevista: no deja desactivar el
+seguimiento salvo en su plan Enterprise y a petición.
+
+**Lo que trae consigo.** La doble confirmación se construye: un enlace firmado
+con caducidad, un endpoint que lo valida y el alta en la lista con la IP y la
+fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
+desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
+Mailjet y un tope de 200 correos al día.
+
+**Disparador de revisión.** Que Mailjet deje de permitir desactivar el
+seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
+diario del plan gratuito.

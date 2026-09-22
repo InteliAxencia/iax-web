@@ -42,6 +42,32 @@ definidas. Al crear el proyecto:
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
 
+## Antes de publicar las páginas legales
+
+Las políticas de privacidad y de cookies afirman cosas que solo se comprueban
+con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
+
+1. Aceptar de forma expresa el anexo de tratamiento de datos de Cloudflare en
+   el panel. Confirmar que el correo corporativo ya está en Infomaniak y los
+   contratos de encargo con Infomaniak y con Mailjet. La entidad de Mailjet y
+   su dirección, como figuren en la orden de servicio, se contrastan con la
+   política de privacidad.
+2. Comprobar el valor de _Challenge Passage_. Si no son los 30 minutos por
+   defecto, se actualiza la duración de `cf_clearance` en la política de
+   cookies.
+3. Activar Cloudflare Web Analytics y comprobar en la pestaña de red que su
+   script llega a la página. Si no llega, se instala a mano en `Base.astro`.
+4. Desactivar en la cuenta de Mailjet el seguimiento de aperturas y de clics.
+   La política de privacidad afirma que los envíos no los miden.
+5. Recorrer el sitio desplegado en una ventana limpia, con las herramientas de
+   desarrollo abiertas: la portada sin interactuar y después todas las páginas
+   del menú. En Aplicación, anotar cookies y almacenamiento; en Red, los
+   dominios desde los que se carga algo. La tabla de la política se ajusta a
+   lo observado.
+6. Confirmar que Cloudflare, Inc. sigue en la lista de
+   https://www.dataprivacyframework.gov y que los enlaces a las políticas de
+   terceros responden.
+
 ## Antes del primer envío de correo
 
 SPF, DKIM y DMARC configurados en el dominio. Lo exige el bloqueo 4.1 de

@@ -46,6 +46,12 @@ const { titulo, descripcion } = Astro.props;
     margin-bottom: 12px;
   }
 
+  .lectura :global(h3) {
+    font-size: 1.05rem;
+    margin-top: 28px;
+    margin-bottom: 8px;
+  }
+
   .lectura :global(p) {
     margin-bottom: 16px;
     color: var(--color-texto-suave);
@@ -91,6 +97,38 @@ const { titulo, descripcion } = Astro.props;
 
   .lectura :global(a:hover) {
     color: var(--color-indigo-deep);
+  }
+
+  /* Tablas de las politicas. Cada una va dentro de un .tabla que la pagina
+     marca con role="region", aria-label y tabindex="0": en movil la tabla se
+     desplaza en horizontal sin ensanchar la pagina, y el teclado alcanza
+     ese desplazamiento. */
+
+  .lectura :global(.tabla) {
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+
+  .lectura :global(table) {
+    width: 100%;
+    min-width: 36rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .lectura :global(th),
+  .lectura :global(td) {
+    padding: 10px 12px;
+    border: 1px solid var(--color-borde);
+    text-align: left;
+    vertical-align: top;
+    color: var(--color-texto-suave);
+  }
+
+  .lectura :global(th) {
+    background: var(--color-gris-claro);
+    color: var(--color-negro);
+    font-weight: 700;
   }
 
   @media (min-width: 821px) {
