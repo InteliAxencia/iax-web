@@ -15,8 +15,9 @@ documentación de Astro cubre de forma oficial.
 
 **Lo que no da.** Procesamiento exclusivo en la UE. La localización de datos de
 Cloudflare es un complemento exclusivo de Enterprise. La transferencia
-internacional se apoya en el contrato de encargo y sus cláusulas contractuales
-tipo, y así tiene que constar en la política de privacidad, sin adornos.
+internacional se apoya en el Marco de Privacidad de Datos UE-EE. UU., con las
+cláusulas contractuales tipo del contrato de encargo como garantía subsidiaria,
+y así tiene que constar en la política de privacidad, sin adornos.
 
 **Disparador.** Que un cliente o un pliego imponga por contrato residencia o
 procesamiento de datos en la UE, o conformidad con el Esquema Nacional de
