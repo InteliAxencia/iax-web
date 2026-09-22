@@ -40,7 +40,10 @@ eliminatorio.
 
 ## 2. Sistema de reservas
 
-**Decisión vigente.** Easy!Appointments autoalojado, versión estable.
+**Decisión vigente.** Sin sistema de reservas: la web no ofrece citas. La
+gestión de agenda queda para una mejora futura de la web.
+
+**Cuando se retome.** Easy!Appointments autoalojado, versión estable.
 
 **Por qué.** Cal.com movió su código principal de AGPL a licencia propietaria en
 abril de 2026. Un componente que guarda datos de citas de clientes del sector
@@ -55,6 +58,13 @@ del servidor es encargado.
 **Pendiente antes de instalar nada.** Verificar por escrito el archivo de
 licencia del repositorio, con el mismo criterio que se aplica a la tipografía
 Neurial Grotesk.
+
+**Antes de enlazarla desde la web.** No carga librerías desde CDN externos,
+comprobado en la pestaña de red del navegador y no en la documentación. La
+sincronización con Google Calendar sigue desactivada: si se activa, entra
+Google como encargado, con transferencia internacional. Las políticas de
+privacidad y de cookies se actualizan antes, y la de cookies incluye las suyas,
+como `ci_session`.
 
 **Disparador de revisión.** Que el mantenimiento del proyecto se detenga más de
 doce meses, o que aparezca una vulnerabilidad grave sin parche disponible.
