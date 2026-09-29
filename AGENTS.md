@@ -205,8 +205,10 @@ reservado a textos legales y contractuales.
   Habla de tareas, procesos y horas.
 - Frases cortas, una idea por frase. Primero la conclusión, después la
   justificación.
-- Llamadas a la acción con verbos directos, una por sección, en la línea de las
-  que ya existen en el sitio.
+- Llamadas a la acción con verbos directos, en la línea de las que ya existen en
+  el sitio. Un botón por destino distinto. Varios botones al mismo destino, solo
+  si lo pide explícitamente quien dirige. Un enlace de texto en lugar de botón,
+  también solo por petición explícita de quien dirige.
 - Nombra los límites. Lo que la IA no resuelve se dice.
 - El microcopy de formularios, errores y estados vacíos mantiene la misma
   calidez que el resto.
