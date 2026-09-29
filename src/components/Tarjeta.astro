@@ -1,0 +1,23 @@
+<article class="tarjeta">
+  <slot />
+</article>
+
+<style>
+  /* Marco compartido por las tarjetas de servicios, método y
+     funcionalidades: borde, radio, fondo y relleno. El contenido entra por
+     el slot y lo estiliza cada sección, porque se renderiza en el ámbito de
+     la sección que lo pasa, no en el de este componente.
+
+     El prototipo daba 24px de relleno vertical a funcionalidades y 26px a
+     las demás. Se unifica en 26px. */
+
+  .tarjeta {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius);
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+</style>
