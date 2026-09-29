@@ -61,7 +61,7 @@ import Campo from "./Campo.astro";
     if (control.validity.valueMissing) {
       return "Error: escribe tu correo para que podamos enviarte la newsletter.";
     }
-    return "Error: este correo no parece completo. Revisa que lleve @ y dominio.";
+    return "Error: introduce un correo válido, por ejemplo tu@email.com.";
   }
 
   if (formulario && confirmacion) {
