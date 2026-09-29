@@ -337,3 +337,48 @@ section {
   bottom: auto;
   opacity: 0.55;
 }
+
+/* ==================== ACORDEÓN ====================
+   Base de los desplegables nativos details y summary. Compartida: la
+   usan los desplegables de servicios y las preguntas frecuentes, y con
+   estilos de ámbito no puede vivir en un componente. Las variantes van
+   en cada componente: la alineación en servicios, la tarjeta en
+   preguntas frecuentes.
+
+   El «+» es coral sobre blanco y no llega a 3:1. Se mantiene a
+   propósito: es un acento redundante. El estado se ve porque el
+   contenido aparece, y el navegador lo expone como plegado o
+   desplegado. */
+
+details.acc > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-indigo);
+}
+
+details.acc > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.acc > summary::after {
+  content: "+";
+  margin-left: auto;
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-coral);
+  transition: transform 0.18s ease;
+}
+
+details.acc[open] > summary::after {
+  transform: rotate(45deg);
+}
+
+details.acc > summary:hover {
+  color: var(--color-indigo-deep);
+}
