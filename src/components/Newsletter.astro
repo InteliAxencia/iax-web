@@ -1,0 +1,150 @@
+---
+import Campo from "./Campo.astro";
+---
+
+<section class="newsletter" id="newsletter">
+  <div class="wrap">
+    <div class="newsletter-inner">
+      <div class="newsletter-texto">
+        <span class="eyebrow">Newsletter</span>
+        <h2>IA y derecho laboral, sin ruido</h2>
+        <p>
+          Una vez al mes: novedades de IA relevantes para el ámbito laboral,
+          casos prácticos y herramientas explicadas en claro. Sin spam.
+        </p>
+      </div>
+      <div>
+        <!-- TODO: conectar a la API de Mailjet con doble confirmación. Hasta
+             entonces el envío es simulado y ningún dato sale del navegador
+             (bloqueo 4.1 de AGENTS.md). -->
+        <form id="form-newsletter" novalidate>
+          <Campo
+            id="news-email"
+            nombre="email"
+            etiqueta="Correo electrónico"
+            tipo="email"
+            autocomplete="email"
+            placeholder="tu@email.com"
+            pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+            requerido
+          />
+          <!-- PROVISIONAL: texto legal pendiente de revisión por quien lleva
+               la parte legal. No publicar sin esa revisión. -->
+          <Campo
+            id="news-consentimiento"
+            nombre="consentimiento"
+            tipo="checkbox"
+            requerido
+          >
+            Acepto recibir el boletín mensual de iAx en mi correo electrónico y
+            he leído la <a href="/privacidad">política de privacidad</a>. Puedo
+            darme de baja en cualquier momento.
+          </Campo>
+          <button class="btn btn-indigo" type="submit">Suscribirme</button>
+          <!-- PROVISIONAL: mientras el envío sea simulado, este mensaje
+               describe un correo que no se envía. -->
+          <p class="newsletter-ok" id="news-ok" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const formulario =
+    document.querySelector<HTMLFormElement>("#form-newsletter");
+  const confirmacion = document.querySelector<HTMLElement>("#news-ok");
+
+  function mensajeError(control: HTMLInputElement): string {
+    if (control.type === "checkbox") {
+      return "Error: marca la casilla para poder suscribirte.";
+    }
+    if (control.validity.valueMissing) {
+      return "Error: escribe tu correo para que podamos enviarte la newsletter.";
+    }
+    return "Error: introduce un correo válido, por ejemplo tu@email.com.";
+  }
+
+  if (formulario && confirmacion) {
+    formulario.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+
+      let primerError: HTMLInputElement | null = null;
+
+      for (const control of formulario.querySelectorAll<HTMLInputElement>(
+        "input",
+      )) {
+        const estado = document.getElementById(`${control.id}-estado`);
+        if (estado) estado.textContent = "";
+        control.removeAttribute("aria-invalid");
+
+        if (!control.checkValidity()) {
+          if (estado) estado.textContent = mensajeError(control);
+          control.setAttribute("aria-invalid", "true");
+          primerError ??= control;
+        }
+      }
+
+      if (primerError) {
+        primerError.focus();
+        return;
+      }
+
+      confirmacion.textContent =
+        "Revisa tu bandeja: te hemos enviado un correo para confirmar la suscripción.";
+      for (const el of formulario.querySelectorAll<HTMLElement>(
+        "input, button",
+      )) {
+        el.setAttribute("disabled", "");
+      }
+    });
+  }
+</script>
+
+<style>
+  .newsletter {
+    background: var(--color-gris-claro);
+  }
+
+  .newsletter-inner {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .newsletter-texto h2 {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+  }
+
+  .newsletter-texto p {
+    margin-top: 12px;
+    color: var(--color-texto-suave);
+  }
+
+  .newsletter-ok {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--color-ok-borde);
+    border-radius: 10px;
+    background: var(--color-ok-fondo);
+    color: var(--color-ok-texto);
+    font-size: 0.95rem;
+  }
+
+  .newsletter-ok:empty {
+    display: none;
+  }
+
+  @media (min-width: 821px) {
+    .newsletter-inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 44px;
+      padding: 52px;
+    }
+  }
+</style>
