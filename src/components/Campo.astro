@@ -1,0 +1,118 @@
+---
+interface Props {
+  id: string;
+  nombre: string;
+  etiqueta?: string;
+  tipo?: "text" | "email" | "checkbox";
+  autocomplete?: string;
+  requerido?: boolean;
+  placeholder?: string;
+  pattern?: string;
+}
+
+const {
+  id,
+  nombre,
+  etiqueta,
+  tipo = "text",
+  autocomplete,
+  requerido = false,
+  placeholder,
+  pattern,
+} = Astro.props;
+
+const idEstado = `${id}-estado`;
+const esCasilla = tipo === "checkbox";
+---
+
+<div class="campo">
+  {
+    esCasilla ? (
+      <label class="campo-casilla" for={id}>
+        <input
+          type="checkbox"
+          id={id}
+          name={nombre}
+          required={requerido}
+          aria-describedby={idEstado}
+        />
+        <span>
+          <slot />
+        </span>
+      </label>
+    ) : (
+      <>
+        <label class="campo-etiqueta" for={id}>
+          {etiqueta}
+        </label>
+        <input
+          type={tipo}
+          id={id}
+          name={nombre}
+          autocomplete={autocomplete}
+          pattern={pattern}
+          placeholder={placeholder}
+          required={requerido}
+          aria-describedby={idEstado}
+        />
+      </>
+    )
+  }
+  <p class="campo-estado" id={idEstado} role="status"></p>
+</div>
+
+<style>
+  .campo {
+    margin-bottom: 16px;
+  }
+
+  .campo-etiqueta {
+    display: block;
+    font-weight: 500;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+  }
+
+  .campo input:not([type="checkbox"]) {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    padding: 12px 14px;
+    border: 1.5px solid var(--color-borde);
+    border-radius: 10px;
+    background: var(--color-blanco);
+    color: var(--color-negro);
+  }
+
+  .campo input:not([type="checkbox"]):focus-visible {
+    border-color: var(--color-indigo);
+  }
+
+  .campo-casilla {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--color-texto-suave);
+  }
+
+  .campo-casilla input {
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .campo-casilla :global(a) {
+    color: var(--color-indigo);
+    text-decoration: underline;
+  }
+
+  .campo-estado {
+    margin-top: 6px;
+    font-size: 0.88rem;
+    color: var(--color-error);
+  }
+
+  .campo-estado:empty {
+    display: none;
+  }
+</style>
