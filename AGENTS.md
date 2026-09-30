@@ -136,16 +136,25 @@ redistribución no autorizada. Mientras tanto, el fallback basta.
   `main`. Prefijos `feat/`, `fix/`, `chore/`, `docs/`. No hay otros: `feature/`
   no es válido.
 - `main` está protegida por un ruleset: se entra por pull request.
-- **Solo commits de fusión.** El aplastado y el rebase están desactivados en el
+- Para hacer merge de un pull request hace falta la aprobación de la otra
+  persona del equipo. El ruleset de `main` exige una aprobación y la anula si
+  entran commits nuevos después.
+- Si `main` avanza mientras un pull request espera revisión, se incorpora a la
+  rama con `git fetch` y `git merge origin/main` desde el host, antes de pedir
+  la aprobación, porque un commit posterior la anula. Tras resolver los
+  conflictos, `npm run format:check`, `npm run check` y `npm run build` antes de
+  hacer push. El botón `Update branch` de GitHub y su editor de conflictos no
+  sirven: firman con la clave de GitHub, no con la tuya.
+- **Solo merge commits.** El squash y el rebase están desactivados en el
   repositorio para preservar las firmas ED25519. Un squash sustituye tus commits
   por uno nuevo firmado por GitHub, y la cadena de firma hasta tu máquina se
   pierde. Un merge commit los conserva.
 - **Commits atómicos, un asunto por commit.** No es una regla independiente de
   la anterior: es lo que la hace viable. Si cada rama llega al pull request con
   pocos commits bien definidos, el merge commit no introduce ruido y no hace
-  falta aplastar nada. Un commit que toca a la vez el andamiaje, la identidad
-  visual y un archivo heredado no se puede revertir por partes ni localizar con
-  `git bisect`.
+  falta hacer squash de nada. Un commit que toca a la vez el andamiaje, la
+  identidad visual y un archivo heredado no se puede revertir por partes ni
+  localizar con `git bisect`.
 - Los commits van firmados con SSH. No propongas comandos que desactiven la
   firma, ni `--no-verify`, ni nada que reescriba el historial.
 - El mensaje explica el porqué. Si el contexto no se deduce del diff, va en el
