@@ -1,0 +1,38 @@
+---
+interface Props {
+  pregunta: string;
+  respuesta: string[];
+}
+
+const { pregunta, respuesta } = Astro.props;
+---
+
+<details class="acc pregunta">
+  <summary>{pregunta}</summary>
+  {respuesta.map((parrafo) => <p>{parrafo}</p>)}
+</details>
+
+<style>
+  /* Un elemento del acordeón de preguntas frecuentes. La base del
+     desplegable, el «+» y su giro, vive en global.css como .acc. Aquí
+     solo van la tarjeta y el texto de la respuesta. Cada párrafo de la
+     respuesta es un elemento del array. */
+
+  .pregunta {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+
+  .pregunta > summary {
+    font-size: 1rem;
+  }
+
+  .pregunta p {
+    margin-top: 14px;
+    font-size: 0.95rem;
+    color: var(--color-texto-suave);
+    max-width: 62ch;
+  }
+</style>

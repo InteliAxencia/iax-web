@@ -1,0 +1,126 @@
+---
+import Tarjeta from "./Tarjeta.astro";
+
+const grupos = [
+  {
+    titulo: "Documentación",
+    elementos: [
+      "Organización de documentos.",
+      "Consulta a bases de datos según permisos de acceso.",
+      "Revisión y análisis de documentos con skills legales.",
+      "Soporte para PDF, Word y Excel.",
+    ],
+  },
+  {
+    titulo: "Información jurídica",
+    elementos: [
+      "Consulta del BOE.",
+      "Consulta de jurisprudencia.",
+      "Centralización de información por expediente.",
+      "Restricciones para evitar consultas masivas.",
+    ],
+  },
+  {
+    titulo: "Gestión del despacho",
+    elementos: [
+      "Revisión del correo.",
+      "Recordatorios de agenda.",
+      "Análisis de leads.",
+    ],
+  },
+  {
+    titulo: "Control y acceso",
+    elementos: [
+      "Sistema de acceso y panel de control.",
+      "Permisos según perfil dentro del despacho.",
+      "Trazabilidad del uso.",
+      "Gobernanza del dato.",
+    ],
+  },
+];
+---
+
+<section id="funcionalidades">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">IA local</span>
+      <h2>Un entorno de trabajo conectado y sin cortes por cuota</h2>
+      <p>
+        La solución incorpora funcionalidades orientadas al trabajo cotidiano
+        del despacho. La capacidad de trabajo es propia, sin cortes por planes
+        de suscripción.
+      </p>
+    </div>
+    <div class="funcionalidades-grid">
+      {
+        grupos.map((grupo) => (
+          <Tarjeta>
+            <h3>{grupo.titulo}</h3>
+            <ul>
+              {grupo.elementos.map((elemento) => (
+                <li>{elemento}</li>
+              ))}
+            </ul>
+          </Tarjeta>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Dos puntos de ruptura, excepción anotada según AGENTS.md, sección 8:
+     a 821px, cuatro columnas dejan tarjetas de 180px, y el prototipo
+     pasaba a cuatro con 235px. Por eso se pasa a dos columnas a 821px y a
+     cuatro a 1040px, donde salen 235px. Mismo valor que en método. */
+
+  .funcionalidades-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Tarjeta separa sus hijos 10px. Con estos 4px, la distancia entre el
+     título y la lista vuelve a los 14px del prototipo. */
+
+  .funcionalidades-grid h3 {
+    font-size: 1.02rem;
+    margin-bottom: 4px;
+  }
+
+  .funcionalidades-grid ul {
+    display: grid;
+    gap: 10px;
+  }
+
+  .funcionalidades-grid li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.92rem;
+    color: var(--color-texto-suave);
+  }
+
+  .funcionalidades-grid li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--color-coral);
+    border-radius: 2px;
+  }
+
+  @media (min-width: 821px) {
+    .funcionalidades-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .funcionalidades-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
