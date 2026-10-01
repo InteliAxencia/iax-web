@@ -1,0 +1,96 @@
+---
+import Tarjeta from "./Tarjeta.astro";
+
+const pasos = [
+  {
+    titulo: "Entendemos",
+    texto:
+      "Analizamos cómo trabaja tu despacho, qué herramientas utilizas y dónde están las principales dificultades.",
+  },
+  {
+    titulo: "Identificamos",
+    texto:
+      "Detectamos qué procesos pueden optimizarse y qué alternativas tienen sentido para tu situación.",
+  },
+  {
+    titulo: "Implementamos",
+    texto:
+      "Te ayudamos a incorporar la solución elegida y a que el equipo pueda utilizarla en su trabajo cotidiano.",
+  },
+  {
+    titulo: "Evolucionamos",
+    texto:
+      "Si las necesidades cambian, podemos seguir acompañando al despacho y desarrollar nuevas soluciones.",
+  },
+];
+---
+
+<section id="metodo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Cómo trabajamos</span>
+      <h2>No empezamos por la herramienta</h2>
+      <p>
+        Primero entendemos cómo trabaja tu despacho. Después identificamos qué
+        puede mejorarse y qué solución tiene sentido.
+      </p>
+    </div>
+    <div class="metodo-pasos">
+      {
+        pasos.map((paso, i) => (
+          <Tarjeta>
+            <span class="metodo-num" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <h3>{paso.titulo}</h3>
+            <p>{paso.texto}</p>
+          </Tarjeta>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Dos puntos de ruptura, excepción anotada según AGENTS.md, sección 8:
+     a 821px, cuatro columnas dejan tarjetas de 180px, por debajo de los
+     220px que el prototipo probó en navegador. Por eso se pasa a dos
+     columnas a 821px y a cuatro a 1040px, donde salen 235px. Mismo valor
+     que en funcionalidades.
+
+     El número va en coral sobre blanco y no llega a 3:1. Mismo criterio
+     que el «+» del acordeón: es redundante, el orden ya lo da el marcado,
+     y va con aria-hidden. */
+
+  .metodo-pasos {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .metodo-num {
+    font-weight: 800;
+    font-size: 2rem;
+    color: var(--color-coral);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .metodo-pasos p {
+    font-size: 0.94rem;
+    color: var(--color-texto-suave);
+  }
+
+  @media (min-width: 821px) {
+    .metodo-pasos {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .metodo-pasos {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,300 @@
+---
+import Tarjeta from "./Tarjeta.astro";
+
+const areas = ["Diagnóstico", "Formación", "Implementación", "IA local"];
+
+// Cada botón lleva su ruta completa. Hoy las tres van a /#contacto; cuando
+// exista la página de un servicio, se cambia su ruta aquí y el componente no
+// se toca.
+const servicios = [
+  {
+    titulo: "Diagnóstico y optimización",
+    sub: "Entender antes de incorporar.",
+    resumen:
+      "Analizamos cómo trabaja tu despacho para detectar tareas repetitivas, puntos de fricción y oportunidades concretas de mejora.",
+    rotulo: "Ver cómo trabajamos",
+    titular: "Primero entendemos cómo trabajas. Después buscamos qué mejorar.",
+    parrafos: [
+      "Analizamos los procesos y herramientas que utilizas actualmente para identificar tareas repetitivas, puntos de fricción y oportunidades de mejora.",
+    ],
+    listas: [
+      {
+        titulo: "Podemos ayudarte a:",
+        elementos: [
+          "analizar procesos y tareas;",
+          "detectar oportunidades de optimización;",
+          "evaluar las herramientas que ya utilizas;",
+          "identificar nuevas herramientas que puedan aportar valor;",
+          "definir por dónde empezar.",
+        ],
+      },
+    ],
+    objetivo:
+      "que tengas claro qué conviene mejorar y qué solución tiene sentido para tu despacho.",
+    boton: { texto: "Analizar mi despacho", ruta: "/#contacto" },
+  },
+  {
+    titulo: "Formación y acompañamiento",
+    sub: "Aprender haciendo.",
+    resumen:
+      "Formación práctica para incorporar nuevas herramientas a los procesos reales del equipo, con acompañamiento durante su implementación cuando sea necesario.",
+    rotulo: "Conocer la formación",
+    titular:
+      "Las herramientas aportan valor cuando el equipo sabe utilizarlas.",
+    parrafos: [
+      "Diseñamos formación práctica a partir de las necesidades reales de tu despacho. Trabajamos con las herramientas y situaciones que forman parte de tu actividad para que el equipo pueda incorporarlas a su trabajo cotidiano.",
+      "Y si necesitas algo más que formación, podemos acompañarte durante la implementación.",
+    ],
+    listas: [
+      {
+        titulo: "Trabajamos sobre:",
+        elementos: [
+          "uso práctico de herramientas de IA;",
+          "incorporación de nuevas herramientas;",
+          "buenas prácticas de uso;",
+          "adaptación a los procesos del despacho;",
+          "acompañamiento durante la puesta en marcha.",
+        ],
+      },
+      {
+        titulo: "Temas que solemos trabajar:",
+        elementos: [
+          "fundamentos de IA para profesionales del ámbito laboral y jurídico;",
+          "automatización de tareas administrativas repetitivas;",
+          "gestión documental y clasificación de expedientes;",
+          "uso responsable de la IA: seguridad, trazabilidad y control.",
+        ],
+      },
+    ],
+    objetivo:
+      "que la tecnología se incorpore al trabajo del equipo, en lugar de convertirse en un gasto al que no le sacas suficiente partido.",
+    boton: { texto: "Quiero formar a mi equipo", ruta: "/#contacto" },
+  },
+  {
+    titulo: "Soluciones adaptadas",
+    sub: "Cuando lo que existe no es suficiente.",
+    resumen:
+      "Evaluamos, integramos o desarrollamos soluciones ajustadas a las necesidades concretas de tu despacho.",
+    rotulo: "Explorar soluciones",
+    titular: "Cuando una herramienta estándar no es suficiente.",
+    parrafos: [
+      "No todos los problemas se resuelven con una aplicación disponible en el mercado.",
+      "Cuando detectamos una necesidad específica, evaluamos alternativas e implementamos una solución adaptada al funcionamiento del despacho.",
+      "Esto puede incluir la integración de herramientas existentes, configuraciones específicas o soluciones desarrolladas para una necesidad concreta.",
+      "Y en determinados casos, la respuesta puede estar en trabajar con IA de forma local.",
+    ],
+    listas: [],
+    objetivo: "que la solución se adapte a tu despacho, y no al revés.",
+    boton: { texto: "Cuéntanos qué necesitas", ruta: "/#contacto" },
+  },
+];
+---
+
+<section class="servicios" id="servicios">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Servicios</span>
+      <h2>Cómo podemos ayudarte</h2>
+      <p>
+        Cada despacho trabaja de una manera diferente. Por eso no partimos de
+        una herramienta, sino de tus necesidades.
+      </p>
+      <p>
+        Analizamos tus procesos, identificamos oportunidades de mejora y te
+        acompañamos en la incorporación de nuevas herramientas, desde la
+        formación del equipo hasta el desarrollo de soluciones adaptadas.
+      </p>
+      <ul class="servicios-areas" aria-label="Áreas de trabajo">
+        {areas.map((area) => <li>{area}</li>)}
+      </ul>
+      <a class="btn btn-indigo servicios-cta" href="/#contacto"
+        >Cuéntanos qué quieres mejorar</a
+      >
+    </div>
+    <div class="servicios-grid">
+      {
+        servicios.map((servicio) => (
+          <Tarjeta>
+            <h3>{servicio.titulo}</h3>
+            <p class="servicios-sub">{servicio.sub}</p>
+            <p class="servicios-resumen">{servicio.resumen}</p>
+            <details class="acc" name="servicios">
+              <summary class="link-cta">{servicio.rotulo}</summary>
+              <div class="servicios-detalle">
+                <h4>{servicio.titular}</h4>
+                {servicio.parrafos.map((parrafo) => (
+                  <p>{parrafo}</p>
+                ))}
+                {servicio.listas.map((lista) => (
+                  <>
+                    <p>
+                      <b>{lista.titulo}</b>
+                    </p>
+                    <ul>
+                      {lista.elementos.map((elemento) => (
+                        <li>{elemento}</li>
+                      ))}
+                    </ul>
+                  </>
+                ))}
+                <p class="servicios-objetivo">
+                  <b>El objetivo:</b> {servicio.objetivo}
+                </p>
+                <p class="servicios-accion">
+                  <a class="btn btn-indigo" href={servicio.boton.ruta}>
+                    {servicio.boton.texto}
+                  </a>
+                </p>
+              </div>
+            </details>
+          </Tarjeta>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Cuatro botones al mismo destino, el de la cabecera y uno por
+     desplegable, por petición explícita de quien dirige (AGENTS.md,
+     sección 7). Cada desplegable tendrá su propio destino cuando exista la
+     página del servicio.
+
+     Las áreas son texto, no botones: sin borde, fondo ni radio, que es la
+     forma de .btn. El cuadrado coral es el de las listas del sitio. */
+
+  .servicios {
+    background: var(--color-gris-claro);
+  }
+
+  .servicios-areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin-top: 22px;
+  }
+
+  .servicios-areas li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-indigo);
+  }
+
+  .servicios-areas li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--color-coral);
+    border-radius: 2px;
+  }
+
+  .servicios-cta {
+    margin-top: 28px;
+  }
+
+  .servicios-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .servicios-sub {
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--color-indigo);
+  }
+
+  .servicios-resumen {
+    font-size: 0.95rem;
+    color: var(--color-texto-suave);
+  }
+
+  /* El rótulo del desplegable va a la derecha, con el «+» pegado, y algo
+     más grande que el texto de la tarjeta para que se lea como acción. */
+
+  .servicios-grid summary {
+    justify-content: flex-end;
+    text-align: right;
+    font-size: 1.05rem;
+  }
+
+  .servicios-grid summary::after {
+    margin-left: 0;
+  }
+
+  .servicios-detalle {
+    padding-top: 16px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .servicios-detalle h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--color-indigo);
+  }
+
+  .servicios-detalle p {
+    font-size: 0.92rem;
+    color: var(--color-texto-suave);
+  }
+
+  .servicios-detalle ul {
+    display: grid;
+    gap: 8px;
+  }
+
+  .servicios-detalle li {
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.92rem;
+    color: var(--color-texto-suave);
+  }
+
+  .servicios-detalle li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    background: var(--color-coral);
+    border-radius: 2px;
+  }
+
+  /* Hereda el tamaño de .servicios-detalle p, como en el prototipo, donde
+     esa regla ganaba al 0.9rem de .objetivo. */
+
+  .servicios-objetivo {
+    background: var(--color-gris-claro);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .servicios-objetivo b {
+    color: var(--color-indigo);
+  }
+
+  /* El botón a la derecha, en el mismo lado que el rótulo y el «+». */
+
+  .servicios-accion {
+    text-align: right;
+  }
+
+  @media (min-width: 821px) {
+    .servicios-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .servicios-resumen {
+      min-height: 6.2em;
+    }
+  }
+</style>

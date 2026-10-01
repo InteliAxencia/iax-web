@@ -1,0 +1,85 @@
+---
+import Pregunta from "./Pregunta.astro";
+
+const preguntas = [
+  {
+    pregunta: "¿Tengo que saber qué herramienta necesito antes de contactar?",
+    respuesta: [
+      "No. Podemos partir de un problema o una necesidad concreta y analizar qué alternativa tiene sentido.",
+    ],
+  },
+  {
+    pregunta: "¿Trabajáis con las herramientas que ya utilizamos?",
+    respuesta: [
+      "Sí. Primero analizamos el entorno existente antes de recomendar incorporar nuevas herramientas.",
+    ],
+  },
+  {
+    pregunta: "¿La formación está pensada para personas sin experiencia en IA?",
+    respuesta: [
+      "Sí. La formación se adapta al nivel de conocimiento y a las necesidades reales del equipo.",
+    ],
+  },
+  {
+    pregunta: "¿Qué es la IA local?",
+    respuesta: [
+      "Es una alternativa que permite ejecutar determinadas capacidades de IA en un entorno controlado por el propio despacho, en lugar de depender exclusivamente de servicios externos.",
+    ],
+  },
+  {
+    pregunta:
+      "¿Hay límite de consultas? ¿Me quedaré sin servicio a mitad de un escrito?",
+    respuesta: [
+      "No. Con las herramientas de suscripción habituales, el proveedor reparte una capacidad compartida entre millones de usuarios y te asigna una cuota. Cuando la agotas, el sistema se bloquea y solo puedes seguir cuando se reinicia el contador, que a veces son horas. Suele ocurrir el día de vencimiento de un plazo, que es precisamente cuando más lo estás usando.",
+      "Con una instalación en tu despacho ese contador no existe. La capacidad de cálculo es del despacho, no está compartida con el exterior, y no se puede cortar el acceso. Si varias personas del despacho consultan a la vez en un momento punta, las respuestas pueden tardar unos segundos más de lo habitual, pero el sistema no se detiene ni te obliga a esperar a que se renueve ninguna suscripción.",
+    ],
+  },
+  {
+    pregunta: "¿Y el coste? ¿Pago más si lo uso mucho?",
+    respuesta: [
+      "No. El coste es fijo y conocido de antemano: no hay factura variable en función del volumen de consultas ni de documentos analizados. Tampoco se paga por usuario, así que incorporar a alguien más del equipo no encarece el servicio mientras la instalación tenga capacidad suficiente. Dimensionamos el equipo según el tamaño del despacho y sus momentos de mayor carga, y eso queda definido en la propuesta.",
+    ],
+  },
+  {
+    pregunta:
+      "¿Es tan potente como ChatGPT, Claude u otros modelos de IA en la nube?",
+    respuesta: [
+      "Para las tareas de un despacho laboralista, sí. Como conversador generalista, no, y no hace falta que lo sea.",
+      "Los modelos comerciales más grandes están entrenados para hacerlo todo razonablemente bien: escribir un soneto, resolver una olimpiada de matemáticas, programar. Un despacho no necesita nada de eso. Necesita localizar el párrafo exacto de un convenio, resumir una vista de treinta páginas, extraer los datos de veinte nóminas, o redactar un borrador siguiendo su propia plantilla. En ese terreno concreto la diferencia entre un modelo local bien configurado y uno comercial es pequeña, porque lo que determina la calidad de la respuesta no es tanto el tamaño del modelo como si tiene delante los documentos correctos.",
+      "Y ahí es donde el sistema local va por delante: trabaja sobre tus expedientes, tus escritos y tus convenios. Un asistente comercial no los tiene, y si se los subes, salen del despacho.",
+      "Para el caso puntual que requiera un razonamiento especialmente complejo, podemos configurar el sistema de forma que consulte un modelo externo de máxima capacidad, siempre con los datos identificativos eliminados previamente y siempre con tu autorización. Lo habitual es que eso sea una fracción pequeña del uso diario.",
+      "Nuestra recomendación es sencilla: no tiene sentido pagar precio de gama alta, ni enviar documentación confidencial fuera, para el trabajo que se repite cada día.",
+    ],
+  },
+  {
+    pregunta: "¿Puedo consultaros aunque todavía no tenga claro qué necesito?",
+    respuesta: [
+      "Sí. De hecho, ese es uno de los motivos por los que hacemos un diagnóstico previo.",
+    ],
+  },
+];
+---
+
+<section class="preguntas-frecuentes" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Dudas habituales antes de empezar</h2>
+    </div>
+    <div class="preguntas-frecuentes-lista">
+      {preguntas.map((p) => <Pregunta {...p} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .preguntas-frecuentes {
+    background: var(--color-gris-claro);
+  }
+
+  .preguntas-frecuentes-lista {
+    display: grid;
+    gap: 12px;
+    max-width: 780px;
+  }
+</style>
