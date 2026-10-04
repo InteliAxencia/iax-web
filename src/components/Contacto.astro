@@ -1,0 +1,154 @@
+---
+import Campo from "./Campo.astro";
+---
+
+<section class="contacto" id="contacto">
+  <div class="wrap grid">
+    <div class="section-head">
+      <span class="eyebrow">Siguiente paso</span>
+      <h2>Empecemos por tu problema</h2>
+      <p>No necesitas tener definida la herramienta ni la solución.</p>
+      <p>
+        Cuéntanos qué quieres mejorar, qué tarea te lleva demasiado tiempo o qué
+        dificultad encuentras en tu forma actual de trabajar.
+      </p>
+      <p>Analizamos tu situación y vemos juntos si podemos ayudarte.</p>
+    </div>
+    <div class="card-form">
+      <!-- TODO: conectar a un endpoint real. Hasta entonces el envío es
+           simulado y ningún dato sale del navegador (bloqueo 4.1 de
+           AGENTS.md). -->
+      <form id="form-contacto" novalidate>
+        <Campo
+          id="contacto-nombre"
+          nombre="nombre"
+          etiqueta="Nombre y apellidos"
+          tipo="text"
+          autocomplete="name"
+          requerido
+        />
+        <Campo
+          id="contacto-email"
+          nombre="email"
+          etiqueta="Correo electrónico"
+          tipo="email"
+          autocomplete="email"
+          placeholder="tu@email.com"
+          pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+          requerido
+        />
+        <Campo
+          id="contacto-telefono"
+          nombre="telefono"
+          etiqueta="Teléfono (opcional)"
+          tipo="tel"
+          autocomplete="tel"
+        />
+        <Campo
+          id="contacto-mensaje"
+          nombre="mensaje"
+          etiqueta="Mensaje"
+          tipo="textarea"
+          requerido
+        />
+        <button class="btn btn-indigo" type="submit">
+          Hablemos de tu caso
+        </button>
+        <p class="contacto-ok" id="contacto-ok" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const formulario = document.querySelector<HTMLFormElement>("#form-contacto");
+  const confirmacion = document.querySelector<HTMLElement>("#contacto-ok");
+
+  function mensajeError(
+    control: HTMLInputElement | HTMLTextAreaElement,
+  ): string {
+    if (control.validity.valueMissing) {
+      return control.tagName === "TEXTAREA"
+        ? "Error: cuéntanos qué necesitas para poder ayudarte."
+        : "Error: este campo es obligatorio.";
+    }
+    return "Error: introduce un correo válido, por ejemplo tu@email.com.";
+  }
+
+  if (formulario && confirmacion) {
+    formulario.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+
+      let primerError: HTMLInputElement | HTMLTextAreaElement | null = null;
+
+      for (const control of formulario.querySelectorAll<
+        HTMLInputElement | HTMLTextAreaElement
+      >("input, textarea")) {
+        const estado = document.getElementById(`${control.id}-estado`);
+        if (estado) estado.textContent = "";
+        control.removeAttribute("aria-invalid");
+
+        if (!control.checkValidity()) {
+          if (estado) estado.textContent = mensajeError(control);
+          control.setAttribute("aria-invalid", "true");
+          primerError ??= control;
+        }
+      }
+
+      if (primerError) {
+        primerError.focus();
+        return;
+      }
+
+      confirmacion.textContent =
+        "Gracias por escribirnos. Te responderemos lo antes posible.";
+      for (const el of formulario.querySelectorAll<HTMLElement>(
+        "input, textarea, button",
+      )) {
+        el.setAttribute("disabled", "");
+      }
+    });
+  }
+</script>
+
+<style>
+  .contacto .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+
+  .card-form {
+    background: var(--color-blanco);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radius);
+    padding: 26px 20px;
+    box-shadow: 0 8px 30px rgba(27, 15, 150, 0.07);
+  }
+
+  .contacto-ok {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--color-ok-borde);
+    border-radius: 10px;
+    background: var(--color-ok-fondo);
+    color: var(--color-ok-texto);
+    font-size: 0.95rem;
+  }
+
+  .contacto-ok:empty {
+    display: none;
+  }
+
+  @media (min-width: 821px) {
+    .contacto .grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+    }
+
+    .card-form {
+      padding: 32px;
+    }
+  }
+</style>
