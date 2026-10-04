@@ -1,0 +1,143 @@
+<section class="ia-local sobre-indigo" id="ia-local">
+  <div class="aspa aspa--local" aria-hidden="true">
+    <span></span><span></span>
+  </div>
+  <div class="wrap ia-local-grid">
+    <div>
+      <span class="eyebrow eyebrow--invert">Diferencial iAx</span>
+      <h2>¿Y si la información no puede salir de tu despacho?</h2>
+      <p class="ia-local-sub">
+        IA local para trabajar con mayor control sobre tus datos.
+      </p>
+      <p>
+        Hay situaciones en las que utilizar herramientas externas no es la
+        opción más adecuada.
+      </p>
+      <p>
+        Por eso iAx ofrece una solución de <strong
+          >IA local diseñada para trabajar en el entorno del propio despacho</strong
+        >, que permite centralizar información, consultar documentación y
+        utilizar capacidades de IA sin depender exclusivamente de servicios
+        externos.
+      </p>
+      <p>
+        Una alternativa pensada para despachos que necesitan combinar las
+        capacidades de la inteligencia artificial con un mayor control sobre su
+        información.
+      </p>
+      <div class="ia-local-cta">
+        <a class="link-cta link-cta--invert" href="/#funcionalidades"
+          >Conocer la IA local</a
+        >
+      </div>
+    </div>
+
+    <div class="ia-local-panel">
+      <h3>IA con una gestión responsable del dato</h3>
+      <p>
+        La solución está concebida para que el despacho pueda mantener un mayor
+        control sobre <strong
+          >dónde se procesa su información, cómo se organiza y quién puede
+          acceder a ella</strong
+        >.
+      </p>
+      <p>
+        El enfoque de iAx incorpora principios de <strong
+          >gobernanza del dato, control de acceso, trazabilidad y gestión
+          responsable de la información</strong
+        >, especialmente relevantes cuando se trabaja con documentación jurídica
+        y datos sensibles.
+      </p>
+      <p class="ia-local-destacado">
+        Porque incorporar inteligencia artificial no debería significar perder
+        el control sobre la información.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* position y overflow son necesarios para el aspa: .aspa es absolute y
+     global.css no los declara. */
+
+  .ia-local {
+    background: var(--color-indigo);
+    color: var(--color-blanco);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ia-local h2 {
+    color: var(--color-blanco);
+    font-size: clamp(1.7rem, 6vw, 2.9rem);
+  }
+
+  /* No se llama .grid: chocaría con la utilidad de Tailwind. El
+     position: relative lo pone por encima del aspa. */
+
+  .ia-local-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    align-items: start;
+    position: relative;
+  }
+
+  /* Orden de especificidad, de menor a mayor: .ia-local p, luego
+     .ia-local .ia-local-sub y .ia-local .ia-local-panel p, y por último
+     .ia-local-destacado. Cada regla pisa a la anterior donde coinciden. */
+
+  .ia-local p {
+    font-weight: 300;
+    margin-top: 16px;
+    max-width: 54ch;
+  }
+
+  .ia-local p strong {
+    font-weight: 700;
+  }
+
+  .ia-local .ia-local-sub {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-coral);
+  }
+
+  .ia-local-cta {
+    margin-top: 28px;
+  }
+
+  .ia-local-panel {
+    background: var(--color-indigo-deep);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    border: 1px solid color-mix(in srgb, var(--color-blanco) 14%, transparent);
+  }
+
+  .ia-local .ia-local-panel h3 {
+    color: var(--color-blanco);
+    font-size: 1.05rem;
+  }
+
+  .ia-local .ia-local-panel p {
+    font-size: 0.94rem;
+    margin-top: 14px;
+    max-width: none;
+  }
+
+  .ia-local .ia-local-panel .ia-local-destacado {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid
+      color-mix(in srgb, var(--color-blanco) 18%, transparent);
+    font-weight: 700;
+    font-size: 0.98rem;
+  }
+
+  @media (min-width: 821px) {
+    .ia-local-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+    }
+  }
+</style>
