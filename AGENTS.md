@@ -128,6 +128,12 @@ incrustación web de Neurial Grotesk, no se commitean archivos de fuente (`.otf`
 `.woff2`) en este repositorio público. Publicarlos podría constituir
 redistribución no autorizada. Mientras tanto, el fallback basta.
 
+**4.3 Formateadores.** `prettier` y `prettier-plugin-astro` están fijados en
+versión exacta y Dependabot no propone sus actualizaciones. No los actualices ni
+propongas actualizarlos: el cambio de formato lo decide el equipo, en un pull
+request propio con la subida y el reformateo. Ver la sección 9 de
+`docs/decisiones-reversibles.md`.
+
 ---
 
 ## 5. Git

@@ -215,3 +215,28 @@ se publicó después de su última actualización sin cambiar la lógica de
 sitio empiece a usar imágenes remotas o que `astro` use el paquete fuera del
 build. Una alerta descartada no se reabre sola, así que el aviso se revisa a
 mano.
+
+## 9. Formateadores con versión fija
+
+**Decisión vigente.** `prettier` y `prettier-plugin-astro` se declaran con
+versión exacta en `package.json`, sin `^`, y Dependabot no propone
+actualizaciones de versión de ninguno de los dos. Versiones fijadas: `prettier`
+3.9.9 y `prettier-plugin-astro` 0.14.1.
+
+**Por qué.** Cualquier actualización de un formateador puede cambiar el formato
+esperado, incluso en una versión de parche, y obliga a reformatear archivos que
+estaban bien. Con la versión fija, el formato solo cambia cuando el equipo lo
+decide.
+
+**Descartado.** Dejar que Dependabot los proponga agrupados y con calendario
+trimestral: el reformateo llegaría cuando toca el calendario, no cuando conviene.
+
+**Cómo se actualizan.** En un pull request propio, sin otros cambios, con dos
+commits atómicos: la subida de versión y el reformateo con `npm run format`. El
+momento se acuerda con la otra persona del equipo, y antes se fusionan las ramas
+abiertas que toquen archivos `.astro` para evitar conflictos de formato.
+
+**Disparador de revisión.** Que `format:check` falle tras una actualización de
+`astro` en archivos que no se han tocado, señal de que el plugin no entiende
+sintaxis nueva; que aparezca una alerta de seguridad en cualquiera de los dos; o
+la revisión periódica, cada seis meses. La primera, en abril de 2027.
