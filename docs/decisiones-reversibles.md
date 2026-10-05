@@ -192,3 +192,26 @@ Mailjet y un tope de 200 correos al día.
 **Disparador de revisión.** Que Mailjet deje de permitir desactivar el
 seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
 diario del plan gratuito.
+
+## 8. Alerta de `http-cache-semantics` descartada
+
+**Decisión vigente.** La alerta 19 de Dependabot (GHSA-ch52-4w7c-c8xp, gravedad
+alta) está descartada en GitHub con el motivo «el código vulnerable no se usa».
+`http-cache-semantics` sigue en 4.2.0, la versión que trae `astro`.
+
+**Por qué.** El fallo permite que una caché compartida entre usuarios entregue a
+un cliente la respuesta guardada para otro, incluida su cookie de sesión, si el
+cliente pide `max-stale`. Aquí no se da: `astro` solo usa el paquete en
+`assets/build/remote.js`, para cachear imágenes remotas al compilar, sin caché
+compartida ni peticiones de terceros. Además, `astro.config.mjs` no autoriza
+ningún dominio remoto y el sitio no usa imágenes remotas.
+
+**Descartado.** Subir a 4.3.0. El aviso no declara versión corregida, y la 4.3.0
+se publicó después de su última actualización sin cambiar la lógica de
+`max-stale`: antes de servir una respuesta caducada solo comprueba
+`must-revalidate`. La subida haría desaparecer la alerta sin corregir el fallo.
+
+**Disparador de revisión.** Que el aviso publique una versión corregida, que el
+sitio empiece a usar imágenes remotas o que `astro` use el paquete fuera del
+build. Una alerta descartada no se reabre sola, así que el aviso se revisa a
+mano.
