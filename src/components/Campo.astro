@@ -3,7 +3,7 @@ interface Props {
   id: string;
   nombre: string;
   etiqueta?: string;
-  tipo?: "text" | "email" | "checkbox";
+  tipo?: "text" | "email" | "checkbox" | "tel" | "textarea";
   autocomplete?: string;
   requerido?: boolean;
   placeholder?: string;
@@ -23,6 +23,7 @@ const {
 
 const idEstado = `${id}-estado`;
 const esCasilla = tipo === "checkbox";
+const esTextarea = tipo === "textarea";
 ---
 
 <div class="campo">
@@ -40,6 +41,19 @@ const esCasilla = tipo === "checkbox";
           <slot />
         </span>
       </label>
+    ) : esTextarea ? (
+      <>
+        <label class="campo-etiqueta" for={id}>
+          {etiqueta}
+        </label>
+        <textarea
+          id={id}
+          name={nombre}
+          placeholder={placeholder}
+          required={requerido}
+          aria-describedby={idEstado}
+        />
+      </>
     ) : (
       <>
         <label class="campo-etiqueta" for={id}>
@@ -73,7 +87,8 @@ const esCasilla = tipo === "checkbox";
     margin-bottom: 6px;
   }
 
-  .campo input:not([type="checkbox"]) {
+  .campo input:not([type="checkbox"]),
+  .campo textarea {
     width: 100%;
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -84,8 +99,15 @@ const esCasilla = tipo === "checkbox";
     color: var(--color-negro);
   }
 
-  .campo input:not([type="checkbox"]):focus-visible {
+  .campo input:not([type="checkbox"]):focus-visible,
+  .campo textarea:focus-visible {
     border-color: var(--color-indigo);
+  }
+
+  .campo textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.5;
   }
 
   .campo-casilla {

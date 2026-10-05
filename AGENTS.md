@@ -139,6 +139,9 @@ redistribución no autorizada. Mientras tanto, el fallback basta.
 - Para hacer merge de un pull request hace falta la aprobación de la otra
   persona del equipo. El ruleset de `main` exige una aprobación y la anula si
   entran commits nuevos después.
+- Los pull requests que abre un bot, como Dependabot, se fusionan con la
+  aprobación de una sola persona del equipo: la regla de que no revisa quien
+  abre el pull request se cumple igualmente.
 - Si `main` avanza mientras un pull request espera revisión, se incorpora a la
   rama con `git fetch` y `git merge origin/main` desde el host, antes de pedir
   la aprobación, porque un commit posterior la anula. Tras resolver los
