@@ -71,6 +71,14 @@ prerenderizan y solo los endpoints de `src/pages/api/` llevan
 renderizaría en cada visita páginas que no cambian nunca y perdería la caché
 del CDN.
 
+**Dependencias que suben juntas.** `astro` y `@astrojs/*` dependen unos de
+otros por funciones internas, y `@cloudflare/vite-plugin` fija una versión
+exacta de `wrangler`. Por eso Dependabot los agrupa en `.github/dependabot.yml`
+y se actualizan por parejas. `@cloudflare/vite-plugin` está declarado en
+`devDependencies` aunque el código no lo importe: si se quita, Dependabot deja
+de verlo, sube `wrangler` solo y aparecen dos copias de `wrangler`, `miniflare`
+y `workerd`. No lo quites ni subas `wrangler` por separado.
+
 ---
 
 ## 3. Seguridad
