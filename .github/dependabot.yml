@@ -10,6 +10,9 @@ updates:
         patterns:
           - "astro"
           - "@astrojs/*"
+    ignore:
+      - dependency-name: "prettier"
+      - dependency-name: "prettier-plugin-astro"
 
   - package-ecosystem: github-actions
     directory: /
