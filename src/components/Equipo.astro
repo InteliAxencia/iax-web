@@ -1,0 +1,78 @@
+---
+import Tarjeta from "./Tarjeta.astro";
+
+// Marcadores provisionales: [foto n], [socia n] y [descripcion n] se
+// sustituyen por los datos reales antes de publicar.
+const personas = [
+  { foto: "[foto 1]", nombre: "[socia 1]", descripcion: "[descripcion 1]" },
+  { foto: "[foto 2]", nombre: "[socia 2]", descripcion: "[descripcion 2]" },
+  { foto: "[foto 3]", nombre: "[socia 3]", descripcion: "[descripcion 3]" },
+];
+---
+
+<section class="equipo" aria-label="Equipo">
+  <div class="wrap">
+    <ul class="equipo-lista">
+      {
+        personas.map((p) => (
+          <li>
+            <Tarjeta>
+              <div class="equipo-foto">{p.foto}</div>
+              <p class="equipo-nombre">{p.nombre}</p>
+              <p class="equipo-descripcion">{p.descripcion}</p>
+            </Tarjeta>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .equipo-lista {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* El li es una cuadrícula de una celda para que la tarjeta ocupe todo su
+     ancho y su alto: el article raíz es de Tarjeta y esta sección no puede
+     estilizarlo. */
+
+  .equipo-lista li {
+    display: grid;
+  }
+
+  .equipo-foto {
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 128px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--color-gris-claro);
+    border: 1px solid var(--color-borde);
+    color: var(--color-gris);
+    font-size: 0.85rem;
+  }
+
+  .equipo-nombre {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-indigo);
+    text-align: center;
+  }
+
+  .equipo-descripcion {
+    font-size: 0.95rem;
+    color: var(--color-texto-suave);
+    text-align: center;
+  }
+
+  @media (min-width: 821px) {
+    .equipo-lista {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+</style>
