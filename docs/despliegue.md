@@ -47,11 +47,13 @@ de la publicación hay que abrir las páginas legales y leerlas.
 Las políticas de privacidad y de cookies afirman cosas que solo se comprueban
 con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 
-1. Aceptar de forma expresa el anexo de tratamiento de datos de Cloudflare en
-   el panel. Confirmar que el correo corporativo ya está en Infomaniak y los
-   contratos de encargo con Infomaniak y con Mailjet. La entidad de Mailjet y
-   su dirección, como figuren en la orden de servicio, se contrastan con la
-   política de privacidad.
+1. Comprobar que la copia del contrato de encargo de Cloudflare está guardada
+   fuera del repositorio. No hay aceptación expresa en el panel: el contrato
+   forma parte del acuerdo de suscripción de autoservicio y queda aceptado con
+   el alta de la cuenta. Confirmar que el correo corporativo ya está en
+   Infomaniak y los contratos de encargo con Infomaniak y con Mailjet. La
+   entidad de Mailjet y su dirección se contrastan con la política de
+   privacidad. Si el panel de Mailjet no la muestra, se confirma con su soporte.
 2. Comprobar el valor de _Challenge Passage_. Si no son los 30 minutos por
    defecto, se actualiza la duración de `cf_clearance` en la política de
    cookies.
