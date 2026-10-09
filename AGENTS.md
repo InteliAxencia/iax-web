@@ -114,9 +114,11 @@ No son preferencias. No admiten excepción por comodidad ni por prisa.
 ### Datos personales
 
 La clientela es del sector jurídico, así que el listón está más alto que en
-cualquier otro proyecto. Ningún formulario envía datos a un servicio externo
-mientras siga vigente el bloqueo de la sección 4. Si dudas de si algo cruza esa
-línea, pregunta antes de implementarlo.
+cualquier otro proyecto. Los formularios envían datos solo desde las rutas de
+`src/pages/api/` y solo a los encargados que recoge la política de privacidad.
+Un servicio nuevo que reciba datos de un formulario necesita antes su contrato
+de encargo y su entrada en la política. Si dudas de si algo cruza esa línea,
+pregunta antes de implementarlo.
 
 ---
 
@@ -125,11 +127,16 @@ línea, pregunta antes de implementarlo.
 Se levantan por decisión explícita del equipo, nunca por el paso del tiempo.
 Hasta entonces, no los rodees ni propongas alternativas para esquivarlos.
 
-**4.1 Capa legal.** Sin aviso legal LSSI-CE, política de privacidad, política de
-cookies y contratos del artículo 28 del RGPD con cada encargado del tratamiento,
-ningún formulario se conecta a un servicio real. Los formularios simulan el envío
-y ningún dato sale del navegador. Antes del primer envío de correo hacen falta
-SPF, DKIM y DMARC configurados.
+**4.1 Capa legal.** Levantado en parte el 9 de octubre de 2026. Están
+redactados el aviso legal LSSI-CE y las políticas de privacidad y de cookies,
+aceptados los contratos del artículo 28 del RGPD con Cloudflare, Mailjet e
+Infomaniak, y configurados SPF, DKIM y DMARC para Infomaniak y Mailjet. Los
+formularios ya pueden conectarse a Mailjet. Las pruebas de envío se hacen solo
+con direcciones del equipo, nunca con datos de clientes ni de terceros.
+
+Sigue vigente una condición: ningún formulario conectado se publica mientras la
+política de privacidad no identifique la entidad de Mailjet que es parte del
+contrato. Antes de publicar se recorre `docs/despliegue.md`.
 
 **4.2 Licencia tipográfica.** Mientras no esté verificado el derecho de
 incrustación web de Neurial Grotesk, no se commitean archivos de fuente (`.otf`,
