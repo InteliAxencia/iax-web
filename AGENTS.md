@@ -127,16 +127,13 @@ pregunta antes de implementarlo.
 Se levantan por decisión explícita del equipo, nunca por el paso del tiempo.
 Hasta entonces, no los rodees ni propongas alternativas para esquivarlos.
 
-**4.1 Capa legal.** Levantado en parte el 9 de octubre de 2026. Están
-redactados el aviso legal LSSI-CE y las políticas de privacidad y de cookies,
-aceptados los contratos del artículo 28 del RGPD con Cloudflare, Mailjet e
-Infomaniak, y configurados SPF, DKIM y DMARC para Infomaniak y Mailjet. Los
-formularios ya pueden conectarse a Mailjet. Las pruebas de envío se hacen solo
-con direcciones del equipo, nunca con datos de clientes ni de terceros.
-
-Sigue vigente una condición: ningún formulario conectado se publica mientras la
-política de privacidad no identifique la entidad de Mailjet que es parte del
-contrato. Antes de publicar se recorre `docs/despliegue.md`.
+**4.1 Capa legal.** Levantado el 13 de octubre de 2026. Están redactados el
+aviso legal LSSI-CE y las políticas de privacidad y de cookies, con cada
+encargado identificado, aceptados los contratos del artículo 28 del RGPD con
+Cloudflare, Mailjet e Infomaniak, y configurados SPF, DKIM y DMARC para
+Infomaniak y Mailjet. Las pruebas de envío se hacen solo con direcciones del
+equipo, nunca con datos de clientes ni de terceros. Antes de publicar se
+recorre `docs/despliegue.md`.
 
 **4.2 Licencia tipográfica.** Mientras no esté verificado el derecho de
 incrustación web de Neurial Grotesk, no se commitean archivos de fuente (`.otf`,
