@@ -184,6 +184,12 @@ request propio con la subida y el reformateo. Ver la sección 9 de
 - El mensaje explica el porqué. Si el contexto no se deduce del diff, va en el
   cuerpo del mensaje. **En los merge commits el cuerpo es obligatorio**: no
   tienen diff propio, así que sin él el historial de `main` no dice qué entró.
+- Los mensajes de commit, incluidos los cuerpos de los merge commits, y los
+  títulos y descripciones de los pull requests van sin tildes ni eñes. Antes de
+  redactar uno, comprueba el estilo de los últimos con `git log`.
+- Con `gh`, los títulos y cuerpos van entre comillas simples. Dentro de comillas
+  dobles, un `!` como el de «Easy!Appointments» activa la expansión del
+  historial de bash y se come la línea.
 - La configuración vive en dos sitios y el ruleset manda. `Settings` → `General`
   define qué métodos permite el repositorio; el ruleset de `main` define cuáles
   permite esa rama. Si se contradicen, GitHub bloquea el merge sin explicar por
