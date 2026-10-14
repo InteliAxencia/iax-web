@@ -19,6 +19,21 @@ El valor real no está en el repositorio a propósito. Es público en la web, pe
 el historial de un repositorio público no se puede reescribir, así que el dato
 seguiría ahí cuando la sociedad sustituya a la persona física en el aviso legal.
 
+## Variables de ejecución
+
+Las leen las rutas de API al ejecutarse en el Worker, no durante el build. Se
+cargan como secretos del Worker, con `npx wrangler secret put` seguido del
+nombre o desde el panel como variable de tipo secreto, y no en las variables de
+compilación. Los valores están en el gestor de contraseñas del equipo.
+
+| Variable             | Contenido                          | Si falta                                                   |
+| -------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `MAILJET_API_KEY`    | Clave de la API de Mailjet         | El envío se detiene con un error antes de llamar a Mailjet |
+| `MAILJET_SECRET_KEY` | Clave secreta de la API de Mailjet | Igual que la anterior                                      |
+
+En el esquema de `astro:env` las dos son opcionales a propósito, aunque el envío
+las necesita. El porqué está comentado en `astro.config.mjs`.
+
 ## Comprobación de marcadores, pendiente
 
 Los textos legales llevan marcadores de equis en los datos que solo se conocen
