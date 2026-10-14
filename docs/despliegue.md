@@ -34,6 +34,19 @@ compilación. Los valores están en el gestor de contraseñas del equipo.
 En el esquema de `astro:env` las dos son opcionales a propósito, aunque el envío
 las necesita. El porqué está comentado en `astro.config.mjs`.
 
+## Despliegue desde local
+
+El build copia `.dev.vars` a `dist/server/`. Un `npx wrangler deploy` sin
+opciones usa la configuración que genera el adaptador, redirigida desde
+`.wrangler/deploy/`: sirve los assets de `dist/client` y sube como Worker solo
+los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 14 de
+octubre de 2026, con `wrangler` 4.147.0.
+
+No se despliega con `--config wrangler.json`. Esa configuración declara `./dist`
+como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
+actualizar `wrangler` o el adaptador, se repite la comprobación con
+`npx wrangler deploy --dry-run --outdir` hacia una carpeta temporal.
+
 ## Comprobación de marcadores, pendiente
 
 Los textos legales llevan marcadores de equis en los datos que solo se conocen
