@@ -9,3 +9,5 @@
 # astro:env en astro.config.mjs, o Astro no la reconocera.
 
 PRUEBA_SECRETO=
+MAILJET_API_KEY=
+MAILJET_SECRET_KEY=
