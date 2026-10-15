@@ -36,6 +36,22 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Las claves de Mailjet son opcionales aunque las rutas de API las
+      // necesitan. astro:env/server evalua todos los secretos al cargarse, y
+      // las paginas legales lo cargan para ID_FISCAL al prerenderizar, cuando
+      // los secretos del Worker no existen. Si fueran obligatorias, el build
+      // fallaria. Que esten definidas lo comprueba src/lib antes de llamar a
+      // Mailjet.
+      MAILJET_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      MAILJET_SECRET_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
     },
   },
 

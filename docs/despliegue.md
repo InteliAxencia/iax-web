@@ -19,6 +19,34 @@ El valor real no está en el repositorio a propósito. Es público en la web, pe
 el historial de un repositorio público no se puede reescribir, así que el dato
 seguiría ahí cuando la sociedad sustituya a la persona física en el aviso legal.
 
+## Variables de ejecución
+
+Las leen las rutas de API al ejecutarse en el Worker, no durante el build. Se
+cargan como secretos del Worker, con `npx wrangler secret put` seguido del
+nombre o desde el panel como variable de tipo secreto, y no en las variables de
+compilación. Los valores están en el gestor de contraseñas del equipo.
+
+| Variable             | Contenido                          | Si falta                                                   |
+| -------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `MAILJET_API_KEY`    | Clave de la API de Mailjet         | El envío se detiene con un error antes de llamar a Mailjet |
+| `MAILJET_SECRET_KEY` | Clave secreta de la API de Mailjet | Igual que la anterior                                      |
+
+En el esquema de `astro:env` las dos son opcionales a propósito, aunque el envío
+las necesita. El porqué está comentado en `astro.config.mjs`.
+
+## Despliegue desde local
+
+El build copia `.dev.vars` a `dist/server/`. Un `npx wrangler deploy` sin
+opciones usa la configuración que genera el adaptador, redirigida desde
+`.wrangler/deploy/`: sirve los assets de `dist/client` y sube como Worker solo
+los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 14 de
+octubre de 2026, con `wrangler` 4.147.0.
+
+No se despliega con `--config wrangler.json`. Esa configuración declara `./dist`
+como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
+actualizar `wrangler` o el adaptador, se repite la comprobación con
+`npx wrangler deploy --dry-run --outdir` hacia una carpeta temporal.
+
 ## Comprobación de marcadores, pendiente
 
 Los textos legales llevan marcadores de equis en los datos que solo se conocen
