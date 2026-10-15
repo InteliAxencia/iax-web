@@ -95,24 +95,30 @@ forma de declarar bindings fuera de `wrangler.json`.
 
 ## 4. Análisis de código con CodeQL
 
-**Decisión vigente.** Desactivado.
+**Decisión vigente.** Activado en modo avanzado desde el 14 de octubre de 2026,
+con el workflow `.github/workflows/codeql.yml`. Analiza `actions` y
+`javascript-typescript` en cada pull request, en cada push a `main` y cada
+lunes.
 
-**Por qué.** Estaba activo por defecto, impuesto por la configuración de
-seguridad de la organización, no por elección. Sobre un sitio estático sin
-entradas de usuario no aporta y solo añade ruido en la lista de checks.
+**Por qué.** Saltó el disparador previsto: B8 trae la primera ruta de API que
+recibe datos de un formulario. Se activa antes que la ruta, para que el análisis
+ya esté en `main` cuando entre.
 
-**Lo que se cambió para poder decidirlo.** La configuración
-`InteliAxencia-org-config-1` de la organización tenía Code scanning en
-`Enabled` con `Enforce`, lo que bloqueaba cualquier cambio desde el
-repositorio. Se pasó a `Not set`, que deja la decisión a cada repositorio sin
-levantar la imposición del resto de funciones.
+**Cómo está montado.** Workflow propio, con las acciones fijadas por SHA y
+versionado en el repositorio. No en modo por defecto: la configuración tiene que
+vivir donde se pueda revisar. La configuración por defecto del repositorio sigue
+en `not-configured`; si se activara, GitHub rechazaría los análisis del
+workflow. Dependabot actualiza los SHA junto con el resto de acciones.
 
-**Disparador.** La primera ruta de API que reciba datos de un formulario, o
-cualquier código que trate entrada externa.
+**Antes.** Estuvo desactivado mientras el sitio era estático y sin entradas de
+usuario: no aportaba y solo añadía ruido en la lista de checks. Estaba activo
+por imposición de la configuración de seguridad de la organización, no por
+elección. Para poder decidirlo, `InteliAxencia-org-config-1` pasó Code scanning
+de `Enabled` con `Enforce` a `Not set`, que deja la decisión a cada repositorio
+sin levantar la imposición del resto de funciones.
 
-**Qué se hace entonces.** Se activa en modo avanzado, con workflow propio fijado
-por SHA y versionado en el repositorio. No en modo por defecto: la configuración
-tiene que vivir donde se pueda revisar.
+**Disparador de revisión.** Que el sitio deje de recibir entrada externa, o que
+los falsos positivos obliguen a ajustar las consultas.
 
 ## 5. TypeScript en la serie 6
 
