@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@cloudflare/vite-plugin": "^1.62.5",
+    "@cloudflare/vite-plugin": "^1.63.1",
     "@tailwindcss/vite": "^4.3.3",
     "prettier": "3.9.9",
     "prettier-plugin-astro": "0.14.1",
