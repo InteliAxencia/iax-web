@@ -246,3 +246,36 @@ abiertas que toquen archivos `.astro` para evitar conflictos de formato.
 `astro` en archivos que no se han tocado, señal de que el plugin no entiende
 sintaxis nueva; que aparezca una alerta de seguridad en cualquiera de los dos; o
 la revisión periódica, cada seis meses. La primera, en abril de 2027.
+
+## 10. Protección de los formularios sin Turnstile
+
+**Decisión vigente.** Los formularios se protegen sin servicios de terceros: un
+campo trampa oculto que se comprueba en el servidor, la validación del esquema
+en servidor y el tope diario de envíos del plan gratuito de Mailjet, que limita
+el daño máximo. Si el campo trampa llega con contenido, la ruta responde como si
+el envío se hubiera hecho y no llama a Mailjet.
+
+**Por qué.** Turnstile cargaría un script de Cloudflare en la portada para todas
+las visitas, no solo para quien rellena un formulario, y rompería la condición
+del apartado 6 sobre scripts de terceros en los formularios. Según su anexo de
+privacidad, Cloudflare es responsable de esos datos cuando los usa para mejorar
+Turnstile, lo que obligaría a reescribir el apartado 4.2 de la política de
+cookies y el 6 de la de privacidad. Con poco tráfico en el lanzamiento y el daño
+acotado por el tope de Mailjet, ese coste todavía no compensa.
+
+**Lo que no cubre.** Un bot preparado contra este sitio puede aprender a dejar
+vacío el campo trampa. El riesgo mayor está en el boletín: la doble confirmación
+envía un correo a la dirección que se escriba, así que un abuso manda correo a
+terceros, agota el tope diario y daña la reputación del dominio.
+
+**Disparador.** Envíos automatizados en `info@`, altas falsas o confirmaciones
+no pedidas en el boletín, o el tope diario de Mailjet agotado.
+
+**Qué se hace entonces.** Turnstile en los dos formularios, con la verificación
+del token en `src/lib` y sus dos claves en `astro:env`. Antes de activarlo:
+medir en el navegador qué guarda en el dispositivo y ajustar la tabla de
+cookies; reescribir el apartado 4.2 de cookies y el 6 de privacidad; añadir la
+excepción en el apartado 6 de este documento, y pasar la revisión de quien
+redactó los textos legales. Se valora cargar el recuadro solo cuando alguien
+empieza a rellenar un formulario, para no conectar con Cloudflare en cada
+visita.
