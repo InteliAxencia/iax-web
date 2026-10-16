@@ -11,13 +11,16 @@ compilación. Van en las variables de **compilación** del proyecto, no en las d
 ejecución del Worker: una variable de ejecución no llega al build y la página
 saldría con el valor por defecto.
 
-| Variable    | Contenido                                                                           | Si falta                                         |
-| ----------- | ----------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `ID_FISCAL` | NIF del titular del sitio, que el aviso legal publica por el artículo 10 de la LSSI | La página se publica con el marcador `XXXXXXXXX` |
+| Variable                  | Contenido                                                                                | Si falta                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `ID_FISCAL`               | NIF del titular del sitio, que el aviso legal publica por el artículo 10 de la LSSI      | La página se publica con el marcador `XXXXXXXXX` |
+| `CORREO_REMITENTE`        | Remitente de los correos del formulario de contacto. Tiene que estar validado en Mailjet | Se usa `info@inteliaxencia.com`                  |
+| `CORREO_DESTINO_CONTACTO` | Dirección que recibe los mensajes del formulario de contacto                             | Se usa `info@inteliaxencia.com`                  |
 
-El valor real no está en el repositorio a propósito. Es público en la web, pero
-el historial de un repositorio público no se puede reescribir, así que el dato
-seguiría ahí cuando la sociedad sustituya a la persona física en el aviso legal.
+El valor real de `ID_FISCAL` no está en el repositorio a propósito. Es público
+en la web, pero el historial de un repositorio público no se puede reescribir,
+así que el dato seguiría ahí cuando la sociedad sustituya a la persona física en
+el aviso legal.
 
 ## Variables de ejecución
 
