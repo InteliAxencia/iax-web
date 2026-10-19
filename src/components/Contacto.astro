@@ -193,16 +193,6 @@ import Campo from "./Campo.astro";
     color: var(--color-error);
   }
 
-  /* Campo trampa: fuera de la pantalla y no con display: none, porque
-     algunos bots se saltan los campos ocultos con display. */
-  .trampa {
-    position: absolute;
-    left: -10000px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
-
   @media (min-width: 821px) {
     .contacto .grid {
       grid-template-columns: 1.05fr 0.95fr;

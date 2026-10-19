@@ -386,3 +386,15 @@ details.acc[open] > summary::after {
 details.acc > summary:hover {
   color: var(--color-indigo-deep);
 }
+
+/* Campo trampa de los formularios de contacto y del boletín
+   (docs/decisiones-reversibles.md, apartado 10). Fuera de la pantalla y no
+   con display: none, porque algunos bots se saltan los campos ocultos con
+   display. */
+.trampa {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
