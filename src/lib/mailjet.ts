@@ -36,22 +36,38 @@ function direccion(d: Direccion) {
   return d.nombre ? { Email: d.correo, Name: d.nombre } : { Email: d.correo };
 }
 
-// Solo códigos y nombres de campo de la respuesta de error, nunca su texto,
-// que podría repetir datos del mensaje.
+// Solo identificadores y códigos de la respuesta de error, nunca ErrorMessage,
+// que podría repetir datos del mensaje. Hay dos formas: los errores de cada
+// mensaje de la Send API, en Messages[].Errors, y los globales o de la API
+// REST, con ErrorIdentifier, ErrorCode o ErrorInfo en el nivel superior.
 function codigosDeError(cuerpo: unknown): string[] {
   if (typeof cuerpo !== "object" || cuerpo === null) return [];
-  const mensajes = (
-    cuerpo as {
-      Messages?: {
-        Errors?: { ErrorCode?: string; ErrorRelatedTo?: string[] }[];
+  const { ErrorIdentifier, ErrorCode, ErrorInfo, Messages } = cuerpo as {
+    ErrorIdentifier?: unknown;
+    ErrorCode?: unknown;
+    ErrorInfo?: unknown;
+    Messages?: {
+      Errors?: {
+        ErrorIdentifier?: string;
+        ErrorCode?: string;
+        ErrorRelatedTo?: string[];
       }[];
-    }
-  ).Messages;
-  return (mensajes ?? []).flatMap((m) =>
+    }[];
+  };
+
+  const global = [ErrorIdentifier, ErrorCode, ErrorInfo]
+    .filter((c): c is string => typeof c === "string" && c !== "")
+    .join(" ");
+
+  const porMensaje = (Messages ?? []).flatMap((m) =>
     (m.Errors ?? []).map((e) =>
-      [e.ErrorCode, ...(e.ErrorRelatedTo ?? [])].filter(Boolean).join(" "),
+      [e.ErrorIdentifier, e.ErrorCode, ...(e.ErrorRelatedTo ?? [])]
+        .filter(Boolean)
+        .join(" "),
     ),
   );
+
+  return global ? [global, ...porMensaje] : porMensaje;
 }
 
 function fallo(resultado: Exclude<Resultado, { ok: true }>): Resultado {
