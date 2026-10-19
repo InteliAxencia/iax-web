@@ -22,10 +22,7 @@ function enLinea(texto: string): string {
   return texto.replace(/[\u0000-\u001f\u007f]+/g, " ").trim();
 }
 
-export function enviarContacto(
-  datos: DatosContacto,
-  opciones: { prueba?: boolean } = {},
-): Promise<Resultado> {
+export function enviarContacto(datos: DatosContacto): Promise<Resultado> {
   const nombre = enLinea(datos.nombre);
   const texto = [
     `Nombre: ${nombre}`,
@@ -36,14 +33,11 @@ export function enviarContacto(
     datos.mensaje,
   ].join("\n");
 
-  return enviarCorreo(
-    {
-      remitente: { correo: CORREO_REMITENTE, nombre: "Web inteliAxencia" },
-      destinatario: { correo: CORREO_DESTINO_CONTACTO },
-      responderA: { correo: datos.email, nombre },
-      asunto: `Contacto web: ${nombre}`,
-      texto,
-    },
-    opciones,
-  );
+  return enviarCorreo({
+    remitente: { correo: CORREO_REMITENTE, nombre: "Web inteliAxencia" },
+    destinatario: { correo: CORREO_DESTINO_CONTACTO },
+    responderA: { correo: datos.email, nombre },
+    asunto: `Contacto web: ${nombre}`,
+    texto,
+  });
 }
