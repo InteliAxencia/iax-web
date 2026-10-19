@@ -15,9 +15,9 @@ import Campo from "./Campo.astro";
       <p>Analizamos tu situación y vemos juntos si podemos ayudarte.</p>
     </div>
     <div class="card-form">
-      <!-- TODO: conectar a un endpoint real. Hasta entonces el envío es
-           simulado y ningún dato sale del navegador (bloqueo 4.1 de
-           AGENTS.md). -->
+      <!-- Envía a /api/contacto (src/pages/api/contacto.ts). Sin JavaScript no
+           se envía: el respaldo con action y redirección queda como mejora
+           anotada. -->
       <form id="form-contacto" novalidate>
         <Campo
           id="contacto-nombre"
@@ -51,9 +51,17 @@ import Campo from "./Campo.astro";
           tipo="textarea"
           requerido
         />
-        <button class="btn btn-indigo" type="submit">
-          Hablemos de tu caso
-        </button>
+        <div class="trampa" aria-hidden="true">
+          <label for="contacto-web">No rellenes este campo</label>
+          <input
+            id="contacto-web"
+            name="web"
+            type="text"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </div>
+        <button class="btn btn-indigo" type="submit">Enviar</button>
         <p class="contacto-ok" id="contacto-ok" role="status"></p>
       </form>
     </div>
@@ -63,6 +71,16 @@ import Campo from "./Campo.astro";
 <script>
   const formulario = document.querySelector<HTMLFormElement>("#form-contacto");
   const confirmacion = document.querySelector<HTMLElement>("#contacto-ok");
+  const boton = formulario?.querySelector<HTMLButtonElement>(
+    'button[type="submit"]',
+  );
+
+  const TEXTO_BOTON = "Enviar";
+  const TEXTO_ENVIANDO = "Enviando…";
+  const TEXTO_OK =
+    "Gracias por escribirnos. Te responderemos en un máximo de dos días laborables.";
+  const TEXTO_ERROR =
+    "No hemos podido enviar tu mensaje. Inténtalo de nuevo en unos minutos o escríbenos a info@inteliaxencia.com.";
 
   function mensajeError(
     control: HTMLInputElement | HTMLTextAreaElement,
@@ -75,9 +93,10 @@ import Campo from "./Campo.astro";
     return "Error: introduce un correo válido, por ejemplo tu@email.com.";
   }
 
-  if (formulario && confirmacion) {
-    formulario.addEventListener("submit", (evento) => {
+  if (formulario && confirmacion && boton) {
+    formulario.addEventListener("submit", async (evento) => {
       evento.preventDefault();
+      if (boton.disabled) return;
 
       let primerError: HTMLInputElement | HTMLTextAreaElement | null = null;
 
@@ -100,13 +119,40 @@ import Campo from "./Campo.astro";
         return;
       }
 
-      confirmacion.textContent =
-        "Gracias por escribirnos. Te responderemos lo antes posible.";
-      for (const el of formulario.querySelectorAll<HTMLElement>(
-        "input, textarea, button",
-      )) {
-        el.setAttribute("disabled", "");
+      // El FormData se toma antes de desactivar nada: los campos desactivados
+      // no se envían.
+      const datos = new FormData(formulario);
+      confirmacion.textContent = "";
+      confirmacion.classList.remove("contacto-ok--error");
+      boton.disabled = true;
+      boton.textContent = TEXTO_ENVIANDO;
+
+      let enviado = false;
+      try {
+        const respuesta = await fetch("/api/contacto", {
+          method: "POST",
+          body: datos,
+        });
+        enviado = respuesta.ok;
+      } catch {
+        // Sin conexión o la petición no llegó: se muestra el error.
       }
+
+      boton.textContent = TEXTO_BOTON;
+
+      if (enviado) {
+        confirmacion.textContent = TEXTO_OK;
+        for (const el of formulario.querySelectorAll<HTMLElement>(
+          "input, textarea, button",
+        )) {
+          el.setAttribute("disabled", "");
+        }
+        return;
+      }
+
+      confirmacion.classList.add("contacto-ok--error");
+      confirmacion.textContent = TEXTO_ERROR;
+      boton.disabled = false;
     });
   }
 </script>
@@ -139,6 +185,22 @@ import Campo from "./Campo.astro";
 
   .contacto-ok:empty {
     display: none;
+  }
+
+  .contacto-ok--error {
+    border-color: var(--color-error);
+    background: var(--color-blanco);
+    color: var(--color-error);
+  }
+
+  /* Campo trampa: fuera de la pantalla y no con display: none, porque
+     algunos bots se saltan los campos ocultos con display. */
+  .trampa {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
   }
 
   @media (min-width: 821px) {
