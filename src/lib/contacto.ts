@@ -12,6 +12,9 @@ export const esquemaContacto = z.object({
     .regex(/^[0-9+().\s-]*$/)
     .optional(),
   mensaje: z.string().trim().min(1).max(5000),
+  // Campo trampa (docs/decisiones-reversibles.md, apartado 10): una persona
+  // lo deja vacío y muchos bots lo rellenan.
+  web: z.string().trim().optional(),
 });
 
 export type DatosContacto = z.infer<typeof esquemaContacto>;
@@ -23,6 +26,13 @@ function enLinea(texto: string): string {
 }
 
 export function enviarContacto(datos: DatosContacto): Promise<Resultado> {
+  // Se responde como si se hubiera enviado, para no delatar la comprobación.
+  // El registro no lleva datos del formulario.
+  if (datos.web) {
+    console.warn(JSON.stringify({ origen: "contacto", motivo: "trampa" }));
+    return Promise.resolve({ ok: true });
+  }
+
   const nombre = enLinea(datos.nombre);
   const texto = [
     `Nombre: ${nombre}`,
