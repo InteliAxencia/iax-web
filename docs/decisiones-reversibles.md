@@ -203,7 +203,11 @@ diario del plan gratuito.
 
 **Decisión vigente.** La alerta 19 de Dependabot (GHSA-ch52-4w7c-c8xp, gravedad
 alta) está descartada en GitHub con el motivo «el código vulnerable no se usa».
-`http-cache-semantics` sigue en 4.2.0, la versión que trae `astro`.
+Desde el 19 de octubre de 2026, `astro` 7.4.0 trae `http-cache-semantics`
+4.3.0, que queda fuera del rango del aviso («<= 4.2.0»): ni `npm audit` ni
+Dependabot lo señalan. Pero la 4.3.0 no cambia la lógica de `max-stale`, así
+que el fallo persiste. Que las herramientas no avisen no significa que esté
+corregido.
 
 **Por qué.** El fallo permite que una caché compartida entre usuarios entregue a
 un cliente la respuesta guardada para otro, incluida su cookie de sesión, si el
@@ -212,15 +216,16 @@ cliente pide `max-stale`. Aquí no se da: `astro` solo usa el paquete en
 compartida ni peticiones de terceros. Además, `astro.config.mjs` no autoriza
 ningún dominio remoto y el sitio no usa imágenes remotas.
 
-**Descartado.** Subir a 4.3.0. El aviso no declara versión corregida, y la 4.3.0
-se publicó después de su última actualización sin cambiar la lógica de
-`max-stale`: antes de servir una respuesta caducada solo comprueba
-`must-revalidate`. La subida haría desaparecer la alerta sin corregir el fallo.
+**Descartado.** Dar el asunto por cerrado porque las herramientas ya no avisan.
+El aviso no declara versión corregida, y la 4.3.0 se publicó después de su
+última actualización sin tocar la lógica afectada: antes de servir una
+respuesta caducada solo comprueba `must-revalidate`.
 
-**Disparador de revisión.** Que el aviso publique una versión corregida, que el
-sitio empiece a usar imágenes remotas o que `astro` use el paquete fuera del
-build. Una alerta descartada no se reabre sola, así que el aviso se revisa a
-mano.
+**Disparador de revisión.** Que se publique una versión que corrija el fallo,
+comprobándolo en su código y no por el rango del aviso; que el aviso amplíe su
+rango a la 4.3.0, en cuyo caso Dependabot volverá a avisar; que el sitio empiece
+a usar imágenes remotas, o que `astro` use el paquete fuera del build. Una alerta
+descartada no se reabre sola, así que el aviso se revisa a mano.
 
 ## 9. Formateadores con versión fija
 
