@@ -52,6 +52,20 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Remitente y destino del formulario de contacto. Son publicas: la
+      // direccion ya aparece en el sitio. Como ID_FISCAL, se fijan al compilar.
+      // El remitente tiene que estar validado en Mailjet; el destino se puede
+      // cambiar a otra direccion del equipo para probar.
+      CORREO_REMITENTE: envField.string({
+        context: "server",
+        access: "public",
+        default: "info@inteliaxencia.com",
+      }),
+      CORREO_DESTINO_CONTACTO: envField.string({
+        context: "server",
+        access: "public",
+        default: "info@inteliaxencia.com",
+      }),
     },
   },
 
