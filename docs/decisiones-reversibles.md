@@ -195,6 +195,14 @@ fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
 desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
 Mailjet y un tope de 200 correos al día.
 
+Mailjet añade por su cuenta una cabecera `List-Unsubscribe` también a los envíos
+por API, con un enlace a `mjt.lu`. No mide aperturas ni clics: solo contacta con
+Mailjet si alguien la usa. En los avisos del formulario de contacto, el webmail
+de `info@` ofrece por ella «Darse de baja»; según la documentación de Mailjet,
+los contactos excluidos siguen recibiendo los envíos de la Send API, así que los
+avisos seguirían llegando. Comprobado en el primer envío real, el 20 de octubre
+de 2026. En el boletín la baja sí tiene que funcionar: se estudia en B8-4.
+
 **Disparador de revisión.** Que Mailjet deje de permitir desactivar el
 seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
 diario del plan gratuito.
