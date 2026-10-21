@@ -42,8 +42,8 @@ las necesita. El porqué está comentado en `astro.config.mjs`.
 El build copia `.dev.vars` a `dist/server/`. Un `npx wrangler deploy` sin
 opciones usa la configuración que genera el adaptador, redirigida desde
 `.wrangler/deploy/`: sirve los assets de `dist/client` y sube como Worker solo
-los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 14 de
-octubre de 2026, con `wrangler` 4.147.0.
+los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 19 de
+octubre de 2026, con `wrangler` 4.151.0 y `@astrojs/cloudflare` 14.4.0.
 
 No se despliega con `--config wrangler.json`. Esa configuración declara `./dist`
 como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
