@@ -26,6 +26,7 @@ import Campo from "./Campo.astro";
           etiqueta="Nombre y apellidos"
           tipo="text"
           autocomplete="name"
+          maxlength={200}
           requerido
         />
         <Campo
@@ -38,18 +39,33 @@ import Campo from "./Campo.astro";
           pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
           requerido
         />
-        <Campo
-          id="contacto-telefono"
-          nombre="telefono"
-          etiqueta="Teléfono (opcional)"
-          tipo="tel"
-          autocomplete="tel"
-        />
+        <div class="contacto-telefono">
+          <Campo
+            id="contacto-prefijo"
+            nombre="prefijo"
+            etiqueta="Prefijo"
+            tipo="tel"
+            autocomplete="tel-country-code"
+            placeholder="Ej: +34"
+            pattern="\+?[0-9]{1,3}"
+            maxlength={4}
+          />
+          <Campo
+            id="contacto-telefono"
+            nombre="telefono"
+            etiqueta="Teléfono (opcional)"
+            tipo="tel"
+            autocomplete="tel-national"
+            pattern=" *(?:[0-9] *){8,15}"
+            maxlength={30}
+          />
+        </div>
         <Campo
           id="contacto-mensaje"
           nombre="mensaje"
           etiqueta="Mensaje"
           tipo="textarea"
+          maxlength={5000}
           requerido
         />
         <div class="trampa" aria-hidden="true">
@@ -88,10 +104,18 @@ import Campo from "./Campo.astro";
     "Gracias por escribirnos. Te responderemos en un máximo de dos días laborables.";
   const TEXTO_ERROR =
     "No hemos podido enviar tu mensaje. Inténtalo de nuevo en unos minutos o escríbenos a info@inteliaxencia.com.";
+  const TEXTO_REVISA =
+    "No hemos podido enviar tu mensaje. Revisa los datos e inténtalo de nuevo.";
 
   function mensajeError(
     control: HTMLInputElement | HTMLTextAreaElement,
   ): string {
+    if (control.name === "prefijo") {
+      return "Error: revisa el prefijo.";
+    }
+    if (control.name === "telefono") {
+      return "Error: escribe un teléfono de entre 8 y 15 cifras. Solo están permitidos números y espacios.";
+    }
     if (control.validity.valueMissing) {
       return control.tagName === "TEXTAREA"
         ? "Error: cuéntanos qué necesitas para poder ayudarte."
@@ -104,6 +128,14 @@ import Campo from "./Campo.astro";
     formulario.addEventListener("submit", async (evento) => {
       evento.preventDefault();
       if (boton.disabled) return;
+
+      // El prefijo es obligatorio solo si se escribe teléfono.
+      const campoPrefijo =
+        formulario.querySelector<HTMLInputElement>('[name="prefijo"]');
+      const campoTelefono =
+        formulario.querySelector<HTMLInputElement>('[name="telefono"]');
+      if (campoPrefijo && campoTelefono)
+        campoPrefijo.required = campoTelefono.value.trim() !== "";
 
       let primerError: HTMLInputElement | HTMLTextAreaElement | null = null;
 
@@ -135,12 +167,14 @@ import Campo from "./Campo.astro";
       boton.textContent = TEXTO_ENVIANDO;
 
       let enviado = false;
+      let estado = 0;
       try {
         const respuesta = await fetch("/api/contacto", {
           method: "POST",
           body: datos,
         });
         enviado = respuesta.ok;
+        estado = respuesta.status;
       } catch {
         // Sin conexión o la petición no llegó: se muestra el error.
       }
@@ -158,7 +192,8 @@ import Campo from "./Campo.astro";
       }
 
       confirmacion.classList.add("contacto-ok--error");
-      confirmacion.textContent = TEXTO_ERROR;
+      confirmacion.textContent =
+        estado === 400 || estado === 413 ? TEXTO_REVISA : TEXTO_ERROR;
       boton.disabled = false;
     });
   }
@@ -184,6 +219,12 @@ import Campo from "./Campo.astro";
     margin-bottom: 16px;
     font-size: 0.85rem;
     color: var(--color-texto-suave);
+  }
+
+  .contacto-telefono {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 12px;
   }
 
   .contacto-ok {

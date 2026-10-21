@@ -8,6 +8,7 @@ interface Props {
   requerido?: boolean;
   placeholder?: string;
   pattern?: string;
+  maxlength?: number;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   requerido = false,
   placeholder,
   pattern,
+  maxlength,
 } = Astro.props;
 
 const idEstado = `${id}-estado`;
@@ -49,6 +51,7 @@ const esTextarea = tipo === "textarea";
         <textarea
           id={id}
           name={nombre}
+          maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
           aria-describedby={idEstado}
@@ -65,6 +68,7 @@ const esTextarea = tipo === "textarea";
           name={nombre}
           autocomplete={autocomplete}
           pattern={pattern}
+          maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
           aria-describedby={idEstado}
