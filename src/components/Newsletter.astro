@@ -14,10 +14,11 @@ import Campo from "./Campo.astro";
         </p>
       </div>
       <div>
-        <!-- Envío simulado hasta B8-4, que añade la ruta y la doble
-             confirmación: mientras tanto ningún dato sale del navegador. El
-             esquema está en src/lib/boletin.ts. -->
-        <form id="form-newsletter" novalidate>
+        <!-- Con JavaScript, el envío es simulado hasta B8-4, que añade la
+             ruta y la doble confirmación. Sin él, el POST va a la propia
+             página, que no lo procesa: los datos no van en la URL. El esquema
+             está en src/lib/boletin.ts. -->
+        <form id="form-newsletter" method="post" novalidate>
           <Campo
             id="news-email"
             nombre="email"

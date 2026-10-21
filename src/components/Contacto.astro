@@ -15,10 +15,11 @@ import Campo from "./Campo.astro";
       <p>Analizamos tu situación y vemos juntos si podemos ayudarte.</p>
     </div>
     <div class="card-form">
-      <!-- Envía a /api/contacto (src/pages/api/contacto.ts). Sin JavaScript no
-           se envía: el respaldo con action y redirección queda como mejora
-           anotada. -->
-      <form id="form-contacto" novalidate>
+      <!-- Con JavaScript, el script envía a /api/contacto con fetch. Sin él,
+           el navegador hace el POST a la misma ruta y muestra la respuesta
+           JSON; los datos nunca van en la URL. El respaldo con redirección a
+           páginas estáticas queda como mejora anotada. -->
+      <form id="form-contacto" method="post" action="/api/contacto" novalidate>
         <Campo
           id="contacto-nombre"
           nombre="nombre"
