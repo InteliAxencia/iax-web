@@ -29,7 +29,7 @@ const esTextarea = tipo === "textarea";
 <div class="campo">
   {
     esCasilla ? (
-      <label class="campo-casilla" for={id}>
+      <label class="campo-casilla texto-con-enlaces" for={id}>
         <input
           type="checkbox"
           id={id}
@@ -121,11 +121,6 @@ const esTextarea = tipo === "textarea";
   .campo-casilla input {
     margin-top: 4px;
     flex-shrink: 0;
-  }
-
-  .campo-casilla :global(a) {
-    color: var(--color-indigo);
-    text-decoration: underline;
   }
 
   .campo-estado {

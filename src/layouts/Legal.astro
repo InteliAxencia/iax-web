@@ -13,7 +13,7 @@ const { titulo, descripcion } = Astro.props;
 
 <Base titulo={titulo} descripcion={descripcion}>
   <Cabecera />
-  <main class="lectura">
+  <main class="lectura texto-con-enlaces">
     <slot />
   </main>
   <Pie />
@@ -82,21 +82,6 @@ const { titulo, descripcion } = Astro.props;
   .lectura :global(strong) {
     font-weight: 700;
     color: var(--color-negro);
-  }
-
-  /* a { color: inherit } en global.css deja los enlaces indistinguibles
-     dentro de un parrafo. Aqui recuperan color y subrayado. No se usa
-     .link-cta: esa clase es para llamadas a la accion, no para enlaces
-     en linea. */
-
-  .lectura :global(a) {
-    color: var(--color-indigo);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-
-  .lectura :global(a:hover) {
-    color: var(--color-indigo-deep);
   }
 
   /* Tablas de las politicas. Cada una va dentro de un .tabla que la pagina

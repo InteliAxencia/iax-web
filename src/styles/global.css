@@ -106,6 +106,21 @@ a {
   color: inherit;
 }
 
+/* a { color: inherit } y la base de Tailwind dejan los enlaces sin color ni
+   subrayado, indistinguibles dentro de un párrafo. Los contenedores de texto
+   corrido con enlaces llevan .texto-con-enlaces para recuperarlos. No se usa
+   .link-cta: esa clase es para llamadas a la acción, no para enlaces en
+   línea. No sirve sobre fondo índigo. */
+.texto-con-enlaces a {
+  color: var(--color-indigo);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.texto-con-enlaces a:hover {
+  color: var(--color-indigo-deep);
+}
+
 /* ==================== FOCO VISIBLE ====================
    Punto 2 del suelo de calidad. El prototipo usaba coral sobre blanco,
    que da un contraste de 1,9:1 y no llega al 3:1 que pide el criterio
