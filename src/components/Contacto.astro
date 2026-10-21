@@ -62,6 +62,12 @@ import Campo from "./Campo.astro";
             autocomplete="off"
           />
         </div>
+        <p class="contacto-info texto-con-enlaces">
+          Usaremos tus datos solo para responder a tu consulta. Más información
+          y cómo ejercer tus derechos en la <a href="/privacidad"
+            >política de privacidad</a
+          >. No incluyas datos de tus clientes ni información confidencial.
+        </p>
         <button class="btn btn-indigo" type="submit">Enviar</button>
         <p class="contacto-ok" id="contacto-ok" role="status"></p>
       </form>
@@ -172,6 +178,12 @@ import Campo from "./Campo.astro";
     border-radius: var(--radius);
     padding: 26px 20px;
     box-shadow: 0 8px 30px rgba(27, 15, 150, 0.07);
+  }
+
+  .contacto-info {
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
   }
 
   .contacto-ok {
