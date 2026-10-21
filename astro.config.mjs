@@ -31,11 +31,6 @@ export default defineConfig({
         optional: true,
         default: "XXXXXXXXX",
       }),
-      PRUEBA_SECRETO: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
       // Las claves de Mailjet son opcionales aunque las rutas de API las
       // necesitan. astro:env/server evalua todos los secretos al cargarse, y
       // las paginas legales lo cargan para ID_FISCAL al prerenderizar, cuando

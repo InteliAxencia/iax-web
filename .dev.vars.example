@@ -8,6 +8,5 @@
 # Cada clave que anadas aqui tiene que estar declarada en el esquema de
 # astro:env en astro.config.mjs, o Astro no la reconocera.
 
-PRUEBA_SECRETO=
 MAILJET_API_KEY=
 MAILJET_SECRET_KEY=
