@@ -73,6 +73,13 @@ definidas. Al crear el proyecto:
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
 
+## Antes de publicar el sitio
+
+El formulario del boletín simula el envío hasta que se termine B8-4: muestra
+«Revisa tu bandeja» sin enviar ningún correo. El sitio no se publica con ese
+mensaje: o B8-4 está terminado, o se cambia el mensaje por uno que no prometa un
+correo.
+
 ## Antes de publicar las páginas legales
 
 Las políticas de privacidad y de cookies afirman cosas que solo se comprueban
@@ -100,6 +107,10 @@ con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 6. Confirmar que Cloudflare, Inc. sigue en la lista de
    https://www.dataprivacyframework.gov y que los enlaces a las políticas de
    terceros responden.
+7. Con el proyecto creado, comprobar en Workers Logs cuánto tiempo se conservan
+   los registros y qué datos de cada petición se guardan. La política de
+   privacidad recoge lo que se guarde y durante cuánto tiempo. El código del
+   sitio solo registra el motivo de un fallo, sin datos del formulario.
 
 ## Antes del primer envío de correo
 
