@@ -21,8 +21,10 @@ export default defineConfig({
   // con wrangler secret put, y en local desde .dev.vars.
   // ID_FISCAL va con access "public" porque se imprime en el aviso legal. Su
   // valor real solo se aporta en la compilacion de Cloudflare, para que no
-  // entre en el historial publico. El marcador por defecto mantiene dev y
-  // build en marcha; que no llegue a produccion lo comprueba verify.
+  // entre en el historial publico. El marcador por defecto mantiene dev y build
+  // en marcha. Que no llegue a produccion aun no lo comprueba nadie: va en el
+  // despliegue, con scripts/check-marcadores.mjs (docs/despliegue.md,
+  // Comprobacion de marcadores).
   env: {
     schema: {
       ID_FISCAL: envField.string({
