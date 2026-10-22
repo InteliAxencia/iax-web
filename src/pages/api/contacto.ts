@@ -11,6 +11,12 @@ const ESTADO_POR_MOTIVO = {
   rechazo: 502,
 } as const;
 
+// Tope del cuerpo de la petición: cubre el peor caso válido del esquema enviado
+// sin JavaScript, en el que cada carácter no ASCII ocupa de 6 a 9 bytes. Una
+// petición sin Content-Length no pasa por este control: se lee entera y la
+// rechazan los límites del esquema y el propio límite de Cloudflare.
+const TAMANO_MAXIMO_BYTES = 64 * 1024;
+
 function responder(ok: boolean, estado: number): Response {
   return new Response(JSON.stringify({ ok }), {
     status: estado,
@@ -19,6 +25,9 @@ function responder(ok: boolean, estado: number): Response {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  const longitud = Number(request.headers.get("Content-Length"));
+  if (longitud > TAMANO_MAXIMO_BYTES) return responder(false, 413);
+
   let formulario: FormData;
   try {
     formulario = await request.formData();
