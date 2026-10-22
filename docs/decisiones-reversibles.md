@@ -195,6 +195,18 @@ fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
 desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
 Mailjet y un tope de 200 correos al día.
 
+Mailjet añade por su cuenta una cabecera `List-Unsubscribe` también a los envíos
+por API, con un enlace a `mjt.lu`. No mide aperturas ni clics: solo contacta con
+Mailjet si alguien la usa. La cabecera se vio en el primer envío real, el 20 de
+octubre de 2026, y el webmail de `info@` ofrece por ella «Darse de baja».
+Comprobado el 22 de octubre de 2026, con una dirección del equipo como destino
+de los avisos: tras pulsar «Darse de baja», la dirección no aparece en la lista
+de exclusiones ni entre los contactos de Mailjet, y el siguiente aviso llega a
+la bandeja de entrada. El panel de Mailjet indica además que los contactos
+excluidos siguen recibiendo los correos transaccionales. Si un aviso deja de
+llegar a `info@`, lo primero es revisar la lista de exclusiones. En el boletín
+la baja sí tiene que funcionar: se estudia en B8-4.
+
 **Disparador de revisión.** Que Mailjet deje de permitir desactivar el
 seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
 diario del plan gratuito.
@@ -272,6 +284,14 @@ acotado por el tope de Mailjet, ese coste todavía no compensa.
 vacío el campo trampa. El riesgo mayor está en el boletín: la doble confirmación
 envía un correo a la dirección que se escriba, así que un abuso manda correo a
 terceros, agota el tope diario y daña la reputación del dominio.
+
+El error contrario también es posible: el autocompletado del navegador o de un
+gestor de contraseñas puede rellenar el campo trampa de una persona real, y su
+mensaje se daría por enviado sin llegar. El campo está fuera de la pantalla, sin
+tabulación y con `autocomplete="off"`, pero no todos los navegadores y gestores
+respetan ese atributo. Cada caso deja en el registro un aviso con motivo
+«trampa», sin datos del formulario: si alguien dice haber escrito y su mensaje
+no llegó, se buscan esos avisos.
 
 **Disparador.** Envíos automatizados en `info@`, altas falsas o confirmaciones
 no pedidas en el boletín, o el tope diario de Mailjet agotado.

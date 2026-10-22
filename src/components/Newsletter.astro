@@ -14,10 +14,11 @@ import Campo from "./Campo.astro";
         </p>
       </div>
       <div>
-        <!-- TODO: conectar a la API de Mailjet con doble confirmación. Hasta
-             entonces el envío es simulado y ningún dato sale del navegador
-             (bloqueo 4.1 de AGENTS.md). -->
-        <form id="form-newsletter" novalidate>
+        <!-- Con JavaScript, el envío es simulado hasta B8-4, que añade la
+             ruta y la doble confirmación. Sin él, el POST va a la propia
+             página, que no lo procesa: los datos no van en la URL. El esquema
+             está en src/lib/boletin.ts. -->
+        <form id="form-newsletter" method="post" novalidate>
           <Campo
             id="news-email"
             nombre="email"
@@ -40,6 +41,16 @@ import Campo from "./Campo.astro";
             he leído la <a href="/privacidad">política de privacidad</a>. Puedo
             darme de baja en cualquier momento.
           </Campo>
+          <div class="trampa" aria-hidden="true">
+            <label for="news-web">No rellenes este campo</label>
+            <input
+              id="news-web"
+              name="web"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
           <button class="btn btn-indigo" type="submit">Suscribirme</button>
           <!-- PROVISIONAL: mientras el envío sea simulado, este mensaje
                describe un correo que no se envía. -->

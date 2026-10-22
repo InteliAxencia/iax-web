@@ -108,14 +108,9 @@ async function llamar(ruta: string, cuerpo: unknown): Promise<Resultado> {
 }
 
 // Seguimiento de aperturas y clics desactivado en cada envío, además de en la
-// cuenta (docs/decisiones-reversibles.md, apartado 7). prueba activa
-// SandboxMode: Mailjet valida la petición sin entregar el correo.
-export function enviarCorreo(
-  mensaje: Mensaje,
-  opciones: { prueba?: boolean } = {},
-): Promise<Resultado> {
+// cuenta (docs/decisiones-reversibles.md, apartado 7).
+export function enviarCorreo(mensaje: Mensaje): Promise<Resultado> {
   return llamar("/v3.1/send", {
-    SandboxMode: opciones.prueba ?? false,
     Messages: [
       {
         From: direccion(mensaje.remitente),
