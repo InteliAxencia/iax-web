@@ -29,13 +29,19 @@ cargan como secretos del Worker, con `npx wrangler secret put` seguido del
 nombre o desde el panel como variable de tipo secreto, y no en las variables de
 compilación. Los valores están en el gestor de contraseñas del equipo.
 
-| Variable             | Contenido                          | Si falta                                                   |
-| -------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| `MAILJET_API_KEY`    | Clave de la API de Mailjet         | El envío se detiene con un error antes de llamar a Mailjet |
-| `MAILJET_SECRET_KEY` | Clave secreta de la API de Mailjet | Igual que la anterior                                      |
+| Variable                | Contenido                                                                              | Si falta                                                                                        |
+| ----------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `MAILJET_API_KEY`       | Clave de la API de Mailjet                                                             | El envío se detiene con un error antes de llamar a Mailjet                                      |
+| `MAILJET_SECRET_KEY`    | Clave secreta de la API de Mailjet                                                     | Igual que la anterior                                                                           |
+| `MAILJET_LISTA_BOLETIN` | ID numérico de la lista del boletín en Mailjet                                         | La suscripción y la confirmación del boletín se detienen con un error antes de llamar a Mailjet |
+| `CLAVE_ENLACE_BOLETIN`  | Clave de cifrado del enlace de confirmación del boletín, 32 bytes aleatorios en base64 | Igual que la anterior                                                                           |
 
-En el esquema de `astro:env` las dos son opcionales a propósito, aunque el envío
-las necesita. El porqué está comentado en `astro.config.mjs`.
+En el esquema de `astro:env` las cuatro son opcionales a propósito, aunque las
+rutas las necesitan. El porqué está comentado en `astro.config.mjs`.
+
+`CLAVE_ENLACE_BOLETIN` se genera con `openssl rand -base64 32` y es distinta en
+cada entorno: la de producción no es la de desarrollo local. Cambiarla invalida
+los enlaces de confirmación pendientes.
 
 ## Despliegue desde local
 

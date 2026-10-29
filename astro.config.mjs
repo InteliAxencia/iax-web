@@ -49,6 +49,22 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // ID de la lista del boletin en Mailjet. No es sensible por si solo, pero
+      // va como secreto para que toda la configuracion de Mailjet que leen las
+      // rutas se cargue igual, y para que no entre en el repositorio.
+      MAILJET_LISTA_BOLETIN: envField.number({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      // Clave del cifrado AES-GCM del enlace de confirmacion del boletin: 32
+      // bytes aleatorios en base64. Es propia del sitio, ajena a Mailjet.
+      // Opcional por la misma razon que las claves de Mailjet.
+      CLAVE_ENLACE_BOLETIN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       // Remitente y destino del formulario de contacto. Son publicas: la
       // direccion ya aparece en el sitio. Como ID_FISCAL, se fijan al compilar.
       // El remitente tiene que estar validado en Mailjet; el destino se puede
