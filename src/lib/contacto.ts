@@ -1,11 +1,12 @@
 import { z } from "astro/zod";
 import { CORREO_DESTINO_CONTACTO, CORREO_REMITENTE } from "astro:env/server";
+import { EXPRESION_CORREO } from "./correo";
 import { enviarCorreo, type Resultado } from "./mailjet";
 
 export const esquemaContacto = z
   .object({
     nombre: z.string().trim().min(1).max(200),
-    email: z.string().trim().max(254).pipe(z.email()),
+    email: z.string().trim().max(254).regex(EXPRESION_CORREO),
     // Prefijo y teléfono van en cajas separadas. El prefijo es obligatorio si
     // hay teléfono y se guarda siempre con +. Los espacios del teléfono se
     // quitan sin avisar.
