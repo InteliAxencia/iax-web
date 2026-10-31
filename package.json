@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@cloudflare/vite-plugin": "^1.64.0",
+    "@cloudflare/vite-plugin": "^1.66.0",
     "@tailwindcss/vite": "^4.3.3",
     "prettier": "3.9.9",
     "prettier-plugin-astro": "0.14.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
-    "wrangler": "^4.151.0"
+    "wrangler": "^4.154.0"
   }
 }
