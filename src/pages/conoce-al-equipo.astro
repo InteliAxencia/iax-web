@@ -6,93 +6,84 @@ import Pie from "../components/Pie.astro";
 ---
 
 <Base
-  titulo="Quiénes somos · inteliAxencia"
-  descripcion="Tres profesionales con trayectorias distintas que encontramos en la tecnología un punto de encuentro. Acercamos la inteligencia artificial al Derecho Laboral."
+  titulo="Conoce al equipo · inteliAxencia"
+  descripcion="Conoce al equipo de inteliAxencia y cómo nació la idea de llevar la IA a los despachos laboralistas."
 >
   <Cabecera />
   <main>
-    <section class="quienes-origen">
+    <section class="conoce-texto">
       <div class="wrap">
-        <div class="quienes-texto">
-          <h1>Quiénes somos</h1>
+        <div class="conoce-lectura">
+          <h1>Así nació inteliAxencia</h1>
           <p>
-            Somos tres profesionales con trayectorias y experiencias diferentes
-            que encontramos en el desarrollo tecnológico un punto de encuentro.
-            Durante una intensa etapa de formación como desarrolladores
-            Full-Stack, aprendimos a trabajar codo con codo, enfrentándonos a
-            problemas complejos, superando retos y construyendo una forma de
-            trabajar basada en la colaboración, la resiliencia y la búsqueda de
-            soluciones.
+            La idea surgió de nuestro entorno más próximo, que nos acercó al día
+            a día de los profesionales del Derecho Laboral y a una realidad
+            común en el sector: sobrecarga de trabajo, procesos que no han
+            evolucionado al ritmo de las herramientas disponibles y muchas horas
+            dedicadas a tareas mecánicas y repetitivas.
           </p>
           <p>
-            A lo largo de ese camino, cada uno fue profundizando en un ámbito
-            diferente: Testing, Cloud Computing e Inteligencia Artificial. Pero
-            lo que empezó como una etapa de formación se convirtió en algo más:
-            un equipo con experiencia y ganas de seguir construyendo juntos.
+            Comprendimos que la Inteligencia Artificial podía aliviar esa carga
+            y liberar tiempo para lo que de verdad exige criterio jurídico. De
+            ahí parte nuestro propósito: que esta tecnología esté al alcance de
+            despachos laboralistas, graduados sociales, sindicatos y asesorías
+            jurídicas y que, en sus manos, la IA se convierta en una aliada para
+            la defensa de los derechos de las personas trabajadoras.
+          </p>
+          <h2>Conoce al equipo</h2>
+          <p>
+            Nuestras trayectorias son distintas, pero convergen en la
+            tecnología. Una intensa formación como desarrolladores Full-Stack
+            nos enseñó a trabajar codo con codo ante problemas complejos y a
+            forjar una manera de hacer basada en la colaboración, la resiliencia
+            y la búsqueda de soluciones. Después, cada uno fue especializándose
+            en diferentes ámbitos: Testing, Cloud Computing, Ciberseguridad e
+            Inteligencia Artificial.
           </p>
           <p>
-            A esta combinación de conocimientos tecnológicos sumamos nuestra
-            experiencia en docencia, finanzas e industria tecnológica, creando
-            una perspectiva multidisciplinar que nos permite entender la
-            tecnología no solo desde su desarrollo, sino también desde las
-            personas y los entornos en los que debe aportar valor.
+            Nuestra base técnica se complementa con experiencia en docencia,
+            finanzas e industria tecnológica. Esta visión multidisciplinar nos
+            permite desarrollar proyectos que no solo funcionan desde el punto
+            de vista tecnológico, sino que también responden a las necesidades
+            reales de las personas y los entornos en los que deben aportar
+            valor.
           </p>
         </div>
       </div>
     </section>
 
     <Equipo />
-
-    <section class="quienes-mision">
-      <div class="wrap">
-        <div class="quienes-texto">
-          <h2>Así nació inteliAxencia.</h2>
-          <p>
-            Nacimos con una idea clara: acercar la Inteligencia Artificial al
-            ámbito del Derecho Laboral y poner la tecnología al servicio de la
-            defensa de los derechos de las personas trabajadoras.
-          </p>
-          <p>
-            Creemos que la Inteligencia Artificial no debe ser únicamente una
-            herramienta al alcance de grandes organizaciones. También puede
-            convertirse en un aliado para quienes necesitan acceder a
-            información, analizar situaciones complejas y defender sus derechos
-            con mayor conocimiento y capacidad.
-          </p>
-          <p>
-            En inteliAxencia trabajamos para hacer posible ese encuentro entre
-            tecnología, conocimiento y derechos laborales.
-          </p>
-        </div>
-      </div>
-    </section>
   </main>
   <Pie />
 </Base>
 
 <style>
-  /* La regla común section de global.css da relleno arriba y abajo. Entre
-     texto y tarjetas se quita en un lado para que la separación sea una sola
-     y no la suma de dos. */
+  /* La regla común section de global.css da relleno arriba y abajo. Entre el
+     texto y las tarjetas se quita el de abajo para que la separación sea una
+     sola y no la suma de dos. */
 
-  .quienes-origen {
+  .conoce-texto {
     padding-bottom: 0;
   }
 
-  .quienes-mision {
-    padding-top: 0;
-  }
-
-  .quienes-texto {
+  .conoce-lectura {
     max-width: var(--max-w-lectura);
   }
 
-  .quienes-texto h1 {
+  /* El h1 y el h2 comparten tamaño y color: el nivel marca la estructura y
+     no el aspecto, y la página abre con dos títulos del mismo peso. */
+
+  .conoce-lectura h1,
+  .conoce-lectura h2 {
     font-size: clamp(1.9rem, 5vw, 2.6rem);
     color: var(--color-indigo);
   }
 
-  .quienes-texto p {
+  .conoce-lectura h2 {
+    margin-top: 40px;
+  }
+
+  .conoce-lectura p {
     margin-top: 16px;
     max-width: 65ch;
     color: var(--color-texto-suave);
