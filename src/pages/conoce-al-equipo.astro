@@ -1,0 +1,91 @@
+---
+import Base from "../layouts/Base.astro";
+import Cabecera from "../components/Cabecera.astro";
+import Equipo from "../components/Equipo.astro";
+import Pie from "../components/Pie.astro";
+---
+
+<Base
+  titulo="Conoce al equipo · inteliAxencia"
+  descripcion="Conoce al equipo de inteliAxencia y cómo nació la idea de llevar la IA a los despachos laboralistas."
+>
+  <Cabecera />
+  <main>
+    <section class="conoce-texto">
+      <div class="wrap">
+        <div class="conoce-lectura">
+          <h1>Así nació inteliAxencia</h1>
+          <p>
+            La idea surgió de nuestro entorno más próximo, que nos acercó al día
+            a día de los profesionales del Derecho Laboral y a una realidad
+            común en el sector: sobrecarga de trabajo, procesos que no han
+            evolucionado al ritmo de las herramientas disponibles y muchas horas
+            dedicadas a tareas mecánicas y repetitivas.
+          </p>
+          <p>
+            Comprendimos que la Inteligencia Artificial podía aliviar esa carga
+            y liberar tiempo para lo que de verdad exige criterio jurídico. De
+            ahí parte nuestro propósito: que esta tecnología esté al alcance de
+            despachos laboralistas, graduados sociales, sindicatos y asesorías
+            jurídicas y que, en sus manos, la IA se convierta en una aliada para
+            la defensa de los derechos de las personas trabajadoras.
+          </p>
+          <h2>Conoce al equipo</h2>
+          <p>
+            Nuestras trayectorias son distintas, pero convergen en la
+            tecnología. Una intensa formación como desarrolladores Full-Stack
+            nos enseñó a trabajar codo con codo ante problemas complejos y a
+            forjar una manera de hacer basada en la colaboración, la resiliencia
+            y la búsqueda de soluciones. Después, cada uno fue especializándose
+            en diferentes ámbitos: Testing, Cloud Computing, Ciberseguridad e
+            Inteligencia Artificial.
+          </p>
+          <p>
+            Nuestra base técnica se complementa con experiencia en docencia,
+            finanzas e industria tecnológica. Esta visión multidisciplinar nos
+            permite desarrollar proyectos que no solo funcionan desde el punto
+            de vista tecnológico, sino que también responden a las necesidades
+            reales de las personas y los entornos en los que deben aportar
+            valor.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Equipo />
+  </main>
+  <Pie />
+</Base>
+
+<style>
+  /* La regla común section de global.css da relleno arriba y abajo. Entre el
+     texto y las tarjetas se quita el de abajo para que la separación sea una
+     sola y no la suma de dos. */
+
+  .conoce-texto {
+    padding-bottom: 0;
+  }
+
+  .conoce-lectura {
+    max-width: var(--max-w-lectura);
+  }
+
+  /* El h1 y el h2 comparten tamaño y color: el nivel marca la estructura y
+     no el aspecto, y la página abre con dos títulos del mismo peso. */
+
+  .conoce-lectura h1,
+  .conoce-lectura h2 {
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    color: var(--color-indigo);
+  }
+
+  .conoce-lectura h2 {
+    margin-top: 40px;
+  }
+
+  .conoce-lectura p {
+    margin-top: 16px;
+    max-width: 65ch;
+    color: var(--color-texto-suave);
+  }
+</style>
