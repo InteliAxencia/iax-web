@@ -15,16 +15,18 @@ import Campo from "./Campo.astro";
       <p>Analizamos tu situación y vemos juntos si podemos ayudarte.</p>
     </div>
     <div class="card-form">
-      <!-- TODO: conectar a un endpoint real. Hasta entonces el envío es
-           simulado y ningún dato sale del navegador (bloqueo 4.1 de
-           AGENTS.md). -->
-      <form id="form-contacto" novalidate>
+      <!-- Con JavaScript, el script envía a /api/contacto con fetch. Sin él,
+           el navegador hace el POST a la misma ruta y muestra la respuesta
+           JSON; los datos nunca van en la URL. El respaldo con redirección a
+           páginas estáticas queda como mejora anotada. -->
+      <form id="form-contacto" method="post" action="/api/contacto" novalidate>
         <Campo
           id="contacto-nombre"
           nombre="nombre"
           etiqueta="Nombre y apellidos"
           tipo="text"
           autocomplete="name"
+          maxlength={200}
           requerido
         />
         <Campo
@@ -37,23 +39,54 @@ import Campo from "./Campo.astro";
           pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
           requerido
         />
-        <Campo
-          id="contacto-telefono"
-          nombre="telefono"
-          etiqueta="Teléfono (opcional)"
-          tipo="tel"
-          autocomplete="tel"
-        />
+        <div class="contacto-telefono">
+          <Campo
+            id="contacto-prefijo"
+            nombre="prefijo"
+            etiqueta="Prefijo"
+            tipo="tel"
+            autocomplete="tel-country-code"
+            placeholder="Ej: +34"
+            pattern="\+?[0-9]{1,3}"
+            maxlength={4}
+          />
+          <Campo
+            id="contacto-telefono"
+            nombre="telefono"
+            etiqueta="Teléfono (opcional)"
+            tipo="tel"
+            autocomplete="tel-national"
+            pattern=" *(?:[0-9] *){8,15}"
+            maxlength={30}
+          />
+        </div>
         <Campo
           id="contacto-mensaje"
           nombre="mensaje"
           etiqueta="Mensaje"
           tipo="textarea"
+          maxlength={5000}
           requerido
         />
-        <button class="btn btn-indigo" type="submit">
-          Hablemos de tu caso
-        </button>
+        <div class="trampa" aria-hidden="true">
+          <label for="contacto-web">No rellenes este campo</label>
+          <input
+            id="contacto-web"
+            name="web"
+            type="text"
+            tabindex="-1"
+            autocomplete="off"
+          />
+        </div>
+        <!-- PROVISIONAL: texto legal pendiente de revisión por quien lleva
+             la parte legal. No publicar sin esa revisión. -->
+        <p class="contacto-info texto-con-enlaces">
+          Usaremos tus datos solo para responder a tu consulta. Más información
+          y cómo ejercer tus derechos en la <a href="/privacidad"
+            >política de privacidad</a
+          >. No incluyas datos de tus clientes ni información confidencial.
+        </p>
+        <button class="btn btn-indigo" type="submit">Enviar</button>
         <p class="contacto-ok" id="contacto-ok" role="status"></p>
       </form>
     </div>
@@ -63,10 +96,28 @@ import Campo from "./Campo.astro";
 <script>
   const formulario = document.querySelector<HTMLFormElement>("#form-contacto");
   const confirmacion = document.querySelector<HTMLElement>("#contacto-ok");
+  const boton = formulario?.querySelector<HTMLButtonElement>(
+    'button[type="submit"]',
+  );
+
+  const TEXTO_BOTON = "Enviar";
+  const TEXTO_ENVIANDO = "Enviando…";
+  const TEXTO_OK =
+    "Gracias por escribirnos. Te responderemos en un máximo de dos días laborables.";
+  const TEXTO_ERROR =
+    "No hemos podido enviar tu mensaje. Inténtalo de nuevo en unos minutos o escríbenos a info@inteliaxencia.com.";
+  const TEXTO_REVISA =
+    "No hemos podido enviar tu mensaje. Revisa los datos e inténtalo de nuevo.";
 
   function mensajeError(
     control: HTMLInputElement | HTMLTextAreaElement,
   ): string {
+    if (control.name === "prefijo") {
+      return "Error: revisa el prefijo.";
+    }
+    if (control.name === "telefono") {
+      return "Error: escribe un teléfono de entre 8 y 15 cifras. Solo están permitidos números y espacios.";
+    }
     if (control.validity.valueMissing) {
       return control.tagName === "TEXTAREA"
         ? "Error: cuéntanos qué necesitas para poder ayudarte."
@@ -75,9 +126,18 @@ import Campo from "./Campo.astro";
     return "Error: introduce un correo válido, por ejemplo tu@email.com.";
   }
 
-  if (formulario && confirmacion) {
-    formulario.addEventListener("submit", (evento) => {
+  if (formulario && confirmacion && boton) {
+    formulario.addEventListener("submit", async (evento) => {
       evento.preventDefault();
+      if (boton.disabled) return;
+
+      // El prefijo es obligatorio solo si se escribe teléfono.
+      const campoPrefijo =
+        formulario.querySelector<HTMLInputElement>('[name="prefijo"]');
+      const campoTelefono =
+        formulario.querySelector<HTMLInputElement>('[name="telefono"]');
+      if (campoPrefijo && campoTelefono)
+        campoPrefijo.required = campoTelefono.value.trim() !== "";
 
       let primerError: HTMLInputElement | HTMLTextAreaElement | null = null;
 
@@ -100,13 +160,43 @@ import Campo from "./Campo.astro";
         return;
       }
 
-      confirmacion.textContent =
-        "Gracias por escribirnos. Te responderemos lo antes posible.";
-      for (const el of formulario.querySelectorAll<HTMLElement>(
-        "input, textarea, button",
-      )) {
-        el.setAttribute("disabled", "");
+      // El FormData se toma antes de desactivar nada: los campos desactivados
+      // no se envían.
+      const datos = new FormData(formulario);
+      confirmacion.textContent = "";
+      confirmacion.classList.remove("contacto-ok--error");
+      boton.disabled = true;
+      boton.textContent = TEXTO_ENVIANDO;
+
+      let enviado = false;
+      let estado = 0;
+      try {
+        const respuesta = await fetch("/api/contacto", {
+          method: "POST",
+          body: datos,
+        });
+        enviado = respuesta.ok;
+        estado = respuesta.status;
+      } catch {
+        // Sin conexión o la petición no llegó: se muestra el error.
       }
+
+      boton.textContent = TEXTO_BOTON;
+
+      if (enviado) {
+        confirmacion.textContent = TEXTO_OK;
+        for (const el of formulario.querySelectorAll<HTMLElement>(
+          "input, textarea, button",
+        )) {
+          el.setAttribute("disabled", "");
+        }
+        return;
+      }
+
+      confirmacion.classList.add("contacto-ok--error");
+      confirmacion.textContent =
+        estado === 400 || estado === 413 ? TEXTO_REVISA : TEXTO_ERROR;
+      boton.disabled = false;
     });
   }
 </script>
@@ -127,6 +217,18 @@ import Campo from "./Campo.astro";
     box-shadow: 0 8px 30px rgba(27, 15, 150, 0.07);
   }
 
+  .contacto-info {
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+  }
+
+  .contacto-telefono {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 12px;
+  }
+
   .contacto-ok {
     margin-top: 14px;
     padding: 14px 16px;
@@ -139,6 +241,12 @@ import Campo from "./Campo.astro";
 
   .contacto-ok:empty {
     display: none;
+  }
+
+  .contacto-ok--error {
+    border-color: var(--color-error);
+    background: var(--color-blanco);
+    color: var(--color-error);
   }
 
   @media (min-width: 821px) {

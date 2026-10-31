@@ -95,24 +95,30 @@ forma de declarar bindings fuera de `wrangler.json`.
 
 ## 4. Análisis de código con CodeQL
 
-**Decisión vigente.** Desactivado.
+**Decisión vigente.** Activado en modo avanzado desde el 14 de octubre de 2026,
+con el workflow `.github/workflows/codeql.yml`. Analiza `actions` y
+`javascript-typescript` en cada pull request, en cada push a `main` y cada
+lunes.
 
-**Por qué.** Estaba activo por defecto, impuesto por la configuración de
-seguridad de la organización, no por elección. Sobre un sitio estático sin
-entradas de usuario no aporta y solo añade ruido en la lista de checks.
+**Por qué.** Saltó el disparador previsto: B8 trae la primera ruta de API que
+recibe datos de un formulario. Se activa antes que la ruta, para que el análisis
+ya esté en `main` cuando entre.
 
-**Lo que se cambió para poder decidirlo.** La configuración
-`InteliAxencia-org-config-1` de la organización tenía Code scanning en
-`Enabled` con `Enforce`, lo que bloqueaba cualquier cambio desde el
-repositorio. Se pasó a `Not set`, que deja la decisión a cada repositorio sin
-levantar la imposición del resto de funciones.
+**Cómo está montado.** Workflow propio, con las acciones fijadas por SHA y
+versionado en el repositorio. No en modo por defecto: la configuración tiene que
+vivir donde se pueda revisar. La configuración por defecto del repositorio sigue
+en `not-configured`; si se activara, GitHub rechazaría los análisis del
+workflow. Dependabot actualiza los SHA junto con el resto de acciones.
 
-**Disparador.** La primera ruta de API que reciba datos de un formulario, o
-cualquier código que trate entrada externa.
+**Antes.** Estuvo desactivado mientras el sitio era estático y sin entradas de
+usuario: no aportaba y solo añadía ruido en la lista de checks. Estaba activo
+por imposición de la configuración de seguridad de la organización, no por
+elección. Para poder decidirlo, `InteliAxencia-org-config-1` pasó Code scanning
+de `Enabled` con `Enforce` a `Not set`, que deja la decisión a cada repositorio
+sin levantar la imposición del resto de funciones.
 
-**Qué se hace entonces.** Se activa en modo avanzado, con workflow propio fijado
-por SHA y versionado en el repositorio. No en modo por defecto: la configuración
-tiene que vivir donde se pueda revisar.
+**Disparador de revisión.** Que el sitio deje de recibir entrada externa, o que
+los falsos positivos obliguen a ajustar las consultas.
 
 ## 5. TypeScript en la serie 6
 
@@ -189,6 +195,18 @@ fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
 desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
 Mailjet y un tope de 200 correos al día.
 
+Mailjet añade por su cuenta una cabecera `List-Unsubscribe` también a los envíos
+por API, con un enlace a `mjt.lu`. No mide aperturas ni clics: solo contacta con
+Mailjet si alguien la usa. La cabecera se vio en el primer envío real, el 20 de
+octubre de 2026, y el webmail de `info@` ofrece por ella «Darse de baja».
+Comprobado el 22 de octubre de 2026, con una dirección del equipo como destino
+de los avisos: tras pulsar «Darse de baja», la dirección no aparece en la lista
+de exclusiones ni entre los contactos de Mailjet, y el siguiente aviso llega a
+la bandeja de entrada. El panel de Mailjet indica además que los contactos
+excluidos siguen recibiendo los correos transaccionales. Si un aviso deja de
+llegar a `info@`, lo primero es revisar la lista de exclusiones. En el boletín
+la baja sí tiene que funcionar: se estudia en B8-4.
+
 **Disparador de revisión.** Que Mailjet deje de permitir desactivar el
 seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
 diario del plan gratuito.
@@ -197,7 +215,11 @@ diario del plan gratuito.
 
 **Decisión vigente.** La alerta 19 de Dependabot (GHSA-ch52-4w7c-c8xp, gravedad
 alta) está descartada en GitHub con el motivo «el código vulnerable no se usa».
-`http-cache-semantics` sigue en 4.2.0, la versión que trae `astro`.
+Desde el 19 de octubre de 2026, `astro` 7.4.0 trae `http-cache-semantics`
+4.3.0, que queda fuera del rango del aviso («<= 4.2.0»): ni `npm audit` ni
+Dependabot lo señalan. Pero la 4.3.0 no cambia la lógica de `max-stale`, así
+que el fallo persiste. Que las herramientas no avisen no significa que esté
+corregido.
 
 **Por qué.** El fallo permite que una caché compartida entre usuarios entregue a
 un cliente la respuesta guardada para otro, incluida su cookie de sesión, si el
@@ -206,15 +228,16 @@ cliente pide `max-stale`. Aquí no se da: `astro` solo usa el paquete en
 compartida ni peticiones de terceros. Además, `astro.config.mjs` no autoriza
 ningún dominio remoto y el sitio no usa imágenes remotas.
 
-**Descartado.** Subir a 4.3.0. El aviso no declara versión corregida, y la 4.3.0
-se publicó después de su última actualización sin cambiar la lógica de
-`max-stale`: antes de servir una respuesta caducada solo comprueba
-`must-revalidate`. La subida haría desaparecer la alerta sin corregir el fallo.
+**Descartado.** Dar el asunto por cerrado porque las herramientas ya no avisan.
+El aviso no declara versión corregida, y la 4.3.0 se publicó después de su
+última actualización sin tocar la lógica afectada: antes de servir una
+respuesta caducada solo comprueba `must-revalidate`.
 
-**Disparador de revisión.** Que el aviso publique una versión corregida, que el
-sitio empiece a usar imágenes remotas o que `astro` use el paquete fuera del
-build. Una alerta descartada no se reabre sola, así que el aviso se revisa a
-mano.
+**Disparador de revisión.** Que se publique una versión que corrija el fallo,
+comprobándolo en su código y no por el rango del aviso; que el aviso amplíe su
+rango a la 4.3.0, en cuyo caso Dependabot volverá a avisar; que el sitio empiece
+a usar imágenes remotas, o que `astro` use el paquete fuera del build. Una alerta
+descartada no se reabre sola, así que el aviso se revisa a mano.
 
 ## 9. Formateadores con versión fija
 
@@ -240,3 +263,44 @@ abiertas que toquen archivos `.astro` para evitar conflictos de formato.
 `astro` en archivos que no se han tocado, señal de que el plugin no entiende
 sintaxis nueva; que aparezca una alerta de seguridad en cualquiera de los dos; o
 la revisión periódica, cada seis meses. La primera, en abril de 2027.
+
+## 10. Protección de los formularios sin Turnstile
+
+**Decisión vigente.** Los formularios se protegen sin servicios de terceros: un
+campo trampa oculto que se comprueba en el servidor, la validación del esquema
+en servidor y el tope diario de envíos del plan gratuito de Mailjet, que limita
+el daño máximo. Si el campo trampa llega con contenido, la ruta responde como si
+el envío se hubiera hecho y no llama a Mailjet.
+
+**Por qué.** Turnstile cargaría un script de Cloudflare en la portada para todas
+las visitas, no solo para quien rellena un formulario, y rompería la condición
+del apartado 6 sobre scripts de terceros en los formularios. Según su anexo de
+privacidad, Cloudflare es responsable de esos datos cuando los usa para mejorar
+Turnstile, lo que obligaría a reescribir el apartado 4.2 de la política de
+cookies y el 6 de la de privacidad. Con poco tráfico en el lanzamiento y el daño
+acotado por el tope de Mailjet, ese coste todavía no compensa.
+
+**Lo que no cubre.** Un bot preparado contra este sitio puede aprender a dejar
+vacío el campo trampa. El riesgo mayor está en el boletín: la doble confirmación
+envía un correo a la dirección que se escriba, así que un abuso manda correo a
+terceros, agota el tope diario y daña la reputación del dominio.
+
+El error contrario también es posible: el autocompletado del navegador o de un
+gestor de contraseñas puede rellenar el campo trampa de una persona real, y su
+mensaje se daría por enviado sin llegar. El campo está fuera de la pantalla, sin
+tabulación y con `autocomplete="off"`, pero no todos los navegadores y gestores
+respetan ese atributo. Cada caso deja en el registro un aviso con motivo
+«trampa», sin datos del formulario: si alguien dice haber escrito y su mensaje
+no llegó, se buscan esos avisos.
+
+**Disparador.** Envíos automatizados en `info@`, altas falsas o confirmaciones
+no pedidas en el boletín, o el tope diario de Mailjet agotado.
+
+**Qué se hace entonces.** Turnstile en los dos formularios, con la verificación
+del token en `src/lib` y sus dos claves en `astro:env`. Antes de activarlo:
+medir en el navegador qué guarda en el dispositivo y ajustar la tabla de
+cookies; reescribir el apartado 4.2 de cookies y el 6 de privacidad; añadir la
+excepción en el apartado 6 de este documento, y pasar la revisión de quien
+redactó los textos legales. Se valora cargar el recuadro solo cuando alguien
+empieza a rellenar un formulario, para no conectar con Cloudflare en cada
+visita.

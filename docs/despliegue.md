@@ -11,13 +11,44 @@ compilación. Van en las variables de **compilación** del proyecto, no en las d
 ejecución del Worker: una variable de ejecución no llega al build y la página
 saldría con el valor por defecto.
 
-| Variable    | Contenido                                                                           | Si falta                                         |
-| ----------- | ----------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `ID_FISCAL` | NIF del titular del sitio, que el aviso legal publica por el artículo 10 de la LSSI | La página se publica con el marcador `XXXXXXXXX` |
+| Variable                  | Contenido                                                                                | Si falta                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `ID_FISCAL`               | NIF del titular del sitio, que el aviso legal publica por el artículo 10 de la LSSI      | La página se publica con el marcador `XXXXXXXXX` |
+| `CORREO_REMITENTE`        | Remitente de los correos del formulario de contacto. Tiene que estar validado en Mailjet | Se usa `info@inteliaxencia.com`                  |
+| `CORREO_DESTINO_CONTACTO` | Dirección que recibe los mensajes del formulario de contacto                             | Se usa `info@inteliaxencia.com`                  |
 
-El valor real no está en el repositorio a propósito. Es público en la web, pero
-el historial de un repositorio público no se puede reescribir, así que el dato
-seguiría ahí cuando la sociedad sustituya a la persona física en el aviso legal.
+El valor real de `ID_FISCAL` no está en el repositorio a propósito. Es público
+en la web, pero el historial de un repositorio público no se puede reescribir,
+así que el dato seguiría ahí cuando la sociedad sustituya a la persona física en
+el aviso legal.
+
+## Variables de ejecución
+
+Las leen las rutas de API al ejecutarse en el Worker, no durante el build. Se
+cargan como secretos del Worker, con `npx wrangler secret put` seguido del
+nombre o desde el panel como variable de tipo secreto, y no en las variables de
+compilación. Los valores están en el gestor de contraseñas del equipo.
+
+| Variable             | Contenido                          | Si falta                                                   |
+| -------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| `MAILJET_API_KEY`    | Clave de la API de Mailjet         | El envío se detiene con un error antes de llamar a Mailjet |
+| `MAILJET_SECRET_KEY` | Clave secreta de la API de Mailjet | Igual que la anterior                                      |
+
+En el esquema de `astro:env` las dos son opcionales a propósito, aunque el envío
+las necesita. El porqué está comentado en `astro.config.mjs`.
+
+## Despliegue desde local
+
+El build copia `.dev.vars` a `dist/server/`. Un `npx wrangler deploy` sin
+opciones usa la configuración que genera el adaptador, redirigida desde
+`.wrangler/deploy/`: sirve los assets de `dist/client` y sube como Worker solo
+los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 19 de
+octubre de 2026, con `wrangler` 4.151.0 y `@astrojs/cloudflare` 14.4.0.
+
+No se despliega con `--config wrangler.json`. Esa configuración declara `./dist`
+como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
+actualizar `wrangler` o el adaptador, se repite la comprobación con
+`npx wrangler deploy --dry-run --outdir` hacia una carpeta temporal.
 
 ## Comprobación de marcadores, pendiente
 
@@ -42,16 +73,25 @@ definidas. Al crear el proyecto:
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
 
+## Antes de publicar el sitio
+
+El formulario del boletín simula el envío hasta que se termine B8-4: muestra
+«Revisa tu bandeja» sin enviar ningún correo. El sitio no se publica con ese
+mensaje: o B8-4 está terminado, o se cambia el mensaje por uno que no prometa un
+correo.
+
 ## Antes de publicar las páginas legales
 
 Las políticas de privacidad y de cookies afirman cosas que solo se comprueban
 con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 
-1. Aceptar de forma expresa el anexo de tratamiento de datos de Cloudflare en
-   el panel. Confirmar que el correo corporativo ya está en Infomaniak y los
-   contratos de encargo con Infomaniak y con Mailjet. La entidad de Mailjet y
-   su dirección, como figuren en la orden de servicio, se contrastan con la
-   política de privacidad.
+1. Comprobar que la copia del contrato de encargo de Cloudflare está guardada
+   fuera del repositorio. No hay aceptación expresa en el panel: el contrato
+   forma parte del acuerdo de suscripción de autoservicio y queda aceptado con
+   el alta de la cuenta. Confirmar que el correo corporativo ya está en
+   Infomaniak y los contratos de encargo con Infomaniak y con Mailjet. La
+   entidad de Mailjet y su dirección se contrastan con la política de
+   privacidad. Si el panel de Mailjet no la muestra, se confirma con su soporte.
 2. Comprobar el valor de _Challenge Passage_. Si no son los 30 minutos por
    defecto, se actualiza la duración de `cf_clearance` en la política de
    cookies.
@@ -67,6 +107,10 @@ con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 6. Confirmar que Cloudflare, Inc. sigue en la lista de
    https://www.dataprivacyframework.gov y que los enlaces a las políticas de
    terceros responden.
+7. Con el proyecto creado, comprobar en Workers Logs cuánto tiempo se conservan
+   los registros y qué datos de cada petición se guardan. La política de
+   privacidad recoge lo que se guarde y durante cuánto tiempo. El código del
+   sitio solo registra el motivo de un fallo, sin datos del formulario.
 
 ## Antes del primer envío de correo
 

@@ -10,6 +10,10 @@ updates:
         patterns:
           - "astro"
           - "@astrojs/*"
+      cloudflare:
+        patterns:
+          - "wrangler"
+          - "@cloudflare/vite-plugin"
     ignore:
       - dependency-name: "prettier"
       - dependency-name: "prettier-plugin-astro"
