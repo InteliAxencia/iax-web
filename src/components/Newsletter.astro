@@ -15,11 +15,16 @@ import { PATRON_CORREO } from "../lib/correo";
         </p>
       </div>
       <div>
-        <!-- Con JavaScript, el envío es simulado hasta B8-4, que añade la
-             ruta y la doble confirmación. Sin él, el POST va a la propia
-             página, que no lo procesa: los datos no van en la URL. El esquema
-             está en src/lib/boletin.ts. -->
-        <form id="form-newsletter" method="post" novalidate>
+        <!-- Con JavaScript, el formulario se envía con fetch y el resultado se
+             muestra aquí. Sin él, el POST va a /api/boletin, que responde solo
+             { ok } en JSON (decisión 44). El esquema está en
+             src/lib/boletin.ts. -->
+        <form
+          id="form-newsletter"
+          method="post"
+          action="/api/boletin"
+          novalidate
+        >
           <Campo
             id="news-email"
             nombre="email"
@@ -30,17 +35,18 @@ import { PATRON_CORREO } from "../lib/correo";
             pattern={PATRON_CORREO}
             requerido
           />
-          <!-- PROVISIONAL: texto legal pendiente de revisión por quien lleva
-               la parte legal. No publicar sin esa revisión. -->
+          <!-- PROVISIONAL hasta constituir la S.L.: entonces se revisa este
+               texto junto con la política de privacidad. -->
           <Campo
             id="news-consentimiento"
             nombre="consentimiento"
             tipo="checkbox"
             requerido
           >
-            Acepto recibir el boletín mensual de iAx en mi correo electrónico y
-            he leído la <a href="/privacidad">política de privacidad</a>. Puedo
-            darme de baja en cualquier momento.
+            Acepto recibir el boletín mensual de inteliAxencia en mi correo
+            electrónico y he leído la <a href="/privacidad"
+              >política de privacidad</a
+            >. Puedo darme de baja en cualquier momento.
           </Campo>
           <div class="trampa" aria-hidden="true">
             <label for="news-web">No rellenes este campo</label>
@@ -53,8 +59,6 @@ import { PATRON_CORREO } from "../lib/correo";
             />
           </div>
           <button class="btn btn-indigo" type="submit">Suscribirme</button>
-          <!-- PROVISIONAL: mientras el envío sea simulado, este mensaje
-               describe un correo que no se envía. -->
           <p class="newsletter-ok" id="news-ok" role="status"></p>
         </form>
       </div>
@@ -66,6 +70,18 @@ import { PATRON_CORREO } from "../lib/correo";
   const formulario =
     document.querySelector<HTMLFormElement>("#form-newsletter");
   const confirmacion = document.querySelector<HTMLElement>("#news-ok");
+  const boton = formulario?.querySelector<HTMLButtonElement>(
+    'button[type="submit"]',
+  );
+
+  const TEXTO_BOTON = "Suscribirme";
+  const TEXTO_ENVIANDO = "Enviando…";
+  const TEXTO_OK =
+    "Revisa tu bandeja: te hemos enviado un correo para confirmar la suscripción.";
+  const TEXTO_ERROR =
+    "No hemos podido completar tu suscripción. Inténtalo de nuevo en unos minutos o escríbenos a info@inteliaxencia.com.";
+  const TEXTO_REVISA =
+    "No hemos podido completar tu suscripción. Revisa los datos e inténtalo de nuevo.";
 
   function mensajeError(control: HTMLInputElement): string {
     if (control.type === "checkbox") {
@@ -77,9 +93,10 @@ import { PATRON_CORREO } from "../lib/correo";
     return "Error: introduce un correo válido, por ejemplo tu@email.com.";
   }
 
-  if (formulario && confirmacion) {
-    formulario.addEventListener("submit", (evento) => {
+  if (formulario && confirmacion && boton) {
+    formulario.addEventListener("submit", async (evento) => {
       evento.preventDefault();
+      if (boton.disabled) return;
 
       let primerError: HTMLInputElement | null = null;
 
@@ -102,13 +119,43 @@ import { PATRON_CORREO } from "../lib/correo";
         return;
       }
 
-      confirmacion.textContent =
-        "Revisa tu bandeja: te hemos enviado un correo para confirmar la suscripción.";
-      for (const el of formulario.querySelectorAll<HTMLElement>(
-        "input, button",
-      )) {
-        el.setAttribute("disabled", "");
+      // El FormData se toma antes de desactivar nada: los campos desactivados
+      // no se envían.
+      const datos = new FormData(formulario);
+      confirmacion.textContent = "";
+      confirmacion.classList.remove("newsletter-ok--error");
+      boton.disabled = true;
+      boton.textContent = TEXTO_ENVIANDO;
+
+      let enviado = false;
+      let estado = 0;
+      try {
+        const respuesta = await fetch("/api/boletin", {
+          method: "POST",
+          body: datos,
+        });
+        enviado = respuesta.ok;
+        estado = respuesta.status;
+      } catch {
+        // Sin conexión o la petición no llegó: se muestra el error.
       }
+
+      boton.textContent = TEXTO_BOTON;
+
+      if (enviado) {
+        confirmacion.textContent = TEXTO_OK;
+        for (const el of formulario.querySelectorAll<HTMLElement>(
+          "input, button",
+        )) {
+          el.setAttribute("disabled", "");
+        }
+        return;
+      }
+
+      confirmacion.classList.add("newsletter-ok--error");
+      confirmacion.textContent =
+        estado === 400 || estado === 413 ? TEXTO_REVISA : TEXTO_ERROR;
+      boton.disabled = false;
     });
   }
 </script>
@@ -150,6 +197,12 @@ import { PATRON_CORREO } from "../lib/correo";
 
   .newsletter-ok:empty {
     display: none;
+  }
+
+  .newsletter-ok--error {
+    border-color: var(--color-error);
+    background: var(--color-blanco);
+    color: var(--color-error);
   }
 
   @media (min-width: 821px) {
