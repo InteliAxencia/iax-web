@@ -189,11 +189,26 @@ cláusulas contractuales tipo y Marco de Privacidad de Datos UE-EE. UU.
 **Descartado.** Brevo, que era la opción prevista: no deja desactivar el
 seguimiento salvo en su plan Enterprise y a petición.
 
-**Lo que trae consigo.** La doble confirmación se construye: un enlace firmado
-con caducidad, un endpoint que lo valida y el alta en la lista con la IP y la
-fecha como prueba. Cabe en R1 y R2 sin guardar estado. El seguimiento queda
-desactivado en la cuenta y en cada envío. El plan gratuito lleva el logotipo de
-Mailjet y un tope de 200 correos al día.
+**Lo que trae consigo.** La doble confirmación se construye en el sitio, sin
+guardar estado (R1 y R2). El correo de confirmación lleva un enlace a
+`/boletin/confirmar` con un token en el fragmento: el correo y su caducidad, 7
+días, cifrados con AES-GCM de 256 bits (`src/lib/enlace.ts`). La página copia el
+token a un formulario y la persona confirma con un botón: confirmar al abrir el
+enlace dejaría que lo hicieran los escáneres de enlaces de los servidores de
+correo, y con su IP. La ruta da de alta en la lista con `managecontact` y
+`addforce`, y guarda la IP y la fecha como propiedades del contacto
+(`ip_confirmacion` y `fecha_confirmacion`). Se sobrescriben en cada alta, así
+que la prueba es la de la última confirmación. El seguimiento queda desactivado
+en la cuenta y en cada envío. El plan gratuito lleva el logotipo de Mailjet y un
+tope de 200 correos al día.
+
+Enviar el correo de confirmación por la Send API crea el contacto en Mailjet,
+sin lista, aunque la persona no confirme (medido el 29 de octubre de 2026). La
+política de privacidad promete eliminarlos en 40 días como máximo, así que antes
+de cada envío del boletín se borran a mano los contactos que no están en ninguna
+lista y tienen más de 7 días, salvo las direcciones del equipo. Quien se dio de
+baja sigue en la lista, marcado como baja, y no se borra: su prueba se conserva
+tres años.
 
 Mailjet añade por su cuenta una cabecera `List-Unsubscribe` también a los envíos
 por API, con un enlace a `mjt.lu`. No mide aperturas ni clics: solo contacta con
@@ -201,11 +216,19 @@ Mailjet si alguien la usa. La cabecera se vio en el primer envío real, el 20 de
 octubre de 2026, y el webmail de `info@` ofrece por ella «Darse de baja».
 Comprobado el 22 de octubre de 2026, con una dirección del equipo como destino
 de los avisos: tras pulsar «Darse de baja», la dirección no aparece en la lista
-de exclusiones ni entre los contactos de Mailjet, y el siguiente aviso llega a
-la bandeja de entrada. El panel de Mailjet indica además que los contactos
-excluidos siguen recibiendo los correos transaccionales. Si un aviso deja de
-llegar a `info@`, lo primero es revisar la lista de exclusiones. En el boletín
-la baja sí tiene que funcionar: se estudia en B8-4.
+de exclusiones, y el siguiente aviso llega a la bandeja de entrada. El panel de
+Mailjet indica además que los contactos excluidos siguen recibiendo los correos
+transaccionales. Si un aviso deja de llegar a `info@`, lo primero es revisar la
+lista de exclusiones. `info@` sí figura como contacto, desde el 1 de octubre de 2026.
+
+La baja del boletín es la de las campañas de Mailjet, comprobada el 4 de
+noviembre de 2026 con una campaña de prueba a la lista. El enlace del pie lleva
+a una página de `mjt.lu` que pide confirmar con un segundo clic, y la baja queda
+marcada en la lista sin borrar las propiedades del contacto. Un enlace de
+confirmación aún vigente reactiva la suscripción. En la prueba, con una
+plantilla de Mailjet en inglés, el enlace llevaba `hl=en_us` y la página salió
+en inglés: con la plantilla del boletín, comprobar que el pie y la página de
+baja salen en español.
 
 **Disparador de revisión.** Que Mailjet deje de permitir desactivar el
 seguimiento, que cambie dónde guarda los datos o que el boletín supere el tope
@@ -283,7 +306,9 @@ acotado por el tope de Mailjet, ese coste todavía no compensa.
 **Lo que no cubre.** Un bot preparado contra este sitio puede aprender a dejar
 vacío el campo trampa. El riesgo mayor está en el boletín: la doble confirmación
 envía un correo a la dirección que se escriba, así que un abuso manda correo a
-terceros, agota el tope diario y daña la reputación del dominio.
+terceros, agota el tope diario y daña la reputación del dominio. Además, cada
+correo de confirmación crea un contacto en Mailjet (apartado 7), así que esas
+direcciones de terceros quedan guardadas hasta la siguiente limpieza.
 
 El error contrario también es posible: el autocompletado del navegador o de un
 gestor de contraseñas puede rellenar el campo trampa de una persona real, y su

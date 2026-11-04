@@ -81,10 +81,13 @@ de la publicación hay que abrir las páginas legales y leerlas.
 
 ## Antes de publicar el sitio
 
-El formulario del boletín simula el envío hasta que se termine B8-4: muestra
-«Revisa tu bandeja» sin enviar ningún correo. El sitio no se publica con ese
-mensaje: o B8-4 está terminado, o se cambia el mensaje por uno que no prometa un
-correo.
+Con el proyecto creado, cargar `MAILJET_LISTA_BOLETIN` y `CLAVE_ENLACE_BOLETIN`
+como secretos del Worker, con una clave de producción nueva (Variables de
+ejecución). Después, hacer una suscripción completa en el sitio publicado con
+una dirección del equipo: el enlace del correo tiene que apuntar a
+`https://inteliaxencia.com/boletin/confirmar`, y al confirmar, la dirección
+tiene que quedar en la lista con la IP de quien confirma. Terminada la prueba,
+se retira esa dirección de la lista.
 
 ## Antes de publicar las páginas legales
 
