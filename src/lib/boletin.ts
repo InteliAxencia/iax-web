@@ -48,9 +48,9 @@ function sinConfiguracion(): Resultado {
 
 function textoConfirmacion(enlace: string): string {
   return [
-    "Hola:",
+    "Hola, muchas gracias por tu interés.",
     "",
-    "Has pedido recibir una vez al mes novedades de IA relevantes para el ámbito laboral, casos prácticos y herramientas explicadas en claro. Sin spam.",
+    "Has pedido recibir una vez al mes novedades de IA relevantes para el ámbito laboral, casos prácticos y nuevas herramientas. Sin spam.",
     "",
     "Para confirmar la suscripción, abre este enlace y pulsa «Confirmar suscripción»:",
     enlace,
