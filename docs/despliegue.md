@@ -11,11 +11,11 @@ compilación. Van en las variables de **compilación** del proyecto, no en las d
 ejecución del Worker: una variable de ejecución no llega al build y la página
 saldría con el valor por defecto.
 
-| Variable                  | Contenido                                                                                | Si falta                                         |
-| ------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| `ID_FISCAL`               | NIF del titular del sitio, que el aviso legal publica por el artículo 10 de la LSSI      | La página se publica con el marcador `XXXXXXXXX` |
-| `CORREO_REMITENTE`        | Remitente de los correos del formulario de contacto. Tiene que estar validado en Mailjet | Se usa `info@inteliaxencia.com`                  |
-| `CORREO_DESTINO_CONTACTO` | Dirección que recibe los mensajes del formulario de contacto                             | Se usa `info@inteliaxencia.com`                  |
+| Variable                  | Contenido                                                                                                                  | Si falta                                                  |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| `ID_FISCAL`               | NIF del titular del sitio, que publican el aviso legal (artículo 10 de la LSSI) y las políticas de privacidad y de cookies | El despliegue se detiene en la comprobación de marcadores |
+| `CORREO_REMITENTE`        | Remitente de los correos del formulario de contacto. Tiene que estar validado en Mailjet                                   | Se usa `info@inteliaxencia.com`                           |
+| `CORREO_DESTINO_CONTACTO` | Dirección que recibe los mensajes del formulario de contacto                                                               | Se usa `info@inteliaxencia.com`                           |
 
 El valor real de `ID_FISCAL` no está en el repositorio a propósito. Es público
 en la web, pero el historial de un repositorio público no se puede reescribir,
@@ -50,25 +50,25 @@ como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
 actualizar `wrangler` o el adaptador, se repite la comprobación con
 `npx wrangler deploy --dry-run --outdir` hacia una carpeta temporal.
 
-## Comprobación de marcadores, pendiente
+## Comprobación de marcadores
 
-Los textos legales llevan marcadores de equis en los datos que solo se conocen
-el día de la publicación. Que ninguno llegue a producción no lo comprueba nadie
-hoy.
+El NIF que publican el aviso legal y las políticas de privacidad y de cookies
+llega por `ID_FISCAL`, que solo se define en la compilación de Cloudflare. Sin
+ella, las tres páginas salen con el marcador `XXXXXXXXX`.
 
 La comprobación no puede vivir en el job `verify`: allí las variables de
 compilación no existen, el build usa siempre el valor por defecto y el marcador
 está siempre presente, así que fallaría en cada pull request.
 
-Tiene que ejecutarse en el despliegue, después del build y con las variables ya
-definidas. Al crear el proyecto:
+Por eso se ejecuta en el despliegue, después del build y con las variables ya
+definidas. `scripts/check-marcadores.mjs` recorre los `.html` de `dist/client/`
+y sale con error si encuentra una cadena de cuatro o más equis mayúsculas
+seguidas. También sale con error si no encuentra ninguna página, para que un
+cambio en la salida del build no pase en verde.
 
-1. Escribir `scripts/check-marcadores.mjs`, que recorra los `.html` de
-   `dist/client/` y salga con error si encuentra una cadena de cuatro o más
-   equis mayúsculas seguidas.
-2. Configurar el comando de compilación del proyecto como
-   `npm run build && node scripts/check-marcadores.mjs`, para que Cloudflare
-   aborte el despliegue en lugar de publicar la página con el marcador.
+Al crear el proyecto con Workers Builds, el comando de compilación es
+`npm run build && node scripts/check-marcadores.mjs`, para que Cloudflare aborte
+el despliegue en lugar de publicar una página con el marcador.
 
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
