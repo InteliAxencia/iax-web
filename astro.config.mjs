@@ -19,12 +19,12 @@ export default defineConfig({
   // Las variables de servidor con datos sensibles van con access "secret"
   // para que no puedan acabar en el bundle del cliente. Sus valores se cargan
   // con wrangler secret put, y en local desde .dev.vars.
-  // ID_FISCAL va con access "public" porque se imprime en el aviso legal. Su
-  // valor real solo se aporta en la compilacion de Cloudflare, para que no
-  // entre en el historial publico. El marcador por defecto mantiene dev y build
-  // en marcha. Que no llegue a produccion aun no lo comprueba nadie: va en el
-  // despliegue, con scripts/check-marcadores.mjs (docs/despliegue.md,
-  // Comprobacion de marcadores).
+  // ID_FISCAL va con access "public" porque se imprime en el aviso legal y en
+  // las politicas de privacidad y de cookies. Su valor real solo se aporta en
+  // la compilacion de Cloudflare, para que no entre en el historial publico. El
+  // marcador por defecto mantiene dev y build en marcha. Que no llegue a
+  // produccion lo comprueba scripts/check-marcadores.mjs en el despliegue
+  // (docs/despliegue.md, Comprobacion de marcadores).
   env: {
     schema: {
       ID_FISCAL: envField.string({
