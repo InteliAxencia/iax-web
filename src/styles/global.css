@@ -110,14 +110,16 @@ a {
    subrayado, indistinguibles dentro de un párrafo. Los contenedores de texto
    corrido con enlaces llevan .texto-con-enlaces para recuperarlos. No se usa
    .link-cta: esa clase es para llamadas a la acción, no para enlaces en
-   línea. No sirve sobre fondo índigo. */
-.texto-con-enlaces a {
+   línea. No sirve sobre fondo índigo. Los enlaces con clase .btn
+   quedan fuera: esta regla les ganaría el color y el subrayado por
+   especificidad. */
+.texto-con-enlaces a:not(.btn) {
   color: var(--color-indigo);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.texto-con-enlaces a:hover {
+.texto-con-enlaces a:not(.btn):hover {
   color: var(--color-indigo-deep);
 }
 
