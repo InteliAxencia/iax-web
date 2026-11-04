@@ -101,6 +101,11 @@ import { PATRON_CORREO } from "../lib/correo";
     'button[type="submit"]',
   );
 
+  // Tiempo máximo de espera del envío: más que los 10 segundos que el servidor
+  // espera a Mailjet, para no cortar una respuesta lenta pero válida. Sin él,
+  // una conexión que ni responde ni falla dejaría el formulario en «Enviando…».
+  const TIEMPO_MAXIMO_MS = 20_000;
+
   const TEXTO_BOTON = "Enviar";
   const TEXTO_ENVIANDO = "Enviando…";
   const TEXTO_OK =
@@ -175,11 +180,13 @@ import { PATRON_CORREO } from "../lib/correo";
         const respuesta = await fetch("/api/contacto", {
           method: "POST",
           body: datos,
+          signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
         });
         enviado = respuesta.ok;
         estado = respuesta.status;
       } catch {
-        // Sin conexión o la petición no llegó: se muestra el error.
+        // Sin conexión, la petición no llegó o se agotó el tiempo máximo: se
+        // muestra el error.
       }
 
       boton.textContent = TEXTO_BOTON;
