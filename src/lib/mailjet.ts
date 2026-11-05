@@ -127,13 +127,20 @@ export function enviarCorreo(mensaje: Mensaje): Promise<Resultado> {
   });
 }
 
-export function anadirALista(
-  correo: string,
+// Alta en la lista con addforce. Comprobado contra Mailjet el 29 de octubre de
+// 2026: añade el contacto a la lista, no da error si ya estaba suscrito (doble
+// clic en el botón) y reactiva a quien se había dado de baja. Las propiedades
+// se sobrescriben en cada alta, así que la prueba guardada es la de la última
+// confirmación. Tienen que existir antes en la cuenta: ip_confirmacion (texto)
+// y fecha_confirmacion (fecha y hora).
+export function altaEnLista(
   lista: number,
+  correo: string,
+  propiedades: Record<string, string>,
 ): Promise<Resultado> {
-  return llamar("/v3/REST/listrecipient", {
-    ContactAlt: correo,
-    ListID: lista,
-    IsUnsubscribed: false,
+  return llamar(`/v3/REST/contactslist/${lista}/managecontact`, {
+    Email: correo,
+    Action: "addforce",
+    Properties: propiedades,
   });
 }

@@ -1,5 +1,6 @@
 ---
 import Campo from "./Campo.astro";
+import { PATRON_CORREO } from "../lib/correo";
 ---
 
 <section class="contacto" id="contacto">
@@ -36,7 +37,7 @@ import Campo from "./Campo.astro";
           tipo="email"
           autocomplete="email"
           placeholder="tu@email.com"
-          pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+          pattern={PATRON_CORREO}
           requerido
         />
         <div class="contacto-telefono">
@@ -78,8 +79,10 @@ import Campo from "./Campo.astro";
             autocomplete="off"
           />
         </div>
-        <!-- PROVISIONAL: texto legal pendiente de revisión por quien lleva
-             la parte legal. No publicar sin esa revisión. -->
+        {
+          /* Se revisa al constituir la S.L., junto con la política de
+           privacidad. */
+        }
         <p class="contacto-info texto-con-enlaces">
           Usaremos tus datos solo para responder a tu consulta. Más información
           y cómo ejercer tus derechos en la <a href="/privacidad"
@@ -99,6 +102,11 @@ import Campo from "./Campo.astro";
   const boton = formulario?.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   );
+
+  // Tiempo máximo de espera del envío: más que los 10 segundos que el servidor
+  // espera a Mailjet, para no cortar una respuesta lenta pero válida. Sin él,
+  // una conexión que ni responde ni falla dejaría el formulario en «Enviando…».
+  const TIEMPO_MAXIMO_MS = 20_000;
 
   const TEXTO_BOTON = "Enviar";
   const TEXTO_ENVIANDO = "Enviando…";
@@ -174,11 +182,13 @@ import Campo from "./Campo.astro";
         const respuesta = await fetch("/api/contacto", {
           method: "POST",
           body: datos,
+          signal: AbortSignal.timeout(TIEMPO_MAXIMO_MS),
         });
         enviado = respuesta.ok;
         estado = respuesta.status;
       } catch {
-        // Sin conexión o la petición no llegó: se muestra el error.
+        // Sin conexión, la petición no llegó o se agotó el tiempo máximo: se
+        // muestra el error.
       }
 
       boton.textContent = TEXTO_BOTON;

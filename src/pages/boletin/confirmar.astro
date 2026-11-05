@@ -1,0 +1,48 @@
+---
+import Legal from "../../layouts/Legal.astro";
+---
+
+<Legal
+  titulo="Confirma tu suscripción · inteliAxencia"
+  descripcion="Confirma tu suscripción a noticiAx, el boletín mensual de inteliAxencia."
+>
+  <h1>Confirma tu suscripción</h1>
+  <p>Pulsa el botón para recibir noticiAx en tu correo una vez al mes.</p>
+  {
+    /* El botón sale desactivado y solo el script lo activa, después de copiar el
+     token al campo oculto: sin script no se envía un formulario sin token. */
+  }
+  <form id="form-confirmar" method="post" action="/api/boletin/confirmar">
+    <input id="confirmar-token" type="hidden" name="t" />
+    <button class="btn btn-indigo" type="submit" disabled>
+      Confirmar suscripción
+    </button>
+  </form>
+  <noscript>
+    <p>
+      El botón no funciona con la configuración actual de tu navegador. Prueba a
+      abrir el enlace del correo en otro navegador, o escríbenos a{" "}
+      <a href="mailto:info@inteliaxencia.com">info@inteliaxencia.com</a> y te damos
+      de alta.
+    </p>
+  </noscript>
+</Legal>
+
+<script>
+  // El token llega en el fragmento (#t=...), que el navegador no envía al
+  // servidor, así que no queda en los registros. Se deja en la dirección para
+  // que recargar la página siga funcionando. Sin token la página no sirve, y
+  // se lleva a la de enlace no válido, que explica qué hacer.
+  const campo = document.querySelector<HTMLInputElement>("#confirmar-token");
+  const boton = document.querySelector<HTMLButtonElement>(
+    "#form-confirmar button",
+  );
+  const token = new URLSearchParams(location.hash.slice(1)).get("t");
+
+  if (!token) {
+    location.replace("/boletin/enlace-no-valido");
+  } else if (campo && boton) {
+    campo.value = token;
+    boton.disabled = false;
+  }
+</script>
