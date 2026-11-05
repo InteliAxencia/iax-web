@@ -31,6 +31,15 @@ const enlaces = [
 </header>
 
 <style>
+  /* La cabecera es bloque contenedor del menu desplegable y queda por encima
+     de las secciones posicionadas que la siguen, como la presentacion. Sin
+     esto, se pintan sobre el menu abierto. El prototipo la tenia sticky;
+     aqui no es fija. */
+  header {
+    position: relative;
+    z-index: 1;
+  }
+
   .nav {
     display: flex;
     align-items: center;
