@@ -24,6 +24,12 @@ const {
     <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    {
+      /* Excepcion a la regla de tokens: un meta no puede leer var(), asi que
+         el indigo va escrito a mano. Es el valor de --color-indigo en
+         global.css. Si cambia, hay que cambiarlo aqui y en theme_color y
+         background_color de public/site.webmanifest. */
+    }
     <meta name="theme-color" content="#1B0F96" />
   </head>
   <body>
