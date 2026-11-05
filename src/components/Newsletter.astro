@@ -15,10 +15,12 @@ import { PATRON_CORREO } from "../lib/correo";
         </p>
       </div>
       <div>
-        <!-- Con JavaScript, el formulario se envía con fetch y el resultado se
-             muestra aquí. Sin él, el POST va a /api/boletin, que responde solo
-             { ok } en JSON (decisión 44). El esquema está en
-             src/lib/boletin.ts. -->
+        {
+          /* Con JavaScript, el formulario se envía con fetch y el resultado se
+           muestra aquí. Sin él, el POST va a /api/boletin, que responde solo
+           con el campo ok en JSON (decisión 44). El esquema está en
+           src/lib/boletin.ts. */
+        }
         <form
           id="form-newsletter"
           method="post"

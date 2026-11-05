@@ -8,9 +8,10 @@ import Legal from "../../layouts/Legal.astro";
 >
   <h1>Confirma tu suscripción</h1>
   <p>Pulsa el botón para recibir noticiAx en tu correo una vez al mes.</p>
-  <!-- El botón sale desactivado y solo el script lo activa, después de copiar
-       el token al campo oculto: sin script no se envía un formulario sin
-       token. -->
+  {
+    /* El botón sale desactivado y solo el script lo activa, después de copiar el
+     token al campo oculto: sin script no se envía un formulario sin token. */
+  }
   <form id="form-confirmar" method="post" action="/api/boletin/confirmar">
     <input id="confirmar-token" type="hidden" name="t" />
     <button class="btn btn-indigo" type="submit" disabled>
