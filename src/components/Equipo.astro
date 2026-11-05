@@ -1,0 +1,108 @@
+---
+import { Image } from "astro:assets";
+import Tarjeta from "./Tarjeta.astro";
+import mabel from "../assets/equipo/mabel.webp";
+import ayelen from "../assets/equipo/ayelen.webp";
+import yeferson from "../assets/equipo/yeferson.webp";
+
+const personas = [
+  {
+    foto: mabel,
+    nombre: "Mabel Rincón Bonifacio",
+    cargo: "CEO · Co-fundadora",
+    descripcion: "Full-Stack · IA + Python · Ciberseguridad NIS2",
+  },
+  {
+    foto: ayelen,
+    nombre: "María Ayelén Marcos Nacht",
+    cargo: "COO · Co-fundadora",
+    descripcion: "+10 años en docencia · QA Automation · IA aplicada",
+  },
+  {
+    foto: yeferson,
+    nombre: "Yeferson Gaviria",
+    cargo: "CTO · Co-fundador",
+    descripcion: "Full-Stack · Cloud + AWS · soluciones escalables",
+  },
+];
+---
+
+<section class="equipo" aria-label="Equipo">
+  <div class="wrap">
+    <ul class="equipo-lista">
+      {
+        personas.map((p) => (
+          <li>
+            <Tarjeta>
+              <Image
+                class="equipo-foto"
+                src={p.foto}
+                alt=""
+                width={256}
+                height={256}
+              />
+              <p class="equipo-nombre">{p.nombre}</p>
+              <p class="equipo-cargo">{p.cargo}</p>
+              <p class="equipo-descripcion">{p.descripcion}</p>
+            </Tarjeta>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .equipo-lista {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* El li es una cuadrícula de una celda para que la tarjeta ocupe todo su
+     ancho y su alto: el article raíz es de Tarjeta y esta sección no puede
+     estilizarlo. */
+
+  .equipo-lista li {
+    display: grid;
+  }
+
+  /* La foto es decorativa (alt vacío): el nombre va justo debajo. La imagen
+     ya viene cuadrada, y el círculo lo da el radio. */
+
+  .equipo-foto {
+    align-self: center;
+    width: 128px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid var(--color-borde);
+  }
+
+  .equipo-nombre {
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--color-indigo);
+    text-align: center;
+  }
+
+  .equipo-cargo {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-texto-suave);
+    text-align: center;
+  }
+
+  .equipo-descripcion {
+    font-size: 0.95rem;
+    color: var(--color-texto-suave);
+    text-align: center;
+  }
+
+  @media (min-width: 821px) {
+    .equipo-lista {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+  }
+</style>
