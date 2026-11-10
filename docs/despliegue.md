@@ -54,8 +54,9 @@ corporativo.
 cambiado en el panel, así que estos valores se cambian solo en el archivo.
 
 - `workers_dev: true` mantiene la dirección de workers.dev, la única del sitio
-  hasta publicar en el dominio propio. Pasa a `false` en «Publicar el sitio en
-  inteliaxencia.com»: por workers.dev no pasan los ajustes de la zona, como el
+  hasta publicar en el dominio propio. Pasa a `false` al publicar en
+  inteliaxencia.com, en el ticket WEBIAX-82, y el paso está en «Antes de
+  publicar el sitio»: por workers.dev no pasan los ajustes de la zona, como el
   bloqueo de rastreadores de entrenamiento de IA, y el sitio quedaría servido
   por dos direcciones.
 - `preview_urls: false` evita que cada versión desplegada tenga su propia URL
@@ -171,6 +172,10 @@ equipo: el enlace del correo tiene que apuntar a
 `https://inteliaxencia.com/boletin/confirmar`, y al confirmar, la dirección
 tiene que quedar en la lista con la IP de quien confirma. Terminada la prueba,
 se retira esa dirección de la lista.
+
+Cuando el dominio propio responda, cambiar `workers_dev` a `false` en
+`wrangler.json`, en su propio pull request. Hasta entonces, workers.dev es la
+única dirección del sitio; después, solo debe servirlo el dominio propio.
 
 ## Antes de publicar las páginas legales
 
