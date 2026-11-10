@@ -1,0 +1,69 @@
+#!/bin/sh
+# Envoltorio de git para el Dev Container (WEBIAX-93).
+#
+# Git se ejecuta en el host, donde estan la clave de firma, gitleaks y el hook
+# de identidad. El contenedor no tiene identidad de Git a proposito, y ante un
+# commit Git sugiere configurar una de ejemplo: el 19 de octubre de 2026 esas
+# ordenes se ejecutaron en el host y 40 commits salieron con ella.
+#
+# Las ordenes que crean commits o necesitan identidad se bloquean con un
+# mensaje propio. Las demas pasan al git real.
+
+# El git real es el primero del PATH que no esta en esta carpeta.
+propia=$(cd "$(dirname "$0")" && pwd)
+real=""
+IFS=:
+for d in $PATH; do
+  [ "$d" = "$propia" ] && continue
+  if [ -x "$d/git" ]; then
+    real="$d/git"
+    break
+  fi
+done
+unset IFS
+if [ -z "$real" ]; then
+  echo "No se encuentra el git real en el PATH." >&2
+  exit 127
+fi
+
+# Subcomando: el primer argumento que no es una opcion global.
+sub=""
+saltar=0
+for arg in "$@"; do
+  if [ "$saltar" -eq 1 ]; then
+    saltar=0
+    continue
+  fi
+  case "$arg" in
+    -C | -c | --git-dir | --work-tree | --namespace | --config-env) saltar=1 ;;
+    -*) ;;
+    *)
+      sub=$arg
+      break
+      ;;
+  esac
+done
+
+bloquear=0
+case "$sub" in
+  commit | push | pull | merge | rebase | cherry-pick | revert | am | tag | stash)
+    bloquear=1
+    ;;
+  config)
+    for arg in "$@"; do
+      case "$arg" in
+        user.name | user.email) bloquear=1 ;;
+      esac
+    done
+    ;;
+esac
+
+if [ "$bloquear" -eq 1 ]; then
+  echo "git $sub no se ejecuta en el contenedor: Git va en el host, donde" >&2
+  echo "estan la clave de firma, gitleaks y el hook de identidad." >&2
+  echo "Repite la orden en la terminal del host (prompt ❯)." >&2
+  echo "No configures user.name ni user.email en ningun sitio." >&2
+  exit 1
+fi
+
+exec "$real" "$@"
