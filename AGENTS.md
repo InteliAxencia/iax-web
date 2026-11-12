@@ -260,6 +260,16 @@ reservado a textos legales y contractuales.
 - El microcopy de formularios, errores y estados vacíos mantiene la misma
   calidez que el resto.
 
+### Listas
+
+Los elementos de una lista siguen uno de dos criterios.
+
+- Si completan una frase de presentación que acaba en dos puntos, empiezan en
+  minúscula, van separados por punto y coma y el último termina en punto. Es el
+  caso de las listas de servicios.
+- Si son independientes, sin frase de presentación, empiezan en mayúscula y cada
+  uno termina en punto. Es el caso de funcionalidades.
+
 La guía de marca completa vive fuera del repositorio. Si una decisión de copy no
 está resuelta aquí, consúltala antes de escribir.
 
