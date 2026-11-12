@@ -77,7 +77,10 @@ exacta de `wrangler`. Por eso Dependabot los agrupa en `.github/dependabot.yml`
 y se actualizan por parejas. `@cloudflare/vite-plugin` está declarado en
 `devDependencies` aunque el código no lo importe: si se quita, Dependabot deja
 de verlo, sube `wrangler` solo y aparecen dos copias de `wrangler`, `miniflare`
-y `workerd`. No lo quites ni subas `wrangler` por separado.
+y `workerd`. No lo quites ni subas `wrangler` por separado. Las acciones de
+CodeQL siguen la misma regla: todos los pasos de `codeql.yml` que usan
+`github/codeql-action` tienen que ir en la misma versión, o el análisis falla
+con un error de configuración. Dependabot las sube juntas con el grupo `codeql`.
 
 ---
 
@@ -160,6 +163,14 @@ request propio con la subida y el reformateo. Ver la sección 9 de
 - Los pull requests que abre un bot, como Dependabot, se fusionan con la
   aprobación de una sola persona del equipo: la regla de que no revisa quien
   abre el pull request se cumple igualmente.
+- Un pull request de Dependabot se valida con su rama al día con `main`. Para
+  ponerla al día se comenta `@dependabot rebase` en el pull request, no se
+  aplica el `git merge origin/main` del punto siguiente: Dependabot deja de
+  mantener una rama en la que ha escrito otra persona. Ese rebase lo hace
+  Dependabot sobre su propia rama, que no lleva commits del equipo, así que no
+  afecta a la prohibición de reescribir el historial. Cada merge a `main`
+  despliega en producción, así que lo que se valida en local tiene que ser lo
+  que se despliega.
 - Si `main` avanza mientras un pull request espera revisión, se incorpora a la
   rama con `git fetch` y `git merge origin/main` desde el host, antes de pedir
   la aprobación, porque un commit posterior la anula. Tras resolver los
