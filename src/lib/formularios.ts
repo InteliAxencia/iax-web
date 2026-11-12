@@ -36,8 +36,6 @@ export interface Formulario {
   tituloPagina: string;
   descripcion: string;
   intro: string;
-  // Título del bloque 3, el de la pregunta obligatoria.
-  bloqueNecesidad: string;
   // Casillas múltiples, al menos una marcada.
   necesidad: Pregunta;
   // Opción única y obligatoria. Solo en formación.
@@ -106,7 +104,6 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
       "Cuéntanos qué necesitas mejorar en tu forma de trabajar. Te responderemos en un máximo de dos días laborables.",
     intro:
       "Unas pocas preguntas para entender tu situación y saber cómo podemos ayudarte.",
-    bloqueNecesidad: "Necesidad",
     necesidad: {
       nombre: "necesidad",
       enunciado: "¿Qué te gustaría mejorar en tu forma de trabajar?",
@@ -150,7 +147,6 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
       "Pide un diagnóstico de cómo trabaja tu equipo: procesos, tareas y herramientas que se pueden mejorar.",
     intro:
       "Cuéntanos cómo trabaja tu equipo. Unas pocas preguntas para entender tu situación actual y ver juntos qué se puede mejorar.",
-    bloqueNecesidad: "Qué te gustaría analizar",
     necesidad: {
       nombre: "necesidad",
       enunciado: "¿Qué te gustaría analizar?",
@@ -189,7 +185,6 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
       "Pide una formación en herramientas de IA adaptada al nivel y a la forma de trabajar de tu equipo.",
     intro:
       "Cuéntanos qué necesita tu equipo. Unas pocas preguntas para diseñar una formación adaptada a su nivel y a su forma de trabajar.",
-    bloqueNecesidad: "Necesidad de formación",
     necesidad: {
       nombre: "necesidad",
       enunciado: "¿En qué te gustaría que se centre la formación?",
@@ -238,7 +233,6 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
       "Cuéntanos qué necesitas resolver y vemos si podemos ayudarte con una solución adaptada.",
     intro:
       "Cuéntanos qué necesitas resolver. Unas pocas preguntas para entender tu situación y ver si podemos ayudarte con una solución adaptada.",
-    bloqueNecesidad: "Necesidad",
     necesidad: {
       nombre: "necesidad",
       enunciado: "¿Qué tipo de ayuda estás buscando?",
