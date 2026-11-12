@@ -178,6 +178,11 @@ request propio con la subida y el reformateo. Ver la sección 9 de
   localizar con `git bisect`.
 - Los commits van firmados con SSH. No propongas comandos que desactiven la
   firma, ni `--no-verify`, ni nada que reescriba el historial.
+- Después de cada commit, comprueba la firma y el autor con
+  `git log -1 --format='%G? %ae'`. Tiene que salir `G` y el correo de quien hace
+  el commit, tal como figura en `.github/allowed_signers`. Que haya firma no
+  basta: una firma válida con un correo que no pertenece a ninguna cuenta sale
+  como Unverified en GitHub, y el ruleset de `main` la rechaza.
 - El mensaje explica el porqué. Si el contexto no se deduce del diff, va en el
   cuerpo del mensaje. **En los merge commits el cuerpo es obligatorio**: no
   tienen diff propio, así que sin él el historial de `main` no dice qué entró.
@@ -193,7 +198,13 @@ request propio con la subida y el reformateo. Ver la sección 9 de
   qué: el desplegable del botón aparece vacío.
 
 Git se ejecuta desde el host, no desde el Dev Container. La clave de firma, el
-hook de pre-commit y `gitleaks` viven en el host a propósito.
+hook de pre-commit y `gitleaks` viven en el host a propósito. El hook
+`identidad` rechaza el commit si el correo del autor o del committer no está en
+`.github/allowed_signers`; un merge sin conflictos no pasa por él, y ese caso lo
+cubre la regla de commits firmados del ruleset. En el contenedor,
+`.devcontainer/bin/git` bloquea las órdenes que crean commits o necesitan
+identidad: si aparece su mensaje, la orden se repite en el host. La identidad de
+Git no se configura en el contenedor.
 
 ---
 

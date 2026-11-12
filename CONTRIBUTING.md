@@ -50,7 +50,7 @@ Las reglas R1 y R2 están explicadas en la sección 10 de AGENTS.md. No son pref
 
 ## Dónde se ejecuta cada cosa
 
-Git se ejecuta en el anfitrión, nunca dentro del contenedor: la clave de firma y el hook de pre-commit viven fuera a propósito. El desarrollo va dentro del Dev Container.
+Git se ejecuta en el host, nunca dentro del contenedor: la clave de firma y el hook de pre-commit viven fuera a propósito. El desarrollo va dentro del Dev Container.
 
 ## Secretos
 

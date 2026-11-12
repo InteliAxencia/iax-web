@@ -7,6 +7,9 @@
   "containerEnv": {
     "ASTRO_TELEMETRY_DISABLED": "1"
   },
+  "remoteEnv": {
+    "PATH": "${containerWorkspaceFolder}/.devcontainer/bin:${containerEnv:PATH}"
+  },
   "forwardPorts": [4321],
   "postCreateCommand": "npm ci --ignore-scripts"
 }

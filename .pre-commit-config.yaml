@@ -3,3 +3,11 @@ repos:
     rev: v8.30.1
     hooks:
       - id: gitleaks
+  - repo: local
+    hooks:
+      - id: identidad
+        name: Comprueba la identidad del commit
+        entry: sh scripts/check-identidad.sh
+        language: system
+        pass_filenames: false
+        always_run: true

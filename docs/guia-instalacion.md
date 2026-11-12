@@ -10,16 +10,16 @@ Termina cuando puedas clonar, instalar, arrancar el servidor, hacer un commit fi
 
 ## 1. Requisitos previos
 
-Se instalan en el anfitrión, no en el contenedor.
+Se instalan en el host, no en el contenedor.
 
-| Herramienta  | Para qué                      | Notas                              |
-| ------------ | ----------------------------- | ---------------------------------- |
-| Git          | Control de versiones          | Se ejecuta siempre en el anfitrión |
-| Node por nvm | Ejecutar npm en el anfitrión  | La versión la fija .nvmrc          |
-| Podman       | Motor del Dev Container       | Rootless                           |
-| VS Code      | Editor                        | Con la extensión Dev Containers    |
-| pre-commit   | Hook de detección de secretos | Instala gitleaks por su cuenta     |
-| gh           | Cliente de GitHub             | Opcional pero recomendado          |
+| Herramienta  | Para qué                      | Notas                           |
+| ------------ | ----------------------------- | ------------------------------- |
+| Git          | Control de versiones          | Se ejecuta siempre en el host   |
+| Node por nvm | Ejecutar npm en el host       | La versión la fija .nvmrc       |
+| Podman       | Motor del Dev Container       | Rootless                        |
+| VS Code      | Editor                        | Con la extensión Dev Containers |
+| pre-commit   | Hook de detección de secretos | Instala gitleaks por su cuenta  |
+| gh           | Cliente de GitHub             | Opcional pero recomendado       |
 
 ### WSL2: dónde va el repositorio
 
@@ -86,6 +86,14 @@ git config --global user.name "Tu Nombre"
 git config --global user.email "NUMERO+usuario@users.noreply.github.com"
 ```
 
+Sustituye los dos valores por los tuyos antes de ejecutar las órdenes: los marcadores no se copian tal cual. Comprueba el resultado:
+
+```bash
+git var GIT_AUTHOR_IDENT
+```
+
+Tiene que mostrar tu nombre y tu correo noreply. Si en algún momento Git responde «Author identity unknown» y sugiere `git config --global user.email "you@example.com"`, no ejecutes esas órdenes: son valores de ejemplo y sustituirían tu identidad real.
+
 ### Clave SSH y firma de commits
 
 Cada máquina necesita su propia clave. En WSL2, cada instancia cuenta como una máquina distinta.
@@ -120,6 +128,8 @@ Para que el resto del equipo pueda verificar tus firmas, tu clave tiene que esta
 TU_EMAIL namespaces="git" ssh-ed25519 AAAA... comentario-de-la-maquina
 ```
 
+El hook `identidad` de pre-commit rechaza cualquier commit cuyo correo no esté en `.github/allowed_signers`. Lee el archivo de tu copia de trabajo, así que añade tu línea antes de tu primer commit, que será el del pull request que la incorpora.
+
 ### VS Code
 
 Abre la paleta con Ctrl+Shift+P, busca "Preferences: Open User Settings (JSON)" y añade:
@@ -130,7 +140,7 @@ Abre la paleta con Ctrl+Shift+P, busca "Preferences: Open User Settings (JSON)" 
 "dev.containers.gitCredentialHelperConfigLocation": "none"
 ```
 
-Los dos últimos son deliberados: impiden que VS Code copie tu identidad de Git y tus credenciales al contenedor. Git se ejecuta en el anfitrión.
+Los dos últimos son deliberados: impiden que VS Code copie tu identidad de Git y tus credenciales al contenedor. Git se ejecuta en el host.
 
 **WSL2:** estos ajustes van en los ajustes remotos de WSL, no en los de Windows. Con la ventana conectada a WSL, la paleta ofrece "Remote [WSL]: Open Remote Settings (JSON)".
 
@@ -182,7 +192,7 @@ Si estos cinco pasos funcionan, el entorno está montado.
 npm run dev
 ```
 
-Abre localhost:4321 en el navegador del anfitrión. Debe cargar la página.
+Abre localhost:4321 en el navegador del host. Debe cargar la página.
 
 **Dos. Los tres comandos de la CI.**
 
@@ -192,15 +202,15 @@ npm run check
 npm run build
 ```
 
-**Tres. Un commit firmado.** Desde el anfitrión, nunca desde el contenedor:
+**Tres. Un commit firmado.** Desde el host, nunca desde el contenedor:
 
 ```bash
 git switch -c chore/prueba-entorno
 git commit --allow-empty -m "chore: comprueba la firma en esta maquina"
-git log --format='%h %G? %s' -1
+git log --format='%h %G? %ae %s' -1
 ```
 
-La segunda columna tiene que ser una G. Si sale N, la firma no está activa; si sale E, falta tu clave en el archivo de firmantes.
+La segunda columna tiene que ser una G y la tercera tu correo noreply. Si sale N, la firma no está activa; si sale E, falta tu clave en el archivo de firmantes. Si el commit no llega a crearse porque lo rechaza el hook `identidad`, tu correo todavía no está en `.github/allowed_signers`: añade tu línea en tu copia, como explica «Añadir tu clave al archivo de firmantes», y repite el paso.
 
 **Cuatro. Limpiar la prueba.**
 
@@ -219,7 +229,7 @@ Los commits de fusión creados por GitHub salen con E: van firmados con la clave
 
 ## 6. El día a día
 
-Git y los commits van en el anfitrión. El desarrollo, dentro del contenedor.
+Git y los commits van en el host. El desarrollo, dentro del contenedor.
 
 Antes de abrir un pull request, los tres comandos del paso dos. Es lo mismo que ejecuta la CI.
 
