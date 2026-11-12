@@ -13,6 +13,7 @@ interface Props {
   pattern?: string;
   maxlength?: number;
   opciones?: readonly Opcion[];
+  ayuda?: string;
 }
 
 const {
@@ -26,9 +27,12 @@ const {
   pattern,
   maxlength,
   opciones = [],
+  ayuda,
 } = Astro.props;
 
 const idEstado = `${id}-estado`;
+const idAyuda = `${id}-ayuda`;
+const descrito = ayuda ? `${idAyuda} ${idEstado}` : idEstado;
 const esCasilla = tipo === "checkbox";
 const esTextarea = tipo === "textarea";
 const esGrupo = tipo === "radio" || tipo === "casillas";
@@ -44,7 +48,7 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
           id={id}
           name={nombre}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
         <span>
           <slot />
@@ -69,7 +73,7 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
                 name={nombre}
                 value={opcion.valor}
                 required={tipo === "radio" && requerido}
-                aria-describedby={idEstado}
+                aria-describedby={descrito}
               />
               <span>{opcion.texto}</span>
             </label>
@@ -80,7 +84,7 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
                 name={`${nombre}-otro`}
                 maxlength={MAXIMOS.otro}
                 aria-label="Especifica otro"
-                aria-describedby={idEstado}
+                aria-describedby={descrito}
               />
             )}
           </div>
@@ -97,7 +101,7 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
           maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
       </>
     ) : (
@@ -114,9 +118,16 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
           maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
       </>
+    )
+  }
+  {
+    ayuda && (
+      <p class="campo-nota" id={idAyuda}>
+        {ayuda}
+      </p>
     )
   }
   <p class="campo-estado" id={idEstado} role="status"></p>
@@ -192,6 +203,12 @@ const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
      Sin soporte de :has(), queda siempre visible. */
   .campo-opcion:has(.campo-casilla input:not(:checked)) .campo-otro {
     display: none;
+  }
+
+  .campo-nota {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
   }
 
   .campo-estado {
