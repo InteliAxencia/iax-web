@@ -9,7 +9,10 @@ no tiene otra comprobación que lo detecte.
 Worker `iax-web`, conectado con Workers Builds al repositorio
 `InteliAxencia/iax-web`, con `main` como rama de producción: cada push a `main`
 compila y despliega. Hasta publicar en el dominio propio, se sirve en
-`https://iax-web.inteliaxencia.workers.dev`.
+`https://iax-web.inteliaxencia.workers.dev`. El resultado de cada despliegue
+aparece en GitHub como check «Workers Builds: iax-web» del commit de `main`, con
+el `Version ID` desplegado, así que se puede consultar sin abrir el panel, con
+`gh api repos/InteliAxencia/iax-web/commits/<sha>/check-runs`.
 
 El nombre del Worker tiene que coincidir con `name` en `wrangler.json`. Si no
 coinciden, el build falla.
