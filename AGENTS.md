@@ -77,7 +77,10 @@ exacta de `wrangler`. Por eso Dependabot los agrupa en `.github/dependabot.yml`
 y se actualizan por parejas. `@cloudflare/vite-plugin` está declarado en
 `devDependencies` aunque el código no lo importe: si se quita, Dependabot deja
 de verlo, sube `wrangler` solo y aparecen dos copias de `wrangler`, `miniflare`
-y `workerd`. No lo quites ni subas `wrangler` por separado.
+y `workerd`. No lo quites ni subas `wrangler` por separado. Las acciones de
+CodeQL siguen la misma regla: todos los pasos de `codeql.yml` que usan
+`github/codeql-action` tienen que ir en la misma versión, o el análisis falla
+con un error de configuración. Dependabot las sube juntas con el grupo `codeql`.
 
 ---
 
