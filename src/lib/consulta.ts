@@ -142,7 +142,7 @@ export function enviarConsulta(datos: DatosConsulta): Promise<Resultado> {
     remitente: { correo: CORREO_REMITENTE, nombre: "Web inteliAxencia" },
     destinatario: { correo: CORREO_DESTINO_CONTACTO },
     responderA: { correo: datos.email, nombre },
-    asunto: `Consulta web, ${f.nombre}: ${nombre}`,
+    asunto: `Consulta web. ${f.nombre}: ${nombre}`,
     texto,
   });
 }
