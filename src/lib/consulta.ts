@@ -55,7 +55,7 @@ function variante<T extends TipoFormulario>(tipo: T) {
     ...comunes,
     tipo: z.literal(tipo),
     necesidad: z.array(opcion(necesidad)).min(1).max(necesidad.opciones.length),
-    experiencia: experiencia ? opcion(experiencia) : z.undefined(),
+    experiencia: experiencia ? opcion(experiencia) : z.undefined().optional(),
   });
 }
 
