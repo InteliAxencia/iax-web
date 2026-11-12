@@ -1,15 +1,79 @@
 # Despliegue
 
-El proyecto todavía no está creado en Cloudflare. Este documento recoge lo que
-hay que configurar el día que se cree, y lo que no puede olvidarse porque no
-tiene otra comprobación que lo detecte.
+El proyecto se creó en Cloudflare el 6 de noviembre de 2026, con Workers Builds.
+Este documento recoge cómo está configurado y lo que no puede olvidarse porque
+no tiene otra comprobación que lo detecte.
+
+## El proyecto en Cloudflare
+
+Worker `iax-web`, conectado con Workers Builds al repositorio
+`InteliAxencia/iax-web`, con `main` como rama de producción: cada push a `main`
+compila y despliega. Hasta publicar en el dominio propio, se sirve en
+`https://iax-web.inteliaxencia.workers.dev`.
+
+El nombre del Worker tiene que coincidir con `name` en `wrangler.json`. Si no
+coinciden, el build falla.
+
+La app de GitHub «Cloudflare Workers and Pages» está instalada en la
+organización inteliAxencia con acceso solo a este repositorio. Tiene permiso de
+escritura sobre el código y los pull requests para abrir un pull request de
+configuración cuando el repositorio no tiene `wrangler.json`; este lo tiene.
+
+Configuración en **Settings › Builds**:
+
+| Campo             | Valor                                                |
+| ----------------- | ---------------------------------------------------- |
+| Production branch | `main`                                               |
+| Build command     | `npm run build && node scripts/check-marcadores.mjs` |
+| Deploy command    | `npx wrangler deploy`                                |
+| Root directory    | `/`                                                  |
+
+Los Preview builds están desactivados. Con ellos, cada push a otra rama, también
+las de Dependabot, se compilaría y se desplegaría como previsualización con
+código que todavía no ha pasado la revisión.
+
+### El token del despliegue
+
+Workers Builds despliega con un token de usuario, `iax-web Workers Builds`, que
+se creó al conectar el repositorio. Está en el perfil del usuario corporativo de
+la cuenta de Cloudflare (**My Profile › API Tokens**), con el acceso restringido
+al equipo que configura el despliegue. Workers Builds todavía no admite tokens
+de cuenta.
+
+En **Settings › Builds**, el apartado del token muestra «Configured API token
+unavailable», pero el token funciona: lo usó el despliegue del 6 de noviembre.
+Si el token se borra o se revoca, o el usuario corporativo pierde el acceso a la
+cuenta, los despliegues fallan en la fase de despliegue. Se repone con
+**Create new token** en ese mismo apartado, con la sesión iniciada como usuario
+corporativo.
+
+### workers.dev y URL de versión
+
+`wrangler.json` declara `workers_dev: true` y `preview_urls: false`. Cada
+`npx wrangler deploy` aplica lo que dice el archivo y pisa lo que se haya
+cambiado en el panel, así que estos valores se cambian solo en el archivo.
+
+- `workers_dev: true` mantiene la dirección de workers.dev, la única del sitio
+  hasta publicar en el dominio propio. Pasa a `false` al publicar en
+  inteliaxencia.com, en el ticket WEBIAX-82, y el paso está en «Antes de
+  publicar el sitio»: por workers.dev no pasan los ajustes de la zona, como el
+  bloqueo de rastreadores de entrenamiento de IA, y el sitio quedaría servido
+  por dos direcciones.
+- `preview_urls: false` evita que cada versión desplegada tenga su propia URL
+  pública, que seguiría mostrando el contenido de esa versión después de
+  sustituirla.
 
 ## Variables de compilación
 
 El sitio se prerenderiza entero, así que estas variables se leen en tiempo de
-compilación. Van en las variables de **compilación** del proyecto, no en las de
-ejecución del Worker: una variable de ejecución no llega al build y la página
-saldría con el valor por defecto.
+compilación. Van en **Settings › Builds › Variables and secrets**, pestaña
+**Production**, no en **Runtime variables and secrets**: una variable de
+ejecución no llega al build y la página saldría con el valor por defecto. Las
+tres son de tipo texto, porque son datos que el sitio publica.
+
+Después de guardar, hay que comprobar que aparecen en la lista. El 6 de
+noviembre no se guardaron al primer intento, y el build siguiente falló en la
+comprobación de marcadores.
 
 | Variable                  | Contenido                                                                                                                  | Si falta                                                  |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
@@ -25,9 +89,11 @@ el aviso legal.
 ## Variables de ejecución
 
 Las leen las rutas de API al ejecutarse en el Worker, no durante el build. Se
-cargan como secretos del Worker, con `npx wrangler secret put` seguido del
-nombre o desde el panel como variable de tipo secreto, y no en las variables de
-compilación. Los valores están en el gestor de contraseñas del equipo.
+cargan en **Settings › Runtime variables and secrets**, pestaña **Production**,
+con tipo **Secret**, o con `npx wrangler secret put` seguido del nombre.
+Guardarlas en el panel despliega una versión nueva del Worker. Los valores están
+en el gestor de contraseñas del equipo, salvo la `CLAVE_ENLACE_BOLETIN` de
+producción.
 
 | Variable                | Contenido                                                                              | Si falta                                                                                        |
 | ----------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
@@ -39,9 +105,22 @@ compilación. Los valores están en el gestor de contraseñas del equipo.
 En el esquema de `astro:env` las cuatro son opcionales a propósito, aunque las
 rutas las necesitan. El porqué está comentado en `astro.config.mjs`.
 
-`CLAVE_ENLACE_BOLETIN` se genera con `openssl rand -base64 32` y es distinta en
-cada entorno: la de producción no es la de desarrollo local. Cambiarla invalida
-los enlaces de confirmación pendientes.
+`CLAVE_ENLACE_BOLETIN` es distinta en cada entorno: la de producción no es la de
+desarrollo local. Quien tenga la clave puede fabricar un enlace de confirmación
+válido para cualquier dirección, así que las copias de desarrollo no deben valer
+en producción. Cambiarla invalida los enlaces de confirmación pendientes.
+
+La de producción se generó el 6 de noviembre en la consola del navegador, en una
+pestaña en blanco, y se pegó en el panel sin mostrarla:
+
+```js
+copy(btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))));
+```
+
+Después, `copy("")` vacía el portapapeles. No está en el gestor de contraseñas:
+si hace falta otra, se genera nueva de la misma forma. La de desarrollo se
+genera con `openssl rand -base64 32` y está en el gestor como clave de
+desarrollo.
 
 ## Despliegue desde local
 
@@ -55,6 +134,11 @@ No se despliega con `--config wrangler.json`. Esa configuración declara `./dist
 como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
 actualizar `wrangler` o el adaptador, se repite la comprobación con
 `npx wrangler deploy --dry-run --outdir` hacia una carpeta temporal.
+
+Workers Builds despliega con el mismo `npx wrangler deploy`, sin `--config`. En
+su build no existe `.dev.vars`, que no está en el repositorio. El registro del
+despliegue del 6 de noviembre muestra un único binding, `env.ASSETS`. El
+apartado **Bindings** del panel no lo lista.
 
 ## Comprobación de marcadores
 
@@ -72,22 +156,26 @@ y sale con error si encuentra una cadena de cuatro o más equis mayúsculas
 seguidas. También sale con error si no encuentra ninguna página, para que un
 cambio en la salida del build no pase en verde.
 
-Al crear el proyecto con Workers Builds, el comando de compilación es
+En Workers Builds, el comando de compilación es
 `npm run build && node scripts/check-marcadores.mjs`, para que Cloudflare aborte
-el despliegue en lugar de publicar una página con el marcador.
+el despliegue en lugar de publicar una página con el marcador. Comprobado el 6
+de noviembre: con `ID_FISCAL` sin definir, el build se abortó y la fase de
+despliegue no llegó a ejecutarse.
 
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
 
 ## Antes de publicar el sitio
 
-Con el proyecto creado, cargar `MAILJET_LISTA_BOLETIN` y `CLAVE_ENLACE_BOLETIN`
-como secretos del Worker, con una clave de producción nueva (Variables de
-ejecución). Después, hacer una suscripción completa en el sitio publicado con
-una dirección del equipo: el enlace del correo tiene que apuntar a
+Hacer una suscripción completa en el sitio publicado con una dirección del
+equipo: el enlace del correo tiene que apuntar a
 `https://inteliaxencia.com/boletin/confirmar`, y al confirmar, la dirección
 tiene que quedar en la lista con la IP de quien confirma. Terminada la prueba,
 se retira esa dirección de la lista.
+
+Cuando el dominio propio responda, cambiar `workers_dev` a `false` en
+`wrangler.json`, en su propio pull request. Hasta entonces, workers.dev es la
+única dirección del sitio; después, solo debe servirlo el dominio propio.
 
 ## Antes de publicar las páginas legales
 
@@ -116,10 +204,10 @@ con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 6. Confirmar que Cloudflare, Inc. sigue en la lista de
    https://www.dataprivacyframework.gov y que los enlaces a las políticas de
    terceros responden.
-7. Con el proyecto creado, comprobar en Workers Logs cuánto tiempo se conservan
-   los registros y qué datos de cada petición se guardan. La política de
-   privacidad recoge lo que se guarde y durante cuánto tiempo. El código del
-   sitio solo registra el motivo de un fallo, sin datos del formulario.
+7. Comprobar en Workers Logs cuánto tiempo se conservan los registros y qué
+   datos de cada petición se guardan. La política de privacidad recoge lo que se
+   guarde y durante cuánto tiempo. El código del sitio solo registra el motivo
+   de un fallo, sin datos del formulario.
 
 ## Antes del primer envío de correo
 
