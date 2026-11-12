@@ -42,7 +42,7 @@ const comunes = {
   equipo: opcion(EQUIPO).optional(),
   "necesidad-otro": libre(MAXIMOS.otro),
   contexto: libre(MAXIMOS.contexto),
-  horario: opcion(HORARIO).optional(),
+  horario: z.array(opcion(HORARIO)).max(HORARIO.opciones.length),
   // Campo trampa (docs/decisiones-reversibles.md, apartado 10).
   web: z.string().trim().optional(),
 };
@@ -70,13 +70,14 @@ export const esquemaConsulta = z
 
 export type DatosConsulta = z.infer<typeof esquemaConsulta>;
 
-// Convierte el cuerpo en el objeto que valida el esquema. La necesidad llega
-// como varias casillas con el mismo nombre: Object.fromEntries solo guardaría
-// la última.
+// Convierte el cuerpo en el objeto que valida el esquema. La necesidad y el
+// horario llegan como varias casillas con el mismo nombre: Object.fromEntries
+// solo guardaría la última.
 export function leerConsulta(cuerpo: FormData): Record<string, unknown> {
   return {
     ...Object.fromEntries(cuerpo),
     necesidad: cuerpo.getAll("necesidad"),
+    horario: cuerpo.getAll("horario"),
   };
 }
 
@@ -122,7 +123,10 @@ export function enviarConsulta(datos: DatosConsulta): Promise<Resultado> {
     dato("Organización", datos.organizacion),
     dato("Tipo de organización", perfil),
     dato("Tamaño del equipo", elegida(EQUIPO, datos.equipo)),
-    dato("Horario preferido", elegida(HORARIO, datos.horario)),
+    dato(
+      "Horario preferido",
+      datos.horario.map((v) => elegida(HORARIO, v)).join(", "),
+    ),
     ...(experiencia ? [dato("Nivel de experiencia", experiencia)] : []),
     "",
     f.necesidad.enunciado,
