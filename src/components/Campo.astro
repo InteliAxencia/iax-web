@@ -1,14 +1,19 @@
 ---
+import { MAXIMOS, type Opcion } from "../lib/formularios";
+
 interface Props {
   id: string;
   nombre: string;
   etiqueta?: string;
-  tipo?: "text" | "email" | "checkbox" | "tel" | "textarea";
+  tipo?:
+    "text" | "email" | "checkbox" | "tel" | "textarea" | "radio" | "casillas";
   autocomplete?: string;
   requerido?: boolean;
   placeholder?: string;
   pattern?: string;
   maxlength?: number;
+  opciones?: readonly Opcion[];
+  ayuda?: string;
 }
 
 const {
@@ -21,11 +26,17 @@ const {
   placeholder,
   pattern,
   maxlength,
+  opciones = [],
+  ayuda,
 } = Astro.props;
 
 const idEstado = `${id}-estado`;
+const idAyuda = `${id}-ayuda`;
+const descrito = ayuda ? `${idAyuda} ${idEstado}` : idEstado;
 const esCasilla = tipo === "checkbox";
 const esTextarea = tipo === "textarea";
+const esGrupo = tipo === "radio" || tipo === "casillas";
+const tipoControl = tipo === "casillas" ? "checkbox" : "radio";
 ---
 
 <div class="campo">
@@ -37,12 +48,48 @@ const esTextarea = tipo === "textarea";
           id={id}
           name={nombre}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
         <span>
           <slot />
         </span>
       </label>
+    ) : esGrupo ? (
+      <fieldset
+        class="campo-grupo"
+        data-requerido={tipo === "casillas" && requerido ? "" : undefined}
+      >
+        <legend class="campo-etiqueta">
+          {etiqueta}{" "}
+          {tipo === "casillas" && (
+            <span class="campo-ayuda">(puedes marcar varias)</span>
+          )}
+        </legend>
+        {opciones.map((opcion) => (
+          <div class="campo-opcion">
+            <label class="campo-casilla">
+              <input
+                type={tipoControl}
+                name={nombre}
+                value={opcion.valor}
+                required={tipo === "radio" && requerido}
+                aria-describedby={descrito}
+              />
+              <span>{opcion.texto}</span>
+            </label>
+            {opcion.otro && (
+              <input
+                type="text"
+                class="campo-otro"
+                name={`${nombre}-otro`}
+                maxlength={MAXIMOS.otro}
+                aria-label="Especifica otro"
+                aria-describedby={descrito}
+              />
+            )}
+          </div>
+        ))}
+      </fieldset>
     ) : esTextarea ? (
       <>
         <label class="campo-etiqueta" for={id}>
@@ -54,7 +101,7 @@ const esTextarea = tipo === "textarea";
           maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
       </>
     ) : (
@@ -71,9 +118,16 @@ const esTextarea = tipo === "textarea";
           maxlength={maxlength}
           placeholder={placeholder}
           required={requerido}
-          aria-describedby={idEstado}
+          aria-describedby={descrito}
         />
       </>
+    )
+  }
+  {
+    ayuda && (
+      <p class="campo-nota" id={idAyuda}>
+        {ayuda}
+      </p>
     )
   }
   <p class="campo-estado" id={idEstado} role="status"></p>
@@ -91,7 +145,7 @@ const esTextarea = tipo === "textarea";
     margin-bottom: 6px;
   }
 
-  .campo input:not([type="checkbox"]),
+  .campo input:not([type="checkbox"], [type="radio"]),
   .campo textarea {
     width: 100%;
     font-family: var(--font-sans);
@@ -103,7 +157,7 @@ const esTextarea = tipo === "textarea";
     color: var(--color-negro);
   }
 
-  .campo input:not([type="checkbox"]):focus-visible,
+  .campo input:not([type="checkbox"], [type="radio"]):focus-visible,
   .campo textarea:focus-visible {
     border-color: var(--color-indigo);
   }
@@ -125,6 +179,36 @@ const esTextarea = tipo === "textarea";
   .campo-casilla input {
     margin-top: 4px;
     flex-shrink: 0;
+    accent-color: var(--color-indigo);
+  }
+
+  .campo-grupo .campo-etiqueta {
+    margin-bottom: 10px;
+  }
+
+  .campo-ayuda {
+    font-weight: 300;
+    color: var(--color-texto-suave);
+  }
+
+  .campo-opcion + .campo-opcion {
+    margin-top: 8px;
+  }
+
+  .campo-otro {
+    margin-top: 8px;
+  }
+
+  /* El campo de «Otro» solo se ve con su opción marcada, sin JavaScript.
+     Sin soporte de :has(), queda siempre visible. */
+  .campo-opcion:has(.campo-casilla input:not(:checked)) .campo-otro {
+    display: none;
+  }
+
+  .campo-nota {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
   }
 
   .campo-estado {
@@ -135,5 +219,21 @@ const esTextarea = tipo === "textarea";
 
   .campo-estado:empty {
     display: none;
+  }
+
+  @media (min-width: 821px) {
+    .campo-etiqueta {
+      font-size: 1rem;
+    }
+
+    .campo-casilla {
+      font-size: 1.05rem;
+    }
+
+    .campo-casilla input {
+      width: 1.1em;
+      height: 1.1em;
+      margin-top: 0.2em;
+    }
   }
 </style>
