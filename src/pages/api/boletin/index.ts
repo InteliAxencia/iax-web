@@ -23,7 +23,7 @@ function responder(ok: boolean, estado: number): Response {
   });
 }
 
-export const POST: APIRoute = async ({ request, url }) => {
+export const POST: APIRoute = async ({ request, site, url }) => {
   const longitud = Number(request.headers.get("Content-Length"));
   if (longitud > TAMANO_MAXIMO_BYTES) return responder(false, 413);
 
@@ -37,7 +37,12 @@ export const POST: APIRoute = async ({ request, url }) => {
   const datos = esquemaBoletin.safeParse(Object.fromEntries(formulario));
   if (!datos.success) return responder(false, 400);
 
-  const resultado = await suscribir(datos.data, url.origin);
+  // Fuera de desarrollo, el enlace del correo lleva el origen de site
+  // (astro.config.mjs), no el de la petición, que puede llegar por otro host,
+  // como workers.dev. En desarrollo, o si site no está definido, lleva el de la
+  // petición.
+  const origen = import.meta.env.DEV || !site ? url.origin : site.origin;
+  const resultado = await suscribir(datos.data, origen);
   return resultado.ok
     ? responder(true, 200)
     : responder(false, ESTADO_POR_MOTIVO[resultado.motivo]);
