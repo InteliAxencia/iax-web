@@ -3,7 +3,7 @@ import Tarjeta from "./Tarjeta.astro";
 
 const areas = ["Diagnóstico", "Formación", "Implementación", "IA local"];
 
-// Cada botón lleva su ruta completa. Hoy las tres van a /#contacto; cuando
+// Cada botón lleva su ruta completa, hoy la de su formulario ampliado; cuando
 // exista la página de un servicio, se cambia su ruta aquí y el componente no
 // se toca.
 const servicios = [
@@ -31,7 +31,7 @@ const servicios = [
     ],
     objetivo:
       "que tengas claro qué conviene mejorar y qué solución tiene sentido para tu despacho.",
-    boton: { texto: "Analizar mi despacho", ruta: "/#contacto" },
+    boton: { texto: "Estudiar nuestro caso", ruta: "/contacto/diagnostico" },
   },
   {
     titulo: "Formación y acompañamiento",
@@ -68,7 +68,7 @@ const servicios = [
     ],
     objetivo:
       "que la tecnología se incorpore al trabajo del equipo, en lugar de convertirse en un gasto al que no le sacas suficiente partido.",
-    boton: { texto: "Quiero formar a mi equipo", ruta: "/#contacto" },
+    boton: { texto: "Quiero formar a mi equipo", ruta: "/contacto/formacion" },
   },
   {
     titulo: "Soluciones adaptadas",
@@ -85,7 +85,10 @@ const servicios = [
     ],
     listas: [],
     objetivo: "que la solución se adapte a tu despacho, y no al revés.",
-    boton: { texto: "Cuéntanos qué necesitas", ruta: "/#contacto" },
+    boton: {
+      texto: "Cuéntanos qué necesitas",
+      ruta: "/contacto/soluciones-adaptadas",
+    },
   },
 ];
 ---
@@ -107,9 +110,6 @@ const servicios = [
       <ul class="servicios-areas" aria-label="Áreas de trabajo">
         {areas.map((area) => <li>{area}</li>)}
       </ul>
-      <a class="btn btn-indigo servicios-cta" href="/#contacto"
-        >Cuéntanos qué quieres mejorar</a
-      >
     </div>
     <div class="servicios-grid">
       {
@@ -155,10 +155,9 @@ const servicios = [
 </section>
 
 <style>
-  /* Cuatro botones al mismo destino, el de la cabecera y uno por
-     desplegable, por petición explícita de quien dirige (AGENTS.md,
-     sección 7). Cada desplegable tendrá su propio destino cuando exista la
-     página del servicio.
+  /* Un botón por desplegable, cada uno al formulario ampliado de su
+     servicio. Tendrá su propio destino cuando exista la página del
+     servicio.
 
      Las áreas son texto, no botones: sin borde, fondo ni radio, que es la
      forma de .btn. El cuadrado coral es el de las listas del sitio. */
@@ -190,10 +189,6 @@ const servicios = [
     height: 10px;
     background: var(--color-coral);
     border-radius: 2px;
-  }
-
-  .servicios-cta {
-    margin-top: 28px;
   }
 
   .servicios-grid {
