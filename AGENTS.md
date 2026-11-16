@@ -284,8 +284,10 @@ Los elementos de una lista siguen uno de dos criterios.
 - Si son independientes, sin frase de presentación, empiezan en mayúscula y cada
   uno termina en punto. Es el caso de funcionalidades.
 
-Estos criterios valen para la copy del sitio. Las listas de datos de las páginas
-legales, con forma de etiqueta y dato, quedan fuera.
+Estos criterios valen para las listas de frases de la copy del sitio. Quedan
+fuera las listas de rótulos o nombres sueltos, como las áreas de servicios o las
+fichas del equipo, y las listas de datos de las páginas legales, con forma de
+etiqueta y dato.
 
 ---
 
