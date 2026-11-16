@@ -64,10 +64,10 @@ function textoConfirmacion(enlace: string): string {
   ].join("\n");
 }
 
-// El enlace usa el origen de la petición, así apunta al mismo sitio en
-// desarrollo y en producción. Si el campo trampa llega relleno, se responde
-// como enviado para no delatar la comprobación, y el registro no lleva datos
-// del formulario.
+// El enlace usa el origen que le pasa la ruta: el de site fuera de desarrollo y
+// el de la petición en desarrollo. Si el campo trampa llega relleno, se
+// responde como enviado para no delatar la comprobación, y el registro no lleva
+// datos del formulario.
 export async function suscribir(
   datos: DatosBoletin,
   origen: string,

@@ -242,7 +242,9 @@ Desde el 19 de octubre de 2026, `astro` 7.4.0 trae `http-cache-semantics`
 4.3.0, que queda fuera del rango del aviso («<= 4.2.0»): ni `npm audit` ni
 Dependabot lo señalan. Pero la 4.3.0 no cambia la lógica de `max-stale`, así
 que el fallo persiste. Que las herramientas no avisen no significa que esté
-corregido.
+corregido. Comprobado de nuevo el 12 de noviembre de 2026: `astro` 7.4.7 trae la
+misma 4.3.0, que es la última versión publicada, y solo la usa en
+`assets/build/remote.js`.
 
 **Por qué.** El fallo permite que una caché compartida entre usuarios entregue a
 un cliente la respuesta guardada para otro, incluida su cookie de sesión, si el

@@ -9,7 +9,10 @@ no tiene otra comprobación que lo detecte.
 Worker `iax-web`, conectado con Workers Builds al repositorio
 `InteliAxencia/iax-web`, con `main` como rama de producción: cada push a `main`
 compila y despliega. Hasta publicar en el dominio propio, se sirve en
-`https://iax-web.inteliaxencia.workers.dev`.
+`https://iax-web.inteliaxencia.workers.dev`. El resultado de cada despliegue
+aparece en GitHub como check «Workers Builds: iax-web» del commit de `main`, con
+el `Version ID` desplegado, así que se puede consultar sin abrir el panel, con
+`gh api repos/InteliAxencia/iax-web/commits/<sha>/check-runs`.
 
 El nombre del Worker tiene que coincidir con `name` en `wrangler.json`. Si no
 coinciden, el build falla.
@@ -127,8 +130,8 @@ desarrollo.
 El build copia `.dev.vars` a `dist/server/`. Un `npx wrangler deploy` sin
 opciones usa la configuración que genera el adaptador, redirigida desde
 `.wrangler/deploy/`: sirve los assets de `dist/client` y sube como Worker solo
-los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 19 de
-octubre de 2026, con `wrangler` 4.151.0 y `@astrojs/cloudflare` 14.4.0.
+los `.mjs`, así que `.dev.vars` no viaja. Comprobado con `--dry-run` el 12 de
+noviembre de 2026, con `wrangler` 4.156.1 y `@astrojs/cloudflare` 14.4.6.
 
 No se despliega con `--config wrangler.json`. Esa configuración declara `./dist`
 como carpeta de assets, y esa carpeta contiene `dist/server/.dev.vars`. Al
