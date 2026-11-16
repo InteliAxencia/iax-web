@@ -5,6 +5,12 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
+  // Direccion publica del sitio. La ruta del boletin construye con ella el
+  // enlace del correo de confirmacion, para que apunte al dominio propio aunque
+  // la peticion llegue por otro host, como workers.dev. En desarrollo se usa el
+  // origen de la peticion.
+  site: "https://inteliaxencia.com",
+
   output: "static",
   // R1: el adaptador activa por defecto Cloudflare Images y sesiones sobre
   // Workers KV, los dos prohibidos. imageService compile optimiza en tiempo
