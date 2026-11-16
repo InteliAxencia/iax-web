@@ -198,8 +198,28 @@ request propio con la subida y el reformateo. Ver la sección 9 de
   cuerpo del mensaje. **En los merge commits el cuerpo es obligatorio**: no
   tienen diff propio, así que sin él el historial de `main` no dice qué entró.
 - Los mensajes de commit, incluidos los cuerpos de los merge commits, y los
-  títulos y descripciones de los pull requests van sin tildes ni eñes. Antes de
-  redactar uno, comprueba el estilo de los últimos con `git log`.
+  títulos y descripciones de los pull requests van sin tildes ni eñes.
+- El formato del mensaje de commit es fijo. No hace falta consultar `git log`
+  antes de redactar uno.
+  - **Asunto:** `<tipo>: <descripcion>`, en una sola línea. El tipo es `feat`,
+    `fix`, `chore` o `docs`, en minúscula y sin ámbito entre paréntesis.
+    Describe ese commit, no la rama: una rama puede llevar commits de tipos
+    distintos. La descripción empieza por un verbo en infinitivo, en minúscula,
+    y no lleva punto final.
+  - **Cuerpo:** un solo párrafo de frases completas, sin listas y sin saltos de
+    línea dentro. Empieza por el origen del cambio: `<CODIGO>.` si hay ticket;
+    si no, la revisión o el pull request que lo pidió, seguido de punto. Después
+    explica el porqué y lo que no se deduce del diff. Si el commit hace una
+    excepción a una regla, el cuerpo lo dice.
+  - Los nombres de archivo, de orden y de clave se escriben tal cual, sin
+    comillas invertidas.
+  - Sin líneas de atribución ni otros pies.
+  - **Merge commits:** el asunto es el que genera GitHub,
+    `Merge pull request #<n> from <organizacion>/<rama>`, sin cambios. El cuerpo
+    sigue las reglas del cuerpo de un commit, con `<CODIGO>.` al principio. Como
+    el merge commit no tiene diff propio, dice qué entra en `main` con ese pull
+    request y por qué, visto en conjunto y sin repasar commit por commit.
+  - Los commits de los bots, como Dependabot, llevan su propio formato.
 - Con `gh`, los títulos y cuerpos van entre comillas simples. Dentro de comillas
   dobles, un `!` como el de «Easy!Appointments» activa la expansión del
   historial de bash y se come la línea.
