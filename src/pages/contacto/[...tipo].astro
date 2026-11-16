@@ -1,0 +1,30 @@
+---
+import Base from "../../layouts/Base.astro";
+import Cabecera from "../../components/Cabecera.astro";
+import FormularioAmpliado from "../../components/FormularioAmpliado.astro";
+import Pie from "../../components/Pie.astro";
+import { FORMULARIOS, type TipoFormulario } from "../../lib/formularios";
+
+// Una página por formulario, a partir de las rutas de formularios.ts:
+// /contacto para el general y /contacto/<servicio> para los demás.
+export function getStaticPaths() {
+  return Object.values(FORMULARIOS).map((f) => ({
+    params: { tipo: f.ruta.replace(/^\/contacto\/?/, "") || undefined },
+    props: { tipo: f.tipo },
+  }));
+}
+
+interface Props {
+  tipo: TipoFormulario;
+}
+
+const f = FORMULARIOS[Astro.props.tipo];
+---
+
+<Base titulo={f.tituloPagina} descripcion={f.descripcion}>
+  <Cabecera />
+  <main>
+    <FormularioAmpliado tipo={f.tipo} />
+  </main>
+  <Pie />
+</Base>
