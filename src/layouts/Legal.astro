@@ -6,12 +6,13 @@ import Pie from "../components/Pie.astro";
 interface Props {
   titulo: string;
   descripcion: string;
+  sinIndexar?: boolean;
 }
 
-const { titulo, descripcion } = Astro.props;
+const { titulo, descripcion, sinIndexar } = Astro.props;
 ---
 
-<Base titulo={titulo} descripcion={descripcion}>
+<Base titulo={titulo} descripcion={descripcion} sinIndexar={sinIndexar}>
   <Cabecera />
   <main class="lectura texto-con-enlaces">
     <slot />
