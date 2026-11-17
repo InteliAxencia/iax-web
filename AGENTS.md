@@ -265,6 +265,9 @@ Reglas que no se deducen de los tokens:
 Registro: castellano peninsular con **tuteo**. Nada de voseo. El usted queda
 reservado a textos legales y contractuales.
 
+La guía de marca completa vive fuera del repositorio. Si una decisión de copy no
+está resuelta aquí, consúltala antes de escribir.
+
 ### Prohibiciones
 
 - **Sin rayas ni guiones largos** en ningún texto. Usa coma, dos puntos o punto.
@@ -291,8 +294,20 @@ reservado a textos legales y contractuales.
 - El microcopy de formularios, errores y estados vacíos mantiene la misma
   calidez que el resto.
 
-La guía de marca completa vive fuera del repositorio. Si una decisión de copy no
-está resuelta aquí, consúltala antes de escribir.
+### Listas
+
+Los elementos de una lista siguen uno de dos criterios.
+
+- Si completan una frase de presentación que acaba en dos puntos, empiezan en
+  minúscula, van separados por punto y coma y el último termina en punto. Es el
+  caso de las listas de servicios.
+- Si son independientes, sin frase de presentación, empiezan en mayúscula y cada
+  uno termina en punto. Es el caso de funcionalidades.
+
+Estos criterios valen para las listas de frases de la copy del sitio. Quedan
+fuera las listas de rótulos o nombres sueltos, como las áreas de servicios o las
+fichas del equipo, y las listas de datos de las páginas legales, con forma de
+etiqueta y dato.
 
 ---
 
