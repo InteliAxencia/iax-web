@@ -181,8 +181,8 @@ Fix typo
 Esto sí:
 
 ```text
-feat: formulario de acceso con validación en servidor
-fix: corrige el contraste del botón de envío
+feat: anadir el formulario de acceso con validacion en servidor
+fix: corregir el contraste del boton de envio
 ```
 
 Un commit que toca a la vez el andamiaje, la identidad visual y un archivo heredado no se puede revertir por partes ni localizar con `git bisect`.
