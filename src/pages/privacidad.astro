@@ -9,7 +9,7 @@ import { ID_FISCAL } from "astro:env/server";
 >
   <h1>Política de privacidad</h1>
   <p class="actualizado">
-    <strong>Última actualización:</strong> 14 de noviembre de 2026
+    <strong>Última actualización:</strong> 17 de noviembre de 2026
   </p>
 
   <p>
@@ -92,7 +92,10 @@ import { ID_FISCAL } from "astro:env/server";
           <td>Seguridad y funcionamiento del sitio</td>
           <td>Dirección IP y datos técnicos de la conexión</td>
           <td>Interés legítimo</td>
-          <td>Plazo de registro del proveedor de alojamiento</td>
+          <td>
+            Siete días como máximo en el registro del sitio; en los registros
+            propios del proveedor de alojamiento, el plazo que este fija
+          </td>
         </tr>
         <tr>
           <td>Medición de audiencia</td>
@@ -185,8 +188,14 @@ import { ID_FISCAL } from "astro:env/server";
   <h3>3.4 Seguridad y funcionamiento del sitio</h3>
   <p>
     <strong>Qué datos tratamos.</strong> Su dirección IP, la fecha y la hora de acceso,
-    el tipo de navegador y las páginas solicitadas. Estos datos los registra automáticamente
-    nuestro proveedor de alojamiento cuando su navegador pide una página.
+    las páginas solicitadas y los datos técnicos que su navegador envía con cada petición:
+    tipo de navegador y de sistema operativo, idioma, página de procedencia y datos
+    de la conexión cifrada. A partir de la dirección IP se deduce una ubicación aproximada:
+    país, región, ciudad, código postal y coordenadas. Nuestro proveedor de alojamiento
+    registra estos datos cuando su navegador pide una página. Además, el sitio guarda
+    un registro propio, con esos mismos datos y sin el contenido de los formularios,
+    de las peticiones que envían los formularios y de las dirigidas a direcciones
+    que no existen en el sitio.
   </p>
   <p>
     <strong>Para qué.</strong> Entregarle las páginas, mantener el sitio disponible,
@@ -252,9 +261,11 @@ import { ID_FISCAL } from "astro:env/server";
       la Ley 58/2003, General Tributaria.
     </li>
     <li>
-      <strong>Registros técnicos del sitio.</strong> El plazo que fija nuestro proveedor
-      de alojamiento para sus propios registros de seguridad. inteliAxencia no los
-      conserva por separado ni los reutiliza.
+      <strong>Registros técnicos del sitio.</strong> Siete días como máximo para el
+      registro de peticiones del sitio, que se elimina automáticamente al cumplirse
+      ese plazo. Para sus propios registros de seguridad, el plazo que fija nuestro
+      proveedor de alojamiento. inteliAxencia no conserva por separado ninguno de
+      los dos ni los reutiliza.
     </li>
   </ul>
   <p>Transcurridos estos plazos, los datos se suprimen.</p>
