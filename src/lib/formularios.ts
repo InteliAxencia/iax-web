@@ -144,7 +144,7 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
     titulo: "Diagnóstico y optimización",
     tituloPagina: "Diagnóstico y optimización · inteliAxencia",
     descripcion:
-      "Pide un diagnóstico de cómo trabaja tu equipo: procesos, tareas y herramientas que se pueden mejorar.",
+      "Pide un diagnóstico de cómo trabaja tu despacho o asesoría laboral: procesos, tareas y herramientas que se pueden mejorar con IA y automatización.",
     intro:
       "Cuéntanos cómo trabaja tu equipo. Unas pocas preguntas para entender tu situación actual y ver juntos qué se puede mejorar.",
     necesidad: {
@@ -182,7 +182,7 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
     titulo: "Formación y acompañamiento",
     tituloPagina: "Formación y acompañamiento · inteliAxencia",
     descripcion:
-      "Pide una formación en herramientas de IA adaptada al nivel y a la forma de trabajar de tu equipo.",
+      "Pide una formación en herramientas de IA adaptada al nivel y a la forma de trabajar de tu despacho o asesoría laboral.",
     intro:
       "Cuéntanos qué necesita tu equipo. Unas pocas preguntas para diseñar una formación adaptada a su nivel y a su forma de trabajar.",
     necesidad: {
@@ -230,7 +230,7 @@ export const FORMULARIOS: Record<TipoFormulario, Formulario> = {
     titulo: "Soluciones adaptadas",
     tituloPagina: "Soluciones adaptadas · inteliAxencia",
     descripcion:
-      "Cuéntanos qué necesitas resolver y vemos si podemos ayudarte con una solución adaptada.",
+      "Cuéntanos qué necesitas resolver en tu despacho o asesoría laboral y vemos si podemos ayudarte con una solución de IA adaptada.",
     intro:
       "Cuéntanos qué necesitas resolver. Unas pocas preguntas para entender tu situación y ver si podemos ayudarte con una solución adaptada.",
     necesidad: {
