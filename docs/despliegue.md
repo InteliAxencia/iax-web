@@ -168,6 +168,22 @@ despliegue no llegó a ejecutarse.
 Esto evita publicar un marcador. No evita publicar un dato mal escrito: el día
 de la publicación hay que abrir las páginas legales y leerlas.
 
+## Registros del Worker
+
+`wrangler.json` activa Workers Logs con `observability.enabled: true`. Guarda un
+registro de cada petición que ejecuta el Worker: las rutas de `src/pages/api/` y
+las peticiones que no encuentran un asset. Las páginas estáticas no lo ejecutan.
+Cada registro lleva la IP, la ubicación que Cloudflare deduce de ella, todas las
+cabeceras de la petición, los datos de TLS, la URL y el estado de la respuesta,
+pero no el cuerpo de la petición. Aparte quedan los `console.error` del código,
+que solo llevan el motivo de un fallo.
+
+La retención es de siete días en el plan Free de observabilidad, que entra en
+vigor el 1 de diciembre de 2026. El 17 de noviembre había registros de casi
+cuatro días. Los apartados 3.4 y 5 de la política de privacidad recogen lo que
+se guarda y el plazo. Si cambia la retención o lo que se guarda, se revisa la
+política.
+
 ## Antes de publicar el sitio
 
 Hacer una suscripción completa en el sitio publicado con una dirección del
@@ -195,22 +211,26 @@ con el proyecto creado y el sitio desplegado. Nada de esto lo detecta la CI.
 2. Comprobar el valor de _Challenge Passage_. Si no son los 30 minutos por
    defecto, se actualiza la duración de `cf_clearance` en la política de
    cookies.
-3. Activar Cloudflare Web Analytics y comprobar en la pestaña de red que su
-   script llega a la página. Si no llega, se instala a mano en `Base.astro`.
-4. Desactivar en la cuenta de Mailjet el seguimiento de aperturas y de clics.
+3. Desactivar en la cuenta de Mailjet el seguimiento de aperturas y de clics.
    La política de privacidad afirma que los envíos no los miden.
-5. Recorrer el sitio desplegado en una ventana limpia, con las herramientas de
-   desarrollo abiertas: la portada sin interactuar y después todas las páginas
-   del menú. En Aplicación, anotar cookies y almacenamiento; en Red, los
-   dominios desde los que se carga algo. La tabla de la política se ajusta a
-   lo observado.
-6. Confirmar que Cloudflare, Inc. sigue en la lista de
+4. Confirmar que Cloudflare, Inc. sigue en la lista de
    https://www.dataprivacyframework.gov y que los enlaces a las políticas de
    terceros responden.
-7. Comprobar en Workers Logs cuánto tiempo se conservan los registros y qué
-   datos de cada petición se guardan. La política de privacidad recoge lo que se
-   guarde y durante cuánto tiempo. El código del sitio solo registra el motivo
-   de un fallo, sin datos del formulario.
+
+## Después de publicar en el dominio propio
+
+Estos dos pasos dependen del tráfico que pasa por el proxy de la zona, así que
+no se pueden comprobar en workers.dev: solo con el sitio servido por
+inteliaxencia.com. Ticket WEBIAX-98.
+
+1. Activar Cloudflare Web Analytics para inteliaxencia.com, con instalación
+   automática, y comprobar en la pestaña de red que su script llega a la página.
+   Si no llega, se instala a mano en `Base.astro`.
+2. Recorrer el sitio servido por inteliaxencia.com en una ventana limpia, con
+   las herramientas de desarrollo abiertas: la portada sin interactuar y después
+   todas las páginas del menú. En Aplicación, anotar cookies y almacenamiento;
+   en Red, los dominios desde los que se carga algo. La tabla de la política de
+   cookies se ajusta a lo observado.
 
 ## Antes del primer envío de correo
 
