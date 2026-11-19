@@ -22,7 +22,7 @@ import { PATRON_CORREO } from "../lib/correo";
            JSON; los datos nunca van en la URL. El respaldo con redirección a
            páginas estáticas queda como mejora anotada. */
       }
-      <form id="form-contacto" method="post" action="/api/contacto" novalidate>
+      <form id="form-contacto" method="post" action="/api/contacto">
         <Campo
           id="contacto-nombre"
           nombre="nombre"
@@ -104,6 +104,10 @@ import { PATRON_CORREO } from "../lib/correo";
   const boton = formulario?.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   );
+
+  // novalidate se pone aquí y no en el HTML: sin JavaScript, el navegador
+  // conserva su validación nativa antes de enviar.
+  if (formulario) formulario.noValidate = true;
 
   // Tiempo máximo de espera del envío: más que los 10 segundos que el servidor
   // espera a Mailjet, para no cortar una respuesta lenta pero válida. Sin él,
