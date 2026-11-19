@@ -1,4 +1,4 @@
-// Configuraciones de los formularios ampliados (WEBIAX-1, guion v0.3).
+// Configuraciones de los formularios ampliados (WEBIAX-1, guion v1.0).
 // Las leen las páginas, para pintar cada formulario, y src/lib/consulta.ts,
 // para validar en el servidor: así una opción no puede existir en la página y
 // faltar en el esquema. Sin importaciones.
