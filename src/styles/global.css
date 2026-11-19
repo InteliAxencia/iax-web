@@ -12,6 +12,9 @@
   --color-gris: #6b6b76;
   --color-gris-claro: #f4f4f8;
   --color-borde: #e4e4ec;
+  /* Borde de los campos de formulario: 3:1 sobre blanco y sobre gris claro,
+     el mínimo de WCAG para lo que identifica un control. */
+  --color-borde-campo: #8c8c96;
 
   --color-blanco: #ffffff;
   --color-negro: #111111;
