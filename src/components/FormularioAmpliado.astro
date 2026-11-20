@@ -35,7 +35,6 @@ const opcional = (texto: string) => `${texto} (opcional)`;
         id="form-consulta"
         method="post"
         action="/api/consulta"
-        novalidate
       >
         <input type="hidden" name="tipo" value={f.tipo} />
         <Campo
@@ -177,6 +176,10 @@ const opcional = (texto: string) => `${texto} (opcional)`;
   const boton = formulario?.querySelector<HTMLButtonElement>(
     'button[type="submit"]',
   );
+
+  // novalidate se pone aquí y no en el HTML: sin JavaScript, el navegador
+  // conserva su validación nativa antes de enviar.
+  if (formulario) formulario.noValidate = true;
 
   // Tiempo máximo de espera del envío: más que los 10 segundos que el servidor
   // espera a Mailjet, para no cortar una respuesta lenta pero válida.

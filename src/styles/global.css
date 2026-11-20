@@ -12,6 +12,9 @@
   --color-gris: #6b6b76;
   --color-gris-claro: #f4f4f8;
   --color-borde: #e4e4ec;
+  /* Borde de los campos de formulario: 3:1 sobre blanco y sobre gris claro,
+     el mínimo de WCAG para lo que identifica un control. */
+  --color-borde-campo: #8c8c96;
 
   --color-blanco: #ffffff;
   --color-negro: #111111;
@@ -26,8 +29,8 @@
   /* Medidas compartidas. Sin el prefijo --color- a propósito: no son
      colores y no deben generar utilidades de color. */
   --max-w: 1120px;
-  /* Ancho de lectura de las paginas de texto corrido, mas estrecho que
-     --max-w para no pasar de una linea comoda. */
+  /* Ancho de lectura de las páginas de texto corrido, más estrecho que
+     --max-w para no pasar de una línea cómoda. */
   --max-w-lectura: 720px;
   --radius: 14px;
   --gutter: 20px;
@@ -234,11 +237,11 @@ a {
   color: var(--color-coral);
 }
 
-/* ==================== ANTETITULO ====================
+/* ==================== ANTETÍTULO ====================
    El texto va en índigo, no en coral: sobre fondo claro el coral no
    cumple contraste. El acento lo pone la barra del ::before, que es
    decorativa y no transmite información. Sobre fondo índigo sí tiene
-   recorrido, y para eso esta la variante invertida. */
+   recorrido, y para eso está la variante invertida. */
 
 .eyebrow {
   display: inline-block;
@@ -267,8 +270,8 @@ a {
 /* ==================== SECCIONES ====================
    Relleno vertical y cabecera comunes a las secciones de la portada. El
    selector de elemento alcanza a cualquier etiqueta section del sitio:
-   hoy ninguna pagina legal la usa, comprobado con grep sobre src/. Si
-   alguna la usa en el futuro, heredara este relleno. */
+   hoy ninguna página legal la usa, comprobado con grep sobre src/. Si
+   alguna la usa en el futuro, heredará este relleno. */
 
 section {
   padding: 60px 0;
@@ -295,9 +298,9 @@ section {
 }
 
 /* ==================== ASPA ====================
-   La 'x' del logotipo como firma grafica de fondo. Compartida: la usan
-   las dos secciones sobre indigo, presentacion e IA local. Es
-   decorativa, su marcado son dos span vacios dentro de un contenedor con
+   La 'x' del logotipo como firma gráfica de fondo. Compartida: la usan
+   las dos secciones sobre índigo, presentación e IA local. Es
+   decorativa, su marcado son dos span vacíos dentro de un contenedor con
    aria-hidden. En el prototipo se llamaba .hero-x. */
 
 .aspa {
@@ -335,10 +338,10 @@ section {
   }
 }
 
-/* El modificador va despues del @media a proposito: tiene la misma
-   especificidad que .aspa, 0-1-0, y las @media no suman, asi que decide
-   el orden en el archivo. Colocado antes, en escritorio perderia su
-   posicion. En el prototipo esto era un style en linea, que ganaba por
+/* El modificador va después del @media a propósito: tiene la misma
+   especificidad que .aspa, 0-1-0, y las @media no suman, así que decide
+   el orden en el archivo. Colocado antes, en escritorio perdería su
+   posición. En el prototipo esto era un style en línea, que ganaba por
    ser inline. */
 
 .aspa--local {
