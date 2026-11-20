@@ -319,7 +319,9 @@ etiqueta y dato.
   prototipo, como `.wrap`, `.btn` o `--color-indigo-deep`. Las clases y los
   tokens nuevos van en español. Excepción: el boletín conserva el nombre
   «newsletter» en su componente (`Newsletter.astro`), en su ancla
-  (`/#newsletter`) y en los textos que ya lo usan.
+  (`/#newsletter`) y en los textos que ya lo usan. Los comentarios se escriben
+  con tildes y eñes, como cualquier texto en español. Los mensajes de commit y
+  los títulos y descripciones de los pull requests siguen sin ellas (sección 5).
 - Componentes en `src/components/`, layouts en `src/layouts/`, páginas en
   `src/pages/` y endpoints en `src/pages/api/`. La lógica de negocio vive en
   `src/lib/` (R2, sección 10); el `@theme` y los estilos compartidos, en
