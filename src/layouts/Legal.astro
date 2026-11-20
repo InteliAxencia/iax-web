@@ -21,12 +21,12 @@ const { titulo, descripcion, sinIndexar } = Astro.props;
 </Base>
 
 <style>
-  /* Texto corrido. El preflight de Tailwind quita margenes de parrafo,
-     vinetas de lista y estilo de enlace, asi que aqui no se decora: se
+  /* Texto corrido. El preflight de Tailwind quita márgenes de párrafo,
+     viñetas de lista y estilo de enlace, así que aquí no se decora: se
      devuelve lo que el documento necesita para leerse.
 
-     Va con :global() porque el marcado lo escribe la pagina y recibe su
-     propio identificador de ambito, no el del layout. Todo cuelga de
+     Va con :global() porque el marcado lo escribe la página y recibe su
+     propio identificador de ámbito, no el del layout. Todo cuelga de
      .lectura para que no se escape al resto del sitio. */
 
   .lectura {
@@ -58,8 +58,8 @@ const { titulo, descripcion, sinIndexar } = Astro.props;
     color: var(--color-texto-suave);
   }
 
-  /* La linea de fecha. No reutiliza .caption de global.css: la regla de
-     arriba compila con el atributo de ambito del layout y le ganaria el
+  /* La línea de fecha. No reutiliza .caption de global.css: la regla de
+     arriba compila con el atributo de ámbito del layout y le ganaría el
      color por especificidad. */
 
   .lectura :global(p.actualizado) {
@@ -85,9 +85,9 @@ const { titulo, descripcion, sinIndexar } = Astro.props;
     color: var(--color-negro);
   }
 
-  /* Tablas de las politicas. Cada una va dentro de un .tabla que la pagina
-     marca con role="region", aria-label y tabindex="0": en movil la tabla se
-     desplaza en horizontal sin ensanchar la pagina, y el teclado alcanza
+  /* Tablas de las políticas. Cada una va dentro de un .tabla que la página
+     marca con role="region", aria-label y tabindex="0": en móvil la tabla se
+     desplaza en horizontal sin ensanchar la página, y el teclado alcanza
      ese desplazamiento. */
 
   .lectura :global(.tabla) {

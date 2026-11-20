@@ -313,26 +313,61 @@ etiqueta y dato.
 
 ## 8. Convenciones de código
 
-- Contenido, nombres de componentes y comentarios **en español**.
-- Componentes en `src/components/`, layouts en `src/layouts/`, endpoints en
-  `src/pages/api/`.
-- Los datos repetidos (tarjetas de servicio, pasos del método, preguntas
-  frecuentes) van en un array y se recorren. No se duplican en el marcado.
-- Astro no envía JavaScript por defecto. Mantenlo así: si un componente no
-  necesita interactividad, no le añadas una isla.
+- Contenido, nombres de componentes y comentarios **en español**. Quedan fuera
+  los nombres que impone el framework o una API externa, como `getStaticPaths`,
+  `prerender` o los campos de Mailjet, y las clases y los tokens heredados del
+  prototipo, como `.wrap`, `.btn` o `--color-indigo-deep`. Las clases y los
+  tokens nuevos van en español. Excepción: el boletín conserva el nombre
+  «newsletter» en su componente (`Newsletter.astro`), en su ancla
+  (`/#newsletter`) y en los textos que ya lo usan.
+- Componentes en `src/components/`, layouts en `src/layouts/`, páginas en
+  `src/pages/` y endpoints en `src/pages/api/`. La lógica de negocio vive en
+  `src/lib/` (R2, sección 10); el `@theme` y los estilos compartidos, en
+  `src/styles/global.css`; y las imágenes que Astro procesa al compilar, en
+  `src/assets/`.
+- Los datos repetidos van en un array y se recorren. No se duplican en el
+  marcado. Un dato es repetido cuando varios elementos comparten estructura y
+  solo cambia su contenido: tarjetas, pasos, preguntas, fichas del equipo,
+  enlaces de navegación u opciones de formulario. Los elementos con estructura o
+  destino distintos se escriben aparte, aunque vayan en la misma lista. Una
+  configuración que usan a la vez la página y el servidor, como las de
+  `src/lib/formularios.ts`, se define una sola vez y la leen los dos. Quedan
+  fuera las páginas legales, que son texto redactado, también en sus tablas.
+- Astro no envía JavaScript por defecto. Mantenlo así. El JavaScript propio va
+  en el `<script>` del componente y mejora algo que ya funciona sin él, como los
+  formularios, que sin JavaScript envían por POST a su ruta. Si una función no
+  puede existir sin JavaScript, un `<noscript>` da la alternativa, como en la
+  confirmación del boletín. El sitio no tiene islas: instalar un framework de
+  interfaz para crearlas es decisión del equipo, y a la isla se le aplica el
+  mismo criterio.
 - Si hay un prototipo estático en la raíz, es referencia visual, no fuente de
   verdad, y no es el destino de los cambios de producto.
 - Cuidado con la especificidad del CSS. Un selector de contexto puede pisar la
-  clase de un componente y arruinar el contraste o la disposición. Ya ha pasado
-  dos veces: con el botón del menú y con una regla `:not([open])` que ganaba en
-  escritorio a un bloque que no declaraba `display`. Las `@media` no suman
-  especificidad.
-- El CSS de un componente vive en su `<style>` y consume los tokens de `@theme`
-  con `var()`. Ningún componente redeclara un hexadecimal. Si falta un token, se
-  añade al `@theme`; no se escribe el valor suelto.
-- Toda superficie con fondo índigo lleva la clase `.sobre-indigo`. Cambia el
-  anillo de foco a coral: sin ella el foco es índigo sobre índigo y no se ve.
-- Punto de ruptura único en 821px, salvo razón concreta y anotada.
+  clase de un componente y arruinar el contraste o la disposición. Por ejemplo,
+  `.nav-links a`, que vale (0,1,1), ganaba a `.btn-indigo`, que vale (0,1,0), y
+  dejaba el botón de la navegación con texto oscuro sobre índigo. Cuando un
+  elemento con clase de componente está dentro de un contexto con reglas
+  propias, comprueba en el navegador qué regla gana: las herramientas de
+  desarrollo muestran la especificidad de cada selector. Las `@media` no suman
+  especificidad: deciden si una regla se aplica, no cuánto pesa.
+- El CSS de un componente vive en su `<style>`, no en atributos `style`, y
+  consume los tokens de `@theme` con `var()`. Ningún componente escribe un color
+  suelto, en ninguna notación: ni hexadecimal, ni `rgb()`, ni `hsl()`, ni
+  nombres como `white`. Un color con transparencia se obtiene del token con
+  `color-mix(in srgb, var(--color-…) 18%, transparent)`. Si falta un token, se
+  añade al `@theme`. Excepción: el `theme-color` de `Base.astro` va escrito
+  literal, porque un `<meta>` no puede leer `var()`, y lo anota un comentario en
+  el propio archivo.
+- Toda superficie con fondo índigo o índigo profundo lleva la clase
+  `.sobre-indigo`. Son superficies las secciones y los bloques que contienen
+  elementos enfocables, no los botones. La clase cambia el anillo de foco a
+  coral: sin ella el foco es índigo sobre índigo y no se ve. Afecta a todo lo
+  que va dentro, así que un bloque de fondo claro con enlaces dentro de una
+  superficie `.sobre-indigo` tiene que recuperar el anillo índigo: el coral
+  sobre blanco no llega a 3:1.
+- Punto de ruptura único en 821px, salvo razón concreta. La razón de una
+  excepción se anota en un comentario del CSS del componente, junto a su
+  `@media`.
 
 ### Suelo de calidad
 
@@ -340,17 +375,27 @@ Esto ya está resuelto y no puede perderse en ninguna migración:
 
 1. **Mobile first.** Los estilos base son para móvil y los `@media (min-width)`
    escalan hacia arriba.
-2. **Foco visible.** `:focus-visible` perceptible en todo elemento interactivo.
-3. **`prefers-reduced-motion` respetado**, sin excepciones.
-4. **Contraste WCAG AA** como mínimo en todo texto.
+2. **Foco visible.** `:focus-visible` perceptible en todo elemento interactivo,
+   con un contraste de al menos 3:1 frente a lo que lo rodea.
+3. **`prefers-reduced-motion` respetado**, sin excepciones. La regla de
+   `global.css` elimina animaciones y transiciones con `!important`. Un script
+   que mueva algo, como un desplazamiento suave, comprueba antes la preferencia
+   con `matchMedia`: la regla de CSS no lo alcanza.
+4. **Contraste WCAG AA** como mínimo: 4.5:1 en texto normal, 3:1 en texto grande
+   y 3:1 en lo que identifica un control, como el borde de un campo o el anillo
+   de foco. Quedan fuera los controles desactivados y los elementos decorativos.
 5. **HTML nativo antes que JavaScript.** Los acordeones son
    `<details>`/`<summary>` y la exclusión mutua se consigue con el atributo
-   `name`, no con un script.
-   Un `<details>` cerrado no pinta a sus descendientes, y `display` no lo
-   revierte. Si el contenido debe verse con el `<details>` cerrado, va como
-   hermano y la apertura se lee con el combinador `~`.
-6. Todo campo con su `<label>` asociado y los mensajes de estado con
-   `role="status"`.
+   `name`, no con un script. Un `<details>` cerrado no pinta a sus
+   descendientes, y `display` no lo revierte. Si el contenido debe verse con el
+   `<details>` cerrado, va como hermano y la apertura se lee con el combinador
+   `~`. Los formularios conservan la validación nativa sin JavaScript:
+   `novalidate` lo pone el script al cargar, no el HTML.
+6. Todo campo con su `<label>` asociado, por `for` o por anidación, y los
+   mensajes de estado con `role="status"`. Un campo cuya etiqueta visible es la
+   opción de al lado, como el texto de «Otro», puede llevar `aria-label`. La
+   región de estado está en el marcado desde el principio y el script solo
+   cambia su texto: si nace ya con el mensaje, puede no anunciarse.
 
 ---
 
