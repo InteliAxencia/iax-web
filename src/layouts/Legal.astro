@@ -58,9 +58,9 @@ const { titulo, descripcion, sinIndexar } = Astro.props;
     color: var(--color-texto-suave);
   }
 
-  /* La línea de fecha. No reutiliza .caption de global.css: la regla de
-     arriba compila con el atributo de ámbito del layout y le ganaría el
-     color por especificidad. */
+  /* La línea de fecha lleva su propio estilo: una clase de global.css perdería
+     el color frente a la regla de arriba, que compila con el atributo de ámbito
+     del layout y tiene más especificidad. */
 
   .lectura :global(p.actualizado) {
     color: var(--color-gris);
