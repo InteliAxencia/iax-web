@@ -237,14 +237,13 @@ Los secretos locales van en .dev.vars, copiando .dev.vars.example. Ese archivo e
 
 ## 7. Qué hay en el repositorio
 
-| Ruta                 | Qué es                                                     |
-| -------------------- | ---------------------------------------------------------- |
-| src/                 | El sitio. Fuente de verdad                                 |
-| index.html           | Prototipo estático. Referencia visual, pendiente de migrar |
-| scripts/check-r1.mjs | Comprobación de R1 para la CI                              |
-| wrangler.json        | Configuración de despliegue en Cloudflare                  |
-| .devcontainer/       | Definición del Dev Container                               |
-| docs/                | Guía, política de Git y decisiones reversibles             |
+| Ruta                 | Qué es                                         |
+| -------------------- | ---------------------------------------------- |
+| src/                 | El sitio. Fuente de verdad                     |
+| scripts/check-r1.mjs | Comprobación de R1 para la CI                  |
+| wrangler.json        | Configuración de despliegue en Cloudflare      |
+| .devcontainer/       | Definición del Dev Container                   |
+| docs/                | Guía, política de Git y decisiones reversibles |
 
 El sistema de citas es un servicio externo y no forma parte de este repositorio ni del Dev Container. La decisión y su disparador están en docs/decisiones-reversibles.md.
 
