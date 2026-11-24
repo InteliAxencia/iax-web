@@ -4,7 +4,7 @@ Sitio web de iAx, digitalización práctica para organizaciones del ámbito labo
 
 ## Estado
 
-En desarrollo. El prototipo estático vive en index.html y sirve de referencia visual; la migración a componentes de Astro está pendiente. La fuente de verdad del sitio es src/.
+Publicado en inteliaxencia.com. La fuente de verdad del sitio es src/ y cada merge a main despliega en producción.
 
 ## Stack
 

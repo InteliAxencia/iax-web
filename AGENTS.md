@@ -342,8 +342,6 @@ etiqueta y dato.
   confirmación del boletín. El sitio no tiene islas: instalar un framework de
   interfaz para crearlas es decisión del equipo, y a la isla se le aplica el
   mismo criterio.
-- Si hay un prototipo estático en la raíz, es referencia visual, no fuente de
-  verdad, y no es el destino de los cambios de producto.
 - Cuidado con la especificidad del CSS. Un selector de contexto puede pisar la
   clase de un componente y arruinar el contraste o la disposición. Por ejemplo,
   `.nav-links a`, que vale (0,1,1), ganaba a `.btn-indigo`, que vale (0,1,0), y
