@@ -8,10 +8,11 @@ no tiene otra comprobación que lo detecte.
 
 Worker `iax-web`, conectado con Workers Builds al repositorio
 `InteliAxencia/iax-web`, con `main` como rama de producción: cada push a `main`
-compila y despliega. Hasta publicar en el dominio propio, se sirve en
-`https://iax-web.inteliaxencia.workers.dev`. El resultado de cada despliegue
-aparece en GitHub como check «Workers Builds: iax-web» del commit de `main`, con
-el `Version ID` desplegado, así que se puede consultar sin abrir el panel, con
+compila y despliega. Desde el 24 de noviembre de 2026 se sirve en
+`https://inteliaxencia.com`, con `www` redirigido a la raíz (apartado «Dominio
+propio y `www`»). El resultado de cada despliegue aparece en GitHub como check
+«Workers Builds: iax-web» del commit de `main`, con el `Version ID` desplegado,
+así que se puede consultar sin abrir el panel, con
 `gh api repos/InteliAxencia/iax-web/commits/<sha>/check-runs`.
 
 El nombre del Worker tiene que coincidir con `name` en `wrangler.json`. Si no
@@ -52,19 +53,52 @@ corporativo.
 
 ### workers.dev y URL de versión
 
-`wrangler.json` declara `workers_dev: true` y `preview_urls: false`. Cada
+`wrangler.json` declara `workers_dev: false` y `preview_urls: false`. Cada
 `npx wrangler deploy` aplica lo que dice el archivo y pisa lo que se haya
 cambiado en el panel, así que estos valores se cambian solo en el archivo.
 
-- `workers_dev: true` mantiene la dirección de workers.dev, la única del sitio
-  hasta publicar en el dominio propio. Pasa a `false` al publicar en
-  inteliaxencia.com, en el ticket WEBIAX-82, y el paso está en «Antes de
-  publicar el sitio»: por workers.dev no pasan los ajustes de la zona, como el
-  bloqueo de rastreadores de entrenamiento de IA, y el sitio quedaría servido
-  por dos direcciones.
+- `workers_dev: false` retira la dirección de workers.dev desde el 27 de
+  noviembre de 2026 (WEBIAX-82, #115), que ahora responde 404. Por workers.dev
+  no pasan los ajustes de la zona, como el bloqueo de rastreadores de
+  entrenamiento de IA, y el sitio quedaría servido por dos direcciones.
 - `preview_urls: false` evita que cada versión desplegada tenga su propia URL
   pública, que seguiría mostrando el contenido de esa versión después de
   sustituirla.
+
+### Dominio propio y `www`
+
+El Worker sirve `inteliaxencia.com` como dominio propio, declarado en
+`wrangler.json` dentro de `routes`, con `pattern` y `custom_domain: true`.
+Bastan esos dos campos: la zona se deduce del nombre, y no se escribe el ID de
+cuenta, el de zona ni ningún token. `routes` está en la lista blanca de
+`scripts/check-r1.mjs`.
+
+El dominio propio se creó desde el panel el 24 de noviembre de 2026 y se declaró
+en `wrangler.json` el 27, en el #115. La documentación oficial de Cloudflare no
+dice si un despliegue sin `routes` conserva un dominio puesto solo en el panel.
+Con la declaración en el archivo, cada despliegue lo mantiene: comprobado tras
+el despliegue del #115, la raíz sigue respondiendo 200 desde el Worker.
+
+Cloudflare no crea un dominio propio sobre un nombre que ya tiene un CNAME:
+antes hubo que borrar el CNAME de la raíz, que apuntaba a la CDN de Hostinger.
+Al crearlo, Cloudflare añade a la zona un registro de tipo Worker, con proxy y
+bloqueado, y emite su certificado.
+
+`www` no es un dominio propio del Worker. Redirige a la raíz con un 301, para
+que el sitio tenga una sola dirección, la de `site` en `astro.config.mjs`. Son
+dos piezas de la zona que viven fuera del repositorio:
+
+- un registro AAAA `www` a `100::`, con proxy. `100::` no tiene destino: la
+  regla responde antes de que la petición necesite un origen;
+- la regla de redirección única «Redirigir de WWW a raíz», en **Rules**: filtro
+  `http.host eq "www.inteliaxencia.com"`, destino dinámico
+  `concat("https://inteliaxencia.com", http.request.uri.path)`, código 301 y
+  cadena de consulta conservada. Filtra por nombre de host para cubrir `http://`
+  y `https://`; la plantilla de patrón comodín solo cubre `https://` y pierde la
+  consulta.
+
+Se comprueba con `curl -sSI 'https://www.inteliaxencia.com/contacto/?x=1'`, que
+tiene que responder 301 a `https://inteliaxencia.com/contacto/?x=1`.
 
 ## Variables de compilación
 
@@ -184,17 +218,14 @@ cuatro días. Los apartados 3.4 y 5 de la política de privacidad recogen lo que
 se guarda y el plazo. Si cambia la retención o lo que se guarda, se revisa la
 política.
 
-## Antes de publicar el sitio
+## Prueba completa del boletín
 
-Hacer una suscripción completa en el sitio publicado con una dirección del
-equipo: el enlace del correo tiene que apuntar a
-`https://inteliaxencia.com/boletin/confirmar`, y al confirmar, la dirección
-tiene que quedar en la lista con la IP de quien confirma. Terminada la prueba,
-se retira esa dirección de la lista.
-
-Cuando el dominio propio responda, cambiar `workers_dev` a `false` en
-`wrangler.json`, en su propio pull request. Hasta entonces, workers.dev es la
-única dirección del sitio; después, solo debe servirlo el dominio propio.
+Se hace en el sitio publicado, con una dirección del equipo: el enlace del
+correo tiene que apuntar a `https://inteliaxencia.com/boletin/confirmar`, y al
+confirmar, la dirección tiene que quedar en la lista con la IP de quien
+confirma. Si esa persona quiere recibir el boletín, la suscripción se queda como
+real; si no, se retira de la lista al terminar. La primera prueba completa se
+hizo el 24 de noviembre de 2026, en WEBIAX-82.
 
 ## Antes de publicar las páginas legales
 
